@@ -34,22 +34,10 @@ local resources = {
 	"tws-time",
 	"tws-tuning",
 	"tws-vehicles",
-	--"tws-vehicles-previews",
 	"tws-vehicles-textures",
 	"tws-voice",
 	"tws-weather",
 	"tws-wheels",
-
-	--"tws-hotel",
-	--"tws-garage",
-	--"tws-carshop",
-	--"tws-race",
-	--"tws-quests",
-	--"tws-instructions",
-	--"tws-warp",
-	-- Работы
-	--"tws-jobs",
-	--"tws-job-mechanic",
 
 	-- GUI
 	"tws-gui",

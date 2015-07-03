@@ -17,7 +17,7 @@ carshopsList = {
 	},
 	{
 		name = "Carshop 2",
-		door_position = {0, 100, 0},
+		door_position = {1159.213, -1859.763, 13.445},
 		interior = 0,
 		interior_position = {312.835, -1499.749, 104.200},
 		vehicle_rotation = {0, 0, 325.497},
