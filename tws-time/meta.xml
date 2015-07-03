@@ -1,0 +1,20 @@
+<meta>
+	<!-- SHARED SCRIPTS -->
+	<script src="shared/minute-duration.lua" type="shared"/>
+
+	<!-- SERVER SCRIPTS -->
+	<script src="server/server.lua" type="server"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/client.lua" type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="setGlobalTime" type="server"/>
+	<export function="freezeWorldTimeAt" type="client"/>
+	<export function="unfreezeWorldTime" type="client"/>
+	<export function="setClockVisible" type="client"/>
+	<export function="getTime" type="client"/>
+	<export function="getTimeString" type="client"/>
+
+	<oop>true</oop>
+</meta>

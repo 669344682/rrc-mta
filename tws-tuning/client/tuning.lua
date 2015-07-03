@@ -119,21 +119,7 @@ function tuningExit()
 		outputChatBox("Вы не в тюнинге", 255, 0, 0)
 		return
 	end
-
-	local oldDimension = localPlayer.dimension
-	localPlayer.dimension = 0
-	localPlayer.vehicle.frozen = true
-	tuningCamera.setLookMode("carPhoto")
-	if getResourceState(getResourceFromName("tws-vehicles-previews")) == "running" then
-		exports["tws-vehicles-previews"]:takePicture()
-	end
-	local function resetDimension()
-		localPlayer.dimension = oldDimension
-		localPlayer.vehicle.frozen = false
-		removeEventHandler("onClientRender", root, resetDimension)
-	end
-	addEventHandler("onClientRender", root, resetDimension)
-
+	
 	tuning.isActive = false
 	
 	tuningTexture.stop()

@@ -1,0 +1,34 @@
+<meta>
+	<script src="client.lua" type="client"/>
+
+	<export function="setVehicleSpoiler" type="client"/>
+	<export function="setVehicleSpoilerType" type="client"/>
+	<export function="setVehicleSpoilerColor" type="client"/>
+	<export function="resetVehicleSpoilerColor" type="client"/>
+	<export function="removeVehicleSpoiler" type="client"/>
+
+	<file src="texture_replace.fx"/>
+
+	<oop>true</oop>
+
+	<min_mta_version client="1.4.0" server="1.4.0" />
+    <script src="replace.lua" type="client" />
+    <file src="1.dff" />
+    <file src="2.dff" />
+    <file src="3.dff" />
+    <file src="4.dff" />
+    <file src="5.dff" />
+    <file src="6.dff" />
+    <file src="7.dff" />
+    <file src="8.dff" />
+    <file src="9.dff" />
+    <file src="10.dff" />
+    <file src="11.dff" />
+    <file src="12.dff" />
+    <file src="13.dff" />
+    <file src="14.dff" />
+    <file src="15.dff" />
+    <file src="16.dff" />
+    <file src="17.dff" />
+    <file src="spoilers.txd" />
+</meta>

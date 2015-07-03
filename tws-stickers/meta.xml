@@ -1,0 +1,74 @@
+<meta>
+	<min_mta_version client="1.4.0" server="1.4.0"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/client.lua" type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="getStickerByID" type="client"/>
+	<export function="getSkinByID" type="client"/>
+
+	<!-- stickers -->
+	<file src="images/stickers/1.png"/>
+	<file src="images/stickers/2.png"/>
+	<file src="images/stickers/3.png"/>
+	<file src="images/stickers/4.png"/>
+	<file src="images/stickers/5.png"/>
+	<file src="images/stickers/6.png"/>
+	<file src="images/stickers/7.png"/>
+	<file src="images/stickers/8.png"/>
+	<file src="images/stickers/9.png"/>
+	<file src="images/stickers/10.png"/>
+	<file src="images/stickers/11.png"/>
+	<file src="images/stickers/12.png"/>
+	<file src="images/stickers/13.png"/>
+	<file src="images/stickers/14.png"/>
+	<file src="images/stickers/15.png"/>
+	<file src="images/stickers/16.png"/>
+	<file src="images/stickers/17.png"/>
+	<file src="images/stickers/18.png"/>
+	<file src="images/stickers/19.png"/>
+	<file src="images/stickers/20.png"/>
+	<file src="images/stickers/21.png"/>
+
+	<file src="images/stickers/22.png"/>
+	<file src="images/stickers/23.png"/>
+	<file src="images/stickers/24.png"/>
+	<file src="images/stickers/25.png"/>
+	<file src="images/stickers/26.png"/>
+	<file src="images/stickers/27.png"/>
+	<file src="images/stickers/28.png"/>
+	<file src="images/stickers/29.png"/>
+	<file src="images/stickers/30.png"/>
+	<file src="images/stickers/31.png"/>
+	<file src="images/stickers/32.png"/>
+	<file src="images/stickers/33.png"/>
+	
+	<!-- paintjobs -->
+	<file src="images/skins/1.png"/>
+	<file src="images/skins/2.png"/>
+	<file src="images/skins/3.png"/>
+	<file src="images/skins/4.png"/>
+	<file src="images/skins/5.png"/>
+	<file src="images/skins/6.png"/>
+	<file src="images/skins/7.png"/>
+	<file src="images/skins/8.png"/>
+	<file src="images/skins/9.png"/>
+	<file src="images/skins/10.png"/>
+	<file src="images/skins/11.png"/>
+	<file src="images/skins/12.png"/>
+	<file src="images/skins/13.png"/>
+	<file src="images/skins/14.png"/>
+	<file src="images/skins/15.png"/>
+	<file src="images/skins/16.png"/>
+	<file src="images/skins/17.png"/>
+	<file src="images/skins/18.png"/>
+	<file src="images/skins/19.png"/>
+	<file src="images/skins/20.png"/>
+	<file src="images/skins/21.png"/>
+	<file src="images/skins/22.png"/>
+	<file src="images/skins/23.png"/>
+	<file src="images/skins/24.png"/>
+	<file src="images/skins/25.png"/>
+	<file src="images/skins/26.png"/>
+</meta>

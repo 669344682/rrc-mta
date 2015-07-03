@@ -1,0 +1,1 @@
+minuteDuration = 60000

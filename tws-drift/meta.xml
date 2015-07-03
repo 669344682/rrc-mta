@@ -1,0 +1,7 @@
+<meta>
+	<oop>true</oop>
+	<script src="config.lua" type="client"/>
+	<script src="client.lua" type="client"/>
+
+	<export function="toggleDriftMode" type="client"/>
+</meta>

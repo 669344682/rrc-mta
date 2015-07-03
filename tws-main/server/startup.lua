@@ -7,7 +7,7 @@ local resources = {
 	"tws-map-garageint",
 	"tws-map-tuning-garage",
 	"tws-map-world",
-	"tws-map-vazcarshop",
+	--"tws-map-vazcarshop",
 	--"tws-map-carshop2",
 
 	-- Ресурсы
@@ -20,7 +20,7 @@ local resources = {
 	"tws-blips",
 	"tws-camera",
 	"tws-carshop",
-	"tws-challenge",
+	--"tws-challenge",
 	"tws-components",
 	"tws-drift",
 	"tws-hpregen",
@@ -34,7 +34,7 @@ local resources = {
 	"tws-time",
 	"tws-tuning",
 	"tws-vehicles",
-	"tws-vehicles-previews",
+	--"tws-vehicles-previews",
 	"tws-vehicles-textures",
 	"tws-voice",
 	"tws-weather",
@@ -53,12 +53,8 @@ local resources = {
 
 	-- GUI
 	"tws-gui",
-	"tws-gui-carmenu",
 	"tws-gui-login",
-	"tws-gui-map",
-	"tws-gui-panel",
-	"tws-gui-profile",
-	"tws-gui-settings",
+	"tws-gui-map"
 }
 
 
