@@ -1,0 +1,11 @@
+<meta>
+	<oop>true</oop>
+	<!-- CLIENT SCRIPTS -->
+    <script src="client.lua" type="client" />
+
+	<!-- SERVER SCRIPTS -->
+    <script src="server.lua" type="server" />
+
+    <!-- EXPORTS -->
+	<export function="toggleGlobalRegeneration" type="server"/>
+</meta>

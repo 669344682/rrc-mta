@@ -1,0 +1,11 @@
+<map edf:definitions="editor_main">
+    <object id="object (vendmachfd) (1)" breakable="true" interior="15" collisions="true" alpha="255" model="1302" doublesided="false" scale="1" dimension="0" posX="2228.6001" posY="-1148.6012" posZ="1028.8" rotX="0" rotY="0" rotZ="270"></object>
+    <object id="object (Plant_Pot_3) (1)" breakable="true" interior="15" collisions="true" alpha="255" model="2195" doublesided="false" scale="1" dimension="0" posX="2228.2002" posY="-1154.5996" posZ="1029.4" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (Plant_Pot_2) (1)" breakable="true" interior="15" collisions="true" alpha="255" model="2194" doublesided="false" scale="1" dimension="0" posX="2226.8999" posY="-1146.4" posZ="1025.6" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (Plant_Pot_20) (1)" breakable="true" interior="15" collisions="true" alpha="255" model="2251" doublesided="false" scale="1" dimension="0" posX="2216" posY="-1153.5" posZ="1026.2" rotX="0" rotY="0" rotZ="320"></object>
+    <object id="object (lift_dr) (3)" breakable="true" interior="15" collisions="true" alpha="255" model="3051" doublesided="false" scale="1" dimension="0" posX="2228.9063" posY="-1149.9482" posZ="1029.859" rotX="0" rotY="0" rotZ="46"></object>
+    <object id="object (lift_dr) (4)" breakable="true" interior="15" collisions="true" alpha="255" model="3051" doublesided="false" scale="1" dimension="0" posX="2228.8945" posY="-1151.124" posZ="1029.859" rotX="0" rotY="0" rotZ="226"></object>
+    <object id="object (Esc_step8) (4)" breakable="true" interior="15" collisions="true" alpha="255" model="1698" doublesided="false" scale="1" dimension="0" posX="2229.4778" posY="-1150.7239" posZ="1028.75" rotX="0" rotY="0" rotZ="359.247"></object>
+    <object id="object (lib_street17) (1)" breakable="true" interior="15" collisions="false" alpha="255" model="3917" doublesided="false" scale="0.079999998" dimension="0" posX="2228.6646" posY="-1150.4563" posZ="1027.6268" rotX="5.99" rotY="356.732" rotZ="299.091"></object>
+    <object id="object (libstreetfar) (1)" breakable="true" interior="15" collisions="false" alpha="255" model="3923" doublesided="false" scale="0.079999998" dimension="0" posX="2228.7312" posY="-1150.4999" posZ="1031.6216" rotX="0" rotY="0" rotZ="300"></object>
+</map>

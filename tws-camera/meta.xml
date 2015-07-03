@@ -1,0 +1,24 @@
+<meta>
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/cameras.lua" type="client"/>
+	<script src="client/garageCamera.lua" type="client"/>
+	<script src="client/tuningCamera.lua" type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="resetCamera" type="client"/>
+	<!-- garage camera -->
+	<export function="startGarageCamera" type="client"/>
+	<export function="resetGarageCamera" type="client"/>
+	<export function="setGarageCameraRotation" type="client"/>
+	<export function="setGarageCameraHeight" type="client"/>
+	<export function="setGarageCameraRotationFrozen" type="client"/>
+	<export function="setGarageCameraDistance" type="client"/>
+	<export function="setGarageCameraCenter" type="client"/>
+	<export function="setGarageCameraFOV" type="client"/>
+	<export function="setGarageCameraRoll" type="client"/>
+	<export function="setControlEnabled" type="client"/>
+
+	<!-- tuning camera -->
+	<export function="startTuningCamera" type="client"/>
+	<export function="setTuningCameraView" type="client"/>
+</meta>

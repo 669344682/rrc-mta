@@ -1,0 +1,16 @@
+<meta>
+	<oop>true</oop>
+	<min_mta_version client="1.4.0" server="1.4.0"/>
+
+	<script src="server/sync.lua" type="server"/>
+
+	<script src="client/main.lua" type="client"/>
+	<script src="client/textureManager.lua" type="client"/>
+	<script src="client/textureDrawing.lua" type="client"/>
+	<script src="client/textureSync.lua" type="client"/>
+	<script src="client/exports.lua" type="client"/>
+	
+	<export function="drawToVehicleTexture" type="client"/>
+
+	<file src="shaders/texreplace.fx"/>
+</meta>

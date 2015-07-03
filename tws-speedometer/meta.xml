@@ -1,0 +1,21 @@
+<meta>
+	<oop>true</oop>
+	<file src="speedo.png" type="client" />
+	<file src="pointer.png" type="client" />
+
+	<file src="icons/hover.png" type="client" />
+	<file src="icons/move.png" type="client" />
+
+	<file src="FontPNG/0.png" type="client" />
+	<file src="FontPNG/1.png" type="client" />
+	<file src="FontPNG/2.png" type="client" />
+	<file src="FontPNG/3.png" type="client" />
+	<file src="FontPNG/4.png" type="client" />
+	<file src="FontPNG/5.png" type="client" />
+	<file src="FontPNG/6.png" type="client" />
+	<file src="FontPNG/7.png" type="client" />
+	<file src="FontPNG/8.png" type="client" />
+	<file src="FontPNG/9.png" type="client" />
+
+    <script src="client.lua" type="client" />
+</meta>

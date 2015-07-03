@@ -1,0 +1,53 @@
+<meta>
+	<!-- Scripts -->
+
+	<script src="utils.lua" 			type="client"/>
+	<script src="colors.lua" 			type="client"/>
+
+	<script src="controls.lua" 			type="client"/>
+	<script src="controls/button.lua" 	type="client"/>
+	<script src="controls/edit.lua" 	type="client"/>
+	<script src="controls/canvas.lua" 	type="client"/>
+	<script src="controls/checkbox.lua" type="client"/>
+	<script src="controls/label.lua" 	type="client"/>
+	<script src="controls/toggle.lua" 	type="client"/>
+	<script src="controls/window.lua" 	type="client"/>
+
+	<script src="drawing.lua" 			type="client"/>
+	<script src="main.lua" 				type="client"/>
+	<script src="exports.lua" 			type="client"/>
+
+	<!-- Exported functions -->
+
+	<export function="getSource"		type="client"/>
+	<export function="getElement"		type="client"/>
+	<export function="destroy"			type="client"/>
+	<export function="setPosition"		type="client"/>
+	<export function="getPosition"		type="client"/>
+	<export function="setSize"			type="client"/>
+	<export function="getSize"			type="client"/>
+	<export function="setEnabled"		type="client"/>
+	<export function="isEnabled"		type="client"/>
+	<export function="setVisible"		type="client"/>
+	<export function="isVisible"		type="client"/>
+	<export function="setText"			type="client"/>
+	<export function="getText"			type="client"/>
+	<export function="setColor"			type="client"/>
+	
+	<export function="createCanvas"		type="client"/>
+	<export function="createWindow"		type="client"/>
+	<export function="createEdit"		type="client"/>
+	<export function="setEditMasked"	type="client"/>
+	<export function="createButton"		type="client"/>
+	<export function="createLabel"		type="client"/>
+	<export function="createToggle"		type="client"/>
+	<export function="getToggleState"	type="client"/>
+	<export function="setToggleState"	type="client"/>
+	<export function="createCheckbox"	type="client"/>
+	<export function="getCheckboxState"	type="client"/>
+
+	<!-- Fonts -->
+	
+	<file src="fonts/OpenSans-Regular.ttf"/>
+	<file src="fonts/OpenSans-Light.ttf"/>
+</meta>

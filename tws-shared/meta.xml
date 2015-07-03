@@ -1,0 +1,20 @@
+<meta>
+	<!-- SERVER SCRIPTS -->
+	<script src="server/main.lua"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/main.lua" type="client"/>
+
+	<!-- shared scripts -->
+	<file src="client/shared/tuning.lua" type="client"/>
+	<file src="client/shared/utils.lua" type="client"/>
+	<file src="client/shared/mouse_utils.lua" type="client"/>
+	<file src="client/shared/vehicle_utils.lua" type="client"/>
+	<file src="client/shared/dxGUI.lua" type="client"/>
+	<file src="client/shared/colors.lua" type="client"/>
+	<file src="client/shared/assetsManager.lua" type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="include" type="client"/>
+	<export function="include" type="server"/>
+</meta>

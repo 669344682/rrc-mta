@@ -1,0 +1,7 @@
+<meta>
+	<oop>true</oop>
+
+	<export function="setNametagsVisible" type="client" />
+	<file src="font.ttf" type="client" />
+	<script src="client.lua" type="client" />
+</meta>

@@ -1,0 +1,7 @@
+<meta>
+	<oop>true</oop>
+	<script src="client/hud.lua" type="client"/>
+
+	<export function="isHUDVisible" type="client"/>
+	<export function="toggleHUD" type="client"/>
+</meta>

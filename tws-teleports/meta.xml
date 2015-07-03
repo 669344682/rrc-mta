@@ -1,0 +1,11 @@
+<meta>
+	<!-- SERVER SCRIPTS -->
+	<script src="server/main.lua" type="server"/>
+
+	<!-- CLIENT SCRIPTS -->
+    <script src="client/main.lua" type="client"/>
+
+	<!-- EXPORTS -->
+    <export function="createTeleport" type="client"/>
+    <export function="createArrow" type="client"/>
+</meta>

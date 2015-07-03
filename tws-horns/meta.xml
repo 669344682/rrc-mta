@@ -1,0 +1,10 @@
+<meta>
+	<script src="server.lua" type="server"/>
+	<script src="client.lua" type="client"/>
+
+	<export function="setVehicleHorn" type="client"/>
+	<export function="setVehicleHorn" type="server"/>
+
+	<file src="sounds/horn1.wav"/>
+	<file src="sounds/horn2.wav"/>
+</meta>

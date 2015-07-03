@@ -1,0 +1,31 @@
+<meta>
+	<include resource="tws-shared"/>
+	
+	<!-- SERVER SCRIPTS -->
+	<script src="server/utils.lua"/>
+	<script src="server/dataCheck.lua"/>
+	<script src="server/accountSettings.lua"/>
+	<script src="server/spawn.lua"/>
+	<script src="server/login.lua"/>
+	<script src="server/playersIDs.lua"/>
+	<script src="server/startup.lua"/>
+	<script src="server/stats.lua"/>
+	<script src="server/commands.lua"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/money.lua" type="client"/>
+	<script src="client/dimensions.lua" type="client"/>
+	<script src="client/gui.lua" type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="getPlayersByPartOfName" type="server"/>
+	<export function="getPlayerByID" type="server"/>
+	<export function="getPlayerID" type="server"/>
+	<export function="givePlayerMoney" type="server"/>
+	<export function="getPlayerMoney" type="server"/>
+	<export function="takePlayerMoney" type="server"/>
+	<export function="upgradePlayerLevel" type="server"/>
+	<export function="getPlayerLevel" type="server"/>
+	<export function="getPlayerRespects" type="server"/>
+	<export function="transferPlayerMoney" type="server"/>
+</meta>

@@ -1,0 +1,19 @@
+<meta>
+	<!-- SERVER SCRIPTS -->
+	<script src="server/utils.lua"/>
+	<script src="server/checkpointsTable.lua"/>
+	<script src="server/checkpoint.lua"/>
+	<script src="server/pathGenerator.lua"/>
+	<script src="server/invite.lua"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/utils.lua" type="client"/>
+	<script src="client/race.lua" type="client"/>
+	<script src="client/client.lua" type="client"/>
+	<script src="client/gui.lua" type="client"/>
+
+	<!-- FILES -->
+	<file src="fonts/calibri.ttf"/>
+
+	<oop>true</oop>
+</meta>

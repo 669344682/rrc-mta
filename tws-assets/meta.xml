@@ -1,0 +1,17 @@
+<meta>
+	<script src="client.lua" type="client"/>
+	<export function="createAssetTexture" type="client"/>
+	<export function="createAssetFont" type="client"/>
+
+	<!-- IMAGES -->
+	<file src="images/arrow.png"/>
+	<file src="images/corner.png"/>
+	<file src="images/bg.png"/>
+	<file src="images/fg.png"/>
+	<file src="images/screen_shadow.png"/>
+	<file src="images/gradient.png"/>
+
+	<!-- FONTS -->
+	<file src="fonts/carbon.ttf"/>
+	<file src="fonts/calibri.ttf"/>
+</meta>

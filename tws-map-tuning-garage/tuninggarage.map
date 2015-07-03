@@ -1,0 +1,4 @@
+<map edf:definitions="editor_main">
+    <object id="object (int3int_carupg_int) (1)" breakable="true" interior="1" alpha="255" model="14776" doublesided="false" scale="1" dimension="0" posX="1397.3107" posY="-21.40013" posZ="942.82178" rotX="0" rotY="0" rotZ="0"></object>
+    <object id="object (vgncarshade1) (1)" breakable="true" interior="1" alpha="0" model="3458" doublesided="false" scale="1" dimension="0" posX="1399.3428" posY="-7.73635" posZ="935.7605" rotX="0" rotY="0" rotZ="270"></object>
+</map>

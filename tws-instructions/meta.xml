@@ -1,0 +1,17 @@
+<meta>
+	<oop>true</oop>
+
+	<file src="arrow.png" type="client" />
+	<file src="OpenSans-Regular.ttf" type="client" />
+
+	<script src="client/common.lua" type="client" />
+	<script src="client/gui.lua" type="client" />
+	<script src="client/base.lua" type="client" />
+    <script src="client/instructions.lua" type="client" />
+
+    <script src="server/server.lua" type="server" />
+
+    <export function="startInstruction" type="client"/>
+    <export function="startInstruction" type="server"/>
+    <!-- carshop, welcoming, vehiclepanel, map, hotel -->
+</meta>

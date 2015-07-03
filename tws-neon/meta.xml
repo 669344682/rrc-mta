@@ -1,0 +1,11 @@
+<meta>
+	<script src="utils.lua" type="client"/>
+	<script src="neonLines.lua" type="client"/>
+	<script src="client.lua" type="client"/>
+
+	<export function="setVehicleNeon" type="client"/>
+
+	<file src="material.png"/>
+	<file src="material2.png"/>
+	<oop>true</oop>
+</meta>

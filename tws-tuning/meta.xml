@@ -1,0 +1,58 @@
+<meta>
+	<min_mta_version client="1.4.0" server="1.4.0"/>
+	<oop>true</oop>
+
+	<!-- INCLUDE -->
+	<include resource="tws-shared" />
+
+	<!-- SERVER SCRIPTS -->
+	<script src="server/main.lua"/>
+	<script src="server/handling.lua"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/utils.lua" type="client"/>
+	<script src="client/tuningConfig.lua" type="client"/>
+	<script src="client/tuningCamera.lua" type="client"/>
+	<script src="client/tuningVehicle.lua" type="client"/>
+	<script src="client/tuningUpgrades.lua" type="client"/>
+	<script src="client/tuningTexture.lua" type="client"/>
+	<script src="client/tuning.lua" type="client"/>
+
+	<script src="client/tuningGarages.lua" type="client"/>
+
+	<!-- gui -->
+	<script src="client/gui/colors.lua" type="client"/>
+	<script src="client/gui/screens.lua" type="client"/>
+	<script src="client/gui/listArrow.lua" type="client"/>
+	<script src="client/gui/buttonsTips.lua" type="client"/>
+	<script src="client/gui/buttonsList.lua" type="client"/>
+	<script src="client/gui/itemsList.lua" type="client"/>
+	<script src="client/gui/stickerSettings.lua" type="client"/>
+	<script src="client/gui/spoilerSettings.lua" type="client"/>
+	<script src="client/gui/stickerPreview.lua" type="client"/>
+	<script src="client/gui/colorPalette.lua" type="client"/>
+	
+	<script src="client/gui/sectionsScreen.lua" type="client"/>
+	<script src="client/gui/subsectionScreen.lua" type="client"/>
+	<script src="client/gui/paletteScreen.lua" type="client"/>
+	<script src="client/gui/stickerScreen.lua" type="client"/>
+	<script src="client/gui/spoilerScreen.lua" type="client"/>
+	<script src="client/gui/removingScreen.lua" type="client"/>
+	
+	<!-- EXPORTS -->
+	<export function="getStikerTableFromInfo" type="client"/>
+
+	<!-- FILES -->
+	<file src="images/arrow.png"/>
+	<file src="images/sv.png"/>
+	<file src="images/h.png"/>
+	<file src="images/preview.png"/>
+	<file src="images/corner.png"/>
+	<file src="images/screen_shadow.png"/>
+
+	<file src="images/buttonsList/bg.png"/>
+	<file src="images/buttonsList/fg.png"/>
+
+	<file src="fonts/carbon.ttf"/>
+	<file src="fonts/calibri.ttf"/>
+</meta>

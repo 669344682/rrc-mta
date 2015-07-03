@@ -1,0 +1,81 @@
+<meta>
+	<min_mta_version client="1.4.0" server="1.4.0"/>
+
+	<!-- SHARED SCRIPTS -->
+	<script src="shared/carnames.lua" type="shared"/>
+	
+	<!-- SERVER SCRIPTS -->
+	<script src="server/tuningSync.lua"/>
+	<script src="server/vehicles.lua"/>
+	<script src="server/numberplate.lua" type="server"/>
+	<script src="server/handlingConfig.lua" type="server"/>
+	<script src="server/handling.lua" type="server"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/windows.lua"				 type="client"/>
+	<script src="client/tuningSync.lua"				 type="client"/>
+	<script src="client/numberplate.lua"			 type="client"/>
+	<script src="client/vehicleNames.lua"			 type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="createVehicleTWS"				 type="server"/>
+
+	<export function="spawnPlayerVehicle"			 type="server"/>
+	<export function="addGarageVehicle"				 type="server"/>
+	<export function="addShopVehicleToGarage"		 type="server"/>
+	<export function="getPlayerSpawnedVehicles"		 type="server"/>
+	<export function="isPlayerVehicleSpawned"		 type="server"/>
+	<export function="isVehicleOwnedByPlayer"		 type="server"/>
+	<export function="getVehicleGarageID"			 type="server"/>
+	<export function="returnVehicleToGarage"		 type="server"/>
+	<export function="setVehicleInfo"				 type="server"/>
+	<export function="getVehicleInfo"				 type="server"/>
+	<export function="fixVehicle"					 type="server"/>
+	<export function="setVehicleHandlingType"		 type="server"/>
+
+	<export function="updateVehicleTuning"			 type="client"/>
+	<export function="setVehicleWindowsLevel"		 type="client"/>
+	<!-- numberplate -->
+	<export function="setVehicleNumberPlate"		 type="client"/>
+	<export function="resetVehicleNumberPlate"		 type="client"/>
+	<export function="setVehicleNumberPlate"		 type="server"/>
+	<export function="resetVehicleNumberPlate"		 type="server"/>
+	<export function="generateRandomNumberPlateText" type="server"/>
+	<export function="generateRandomRegion"			 type="server"/>
+	<export function="applyVehicleNumberPlate"		 type="server"/>
+	
+	<!-- carnames -->
+	<export function="getVehicleNameFromModel"		 type="client"/>
+	<export function="getVehicleNameFromModel"		 type="server"/>
+	<export function="getAllVehiclesModels"			 type="client"/>
+	<export function="getAllVehiclesModels"			 type="server"/>
+
+	<!-- textures -->
+	<export function="redrawVehicleTexture"			 type="client"/>
+	<export function="drawTableToRenderTarget"		 type="client"/>
+	<export function="changeVehicleTexture"			 type="client"/>
+	
+	<!-- FILES -->
+	<file src="shaders/mta-helper.fx"/>
+	<file src="shaders/texreplace.fx"/>
+	<file src="shaders/car_windows.fx"/>
+	<file src="shaders/color_replace.fx"/>
+
+	<file src="images/scratch.png"/>
+	<file src="images/scratch_0.png"/>
+	<file src="images/scratch_1.png"/>
+	<file src="images/scratch_2.png"/>
+	<file src="images/scratch_3.png"/>
+	<file src="images/scratch_4.png"/>
+	<file src="images/scratch_5.png"/>
+	<file src="images/rust.png"/>
+	<file src="images/number.png"/>
+	<file src="images/cube_veh256.dds"/>
+
+	<file src="fonts/numbers.ttf"/>
+
+	<file src="images/carbon/bonnet1.png"/>
+	<file src="images/carbon/bonnet2.png"/>
+	<file src="images/carbon/boot1.png"/>
+	<file src="images/carbon/boot2.png"/>
+</meta>

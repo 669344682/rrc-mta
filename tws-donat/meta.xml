@@ -1,0 +1,20 @@
+<meta>
+	<oop>true</oop>
+	<!-- CLIENT FILES -->
+	<file src="fonts/OpenSans-Regular.ttf"/>
+	<file src="fonts/numbers.ttf"/>
+	<file src="images/sv.png"/>
+	<file src="images/h.png"/>
+	<file src="images/preview.png"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/common.lua" type="client"/>
+	<script src="client/Colorpicker.lua" type="client"/>
+    <script src="client/gui.lua" type="client" />
+    <script src="client/events.lua" type="client" />
+    <script src="client/actions.lua" type="client" />
+
+    <!-- SERVER SCRIPTS -->
+    <script src="server/savingChanges.lua" type="server" />
+    <script src="server/actions.lua" type="server" />
+</meta>

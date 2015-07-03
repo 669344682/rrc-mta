@@ -1,0 +1,33 @@
+<meta>
+	<!-- SERVER SCRIPTS -->
+	<script src="server/exports.lua" type="server"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/utils.lua" type="client"/>
+	<script src="client/gui.lua" type="client"/>
+	<script src="client/exports.lua" type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="setLoginWindowVisible" type="server"/>
+	<export function="setLoginWindowVisible" type="client"/>
+
+	<!-- FILES -->
+	<file src="images/backgrounds/background1.jpg"/>
+	<file src="images/backgrounds/background2.jpg"/>
+	<file src="images/backgrounds/background3.jpg"/>
+	<file src="images/backgrounds/background4.jpg"/>
+	<file src="images/backgrounds/background5.jpg"/>
+	<file src="images/backgrounds/background6.jpg"/>
+	<file src="images/backgrounds/background7.jpg"/>
+	<file src="images/backgrounds/background8.jpg"/>
+	<file src="images/backgrounds/background9.jpg"/>
+	<file src="images/backgrounds/background10.jpg"/>
+	<file src="images/backgrounds/background11.jpg"/>
+	<file src="images/backgrounds/background12.jpg"/>
+	<file src="images/backgrounds/background13.jpg"/>
+	<file src="images/backgrounds/background14.jpg"/>
+	<file src="images/backgrounds/background15.jpg"/>
+	<file src="images/backgrounds/background16.jpg"/>
+	<file src="images/backgrounds/background17.jpg"/>
+	<file src="images/logo.png"/>
+</meta>
