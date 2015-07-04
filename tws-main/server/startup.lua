@@ -42,7 +42,8 @@ local resources = {
 	-- GUI
 	"tws-gui",
 	"tws-gui-login",
-	"tws-gui-map"
+	"tws-gui-map",
+	"tws-gui-hud"
 }
 
 

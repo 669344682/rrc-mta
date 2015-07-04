@@ -1,0 +1,10 @@
+<meta>
+	<script src="client/main.lua" type="client"/>
+
+	<file src="images/car.png"/>
+	<file src="images/hp.png"/>
+	<file src="images/cash.png"/>
+
+	<export function="setVisible" type="client"/>
+	<oop>true</oop>
+</meta>

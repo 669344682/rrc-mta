@@ -28,6 +28,9 @@ function toggleHUD(isVisible, ignoreMap)
 	if isResourceRunning("tws-speedometer") then
 		exports["tws-speedometer"]:setVisible(isVisible)
 	end
+	if isResourceRunning("tws-gui-hud") then
+		exports["tws-gui-hud"]:setVisible(isVisible)
+	end	
 	if not ignoreMap then
 		if isResourceRunning("tws-gui-map") then
 			exports["tws-gui-map"]:setEnabled(isVisible)
