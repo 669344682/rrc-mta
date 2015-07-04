@@ -12,31 +12,25 @@ local function isResourceRunning(resourceName)
 	return getResourceFromName(resourceName) and getResourceFromName(resourceName).state == "running"
 end
 
-function toggleHUD(isVisible)
-	if not isVisible then
-		setPlayerHudComponentVisible("all", false)
-		if isResourceRunning("tws-time") then
-			exports["tws-time"]:setClockVisible(false)
-		end
-		if isResourceRunning("tws-gui-panel") then
-			exports["tws-gui-panel"]:setPanelVisible(false)
-		end
-		if isResourceRunning("tws-nametags") then
-			--exports["tws-nametags"]:setPanelVisible(false)
-		end
-	else
-		setPlayerHudComponentVisible("all", false)
+function toggleHUD(isVisible, ignoreMap)
+	setPlayerHudComponentVisible("all", false)
+	if isVisible then
 		for i, name in ipairs(enabledHudComponents) do
 			setPlayerHudComponentVisible(name, true)
 		end
-		if isResourceRunning("tws-time") then
-			exports["tws-time"]:setClockVisible(true)
-		end
-		if isResourceRunning("tws-gui-panel") then
-			exports["tws-gui-panel"]:setPanelVisible(true)
-		end
-		if isResourceRunning("tws-nametags") then
-			--exports["tws-nametags"]:setPanelVisible(true)
+	end
+	if isResourceRunning("tws-time") then
+		exports["tws-time"]:setClockVisible(isVisible)
+	end
+	if isResourceRunning("tws-nametags") then
+		--exports["tws-nametags"]:setPanelVisible(isVisible)
+	end
+	if isResourceRunning("tws-speedometer") then
+		exports["tws-speedometer"]:setVisible(isVisible)
+	end
+	if not ignoreMap then
+		if isResourceRunning("tws-gui-map") then
+			exports["tws-gui-map"]:setEnabled(isVisible)
 		end
 	end
 	hudVisiblityState = isVisible

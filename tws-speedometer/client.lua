@@ -1,6 +1,7 @@
 local FONT_BIAS = 4 -- наложение (расстояние между цифрами)
 local REFRESH_FRAME_RATE = 3 -- обновление скорости
 
+local isSpeedoVisible = true
 local screenX, screenY = guiGetScreenSize()
 local speedometer = dxCreateTexture("speedo.png", "argb", true, "clamp")
 local pointer = dxCreateTexture("pointer.png", "argb", true, "clamp")
@@ -52,7 +53,7 @@ end
 local vehicleSpeed, frameCounter = 0, 0
 addEventHandler("onClientPreRender", root,
 	function()
-		if localPlayer.vehicle then
+		if localPlayer.vehicle and isSpeedoVisible then
 			local speed, tab = vehicleSpeed, {}
 
 			local trueSpeed = math.round(getElementSpeed(localPlayer.vehicle, 1)^1.02)
@@ -105,6 +106,9 @@ addEventHandler("onClientPreRender", root,
 
 addEventHandler("onClientPreRender", root,
 	function()
+		if not isSpeedoVisible then 
+			return
+		end
 		if not isCursorShowing() then
 			if lastCursorPosX or lastCursorPosY then
 				lastCursorPosX, lastCursorPosY = nil, nil
@@ -191,3 +195,7 @@ addEventHandler("onClientResourceStop", resourceRoot,
 		setCursorAlpha(255)
 	end
 )
+
+function setVisible(isVisible)
+	isSpeedoVisible = isVisible == true
+end

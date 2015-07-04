@@ -18,4 +18,6 @@
 	<file src="FontPNG/9.png" type="client" />
 
     <script src="client.lua" type="client" />
+
+    <export function="setVisible" type="client"/>
 </meta>

@@ -16,7 +16,7 @@ function buttonsTips.start(buttons)
 end
 
 function buttonsTips.stop()
-	buttonsList = nil
+	buttonsList = {}
 end
 
 function buttonsTips.draw(fade)

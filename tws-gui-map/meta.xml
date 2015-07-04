@@ -19,6 +19,8 @@
 	<!-- EXPORTS -->
 	<export function="toggleMap" type="client"/>
 	<export function="isVisible" type="client"/>
+	<export function="setVisible" type="client"/>
+	<export function="setEnabled" type="client"/>
 
 	<!-- FILES -->
 	<file src="images/corner.png"/>

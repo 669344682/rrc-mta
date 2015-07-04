@@ -1,4 +1,5 @@
 isMapVisible = false
+isMapEnabled = true
 
 local isDragging = false
 local dragX, dragY = 0, 0
@@ -95,7 +96,7 @@ function showMap()
 	captionText.start(60 * mainScale, "Карта", "Los Santos")
 	buttonsTips.start({"КУРСОР - ПЕРЕМЕЩЕНИЕ", "КОЛЕСО - ПРИБЛИЖЕНИЕ", "ПКМ - УСТАНОВИТЬ ЦЕЛЬ", "M - ЗАКРЫТЬ КАРТУ"})
 	isMapVisible = true
-	exports["tws-utils"]:toggleHUD(false)
+	exports["tws-utils"]:toggleHUD(false, true)
 	
 	setTimer(
 		function() 
@@ -114,19 +115,38 @@ function hideMap()
 	setCursorAlpha(255)
 	buttonsTips.stop()
 	isMapVisible = false
-	exports["tws-utils"]:toggleHUD(true)
+	exports["tws-utils"]:toggleHUD(true, true)
 end
 
 function toggleMap()
 	if isMapVisible then
 		hideMap()
-	else
+	elseif isMapEnabled then
 		showMap()
 	end
 end
 
 function isVisible()
 	return isMapVisible
+end
+
+function setVisible(v)
+	if isMapVisible then
+		if not v then
+			hideMap()
+		end
+	else
+		if v then
+			showMap()
+		end
+	end
+end
+
+function setEnabled(isEnabled)
+	if not isEnabled and isMapVisible then
+		setVisible(false)
+	end
+	isMapEnabled = isEnabled
 end
 
 addEventHandler("onClientKey", root,
