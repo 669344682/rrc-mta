@@ -62,7 +62,7 @@ end
 
 addEvent("twsGarageLeave", true)
 addEventHandler("twsGarageLeave", root, 
-	function()
+	function(id)
 		exports["tws-camera"]:resetCamera()
 		garageVehicles.destroy()
 		garageGUI.isEnabled = false
@@ -77,7 +77,8 @@ addEventHandler("twsGarageLeave", root,
 				setElementPosition(localPlayer, unpack(garageExitPos))
 			end
 		else
-			triggerServerEvent("twsClientGarageTakeCar", resourceRoot, garageVehicles.getVehicleID())
+			outputChatBox(garageExitPos[1] .. " " .. garageExitPos[2] .. " " .. garageExitPos[3])
+			triggerServerEvent("twsClientGarageTakeCar", resourceRoot, garageVehicles.getVehicleID(), unpack(garageExitPos))
 		end
 		exports["tws-utils"]:toggleHUD(true)
 		exports["tws-time"]:unfreezeWorldTime()
@@ -86,10 +87,14 @@ addEventHandler("twsGarageLeave", root,
 
 
 function clientEnterGarage(exitPos, exitInt)
-	exitPos = {getElementPosition(localPlayer)}
-	exitInt = getElementInterior(localPlayer)
 	if getVehicleOccupantsCount() > 1 then
 		outputChatBox("В гараж с пассажирами нельзя!")
+		return
+	end
+	exitPos = {getElementPosition(localPlayer)}
+	exitInt = getElementInterior(localPlayer)
+	if exitInt ~= 0 then
+		outputChatBox("В гараж можно попасть только находясь на улице")
 		return
 	end
 	fadeCamera(false, 1)
@@ -98,6 +103,7 @@ function clientEnterGarage(exitPos, exitInt)
 		end, 1000, 1)
 
 	garageExitPos = exitPos
+	outputChatBox(garageExitPos[1] .. " " .. garageExitPos[2] .. " " .. garageExitPos[3])
 end
 
 addEventHandler("onClientKey", root, 

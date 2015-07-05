@@ -1,6 +1,6 @@
 addEvent("twsPlayerEnterGarage", true)
 addEventHandler("twsPlayerEnterGarage", root,
-	function( )
+	function()
 		local playerAccount = getPlayerAccount(client)
 		if isGuestAccount(playerAccount) then
 			return false
@@ -44,6 +44,7 @@ addEventHandler("twsClientGarageLeave", root,
 		if getElementData(client, "tws-inGarage") == false then
 			return false
 		end
+
 		setElementDimension(client, 0)
 
 		
@@ -59,12 +60,15 @@ addEventHandler("twsClientGarageLeave", root,
 
 addEvent("twsClientGarageTakeCar", true)
 addEventHandler("twsClientGarageTakeCar", root, 
-	function(vehicleID)
+	function(vehicleID, x, y, z)
 		local currentVehicle = getPedOccupiedVehicle(client)
 		if currentVehicle then
 			destroyElement(currentVehicle)
 		end
-		local vehicle = exports["tws-vehicles"]:spawnPlayerVehicle(client, vehicleID, 290.00677490234, -1533.0416259766, 24.520421981812, 0, 0, 144)
+		setElementPosition(client, x, y, z)
+		outputChatBox(x .. " " .. y .. " " .. z)
+		local vehicle = exports["tws-vehicles"]:spawnPlayerVehicle(client, vehicleID, x, y, z, 0, 0, r)
+		removePedFromVehicle(client)
 		warpPedIntoVehicle(client, vehicle)
 	end
 )
