@@ -2,9 +2,12 @@ spoilerScreen = {}
 spoilerScreen.selectedID = 0
 spoilerScreen.selectedColor = {255, 255, 255}
 spoilerScreen.selectedType = "normal"
+spoilerScreen.price = 0
 
-function spoilerScreen.start(id)
+function spoilerScreen.start(id, price)
 	spoilerScreen.stop()
+
+	spoilerScreen.price = price
 
 	colorPalette.start("Цвет спойлера", screenWidth - colorPalette.width - 10 * mainScale, 100 * mainScale, spoilerScreen, true, true)
 	buttonsTips.start({"ENTER - СОХРАНИТЬ", "BACKSPACE - ОТМЕНА"})
@@ -46,7 +49,12 @@ function spoilerScreen.back()
 end
 
 function spoilerScreen.confirm()
-	tuningVehicle.setTuning("spoiler", {id = spoilerScreen.selectedID, color = spoilerScreen.selectedColor, type = spoilerScreen.selectedType})
+	tuningUpgrades.pay(spoilerScreen.price,
+		function()
+			tuningVehicle.setTuning("spoiler", {id = spoilerScreen.selectedID, color = spoilerScreen.selectedColor, type = spoilerScreen.selectedType})
+		end
+	)
+	spoilerScreen.price = 0
 	screens.changeScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton)
 end
 

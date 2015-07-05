@@ -1,5 +1,6 @@
 addEvent("tws-serverTuningEnter", true)
 addEvent("tws-serverTuningExit", true)
+addEvent("tws-serverTuningBuyItem", true)
 
 function playerTuningEnter(player)
 	if not isElement(player) then
@@ -59,5 +60,19 @@ addEventHandler("tws-serverTuningEnter", root,
 addEventHandler("tws-serverTuningExit", root,
 	function(vehicleInfo, textureData)
 		playerTuningExit(client, nil, vehicleInfo, textureData)
+	end
+)
+
+addEventHandler("tws-serverTuningBuyItem", resourceRoot,
+	function(price)
+		if not client:getData("tws-accountName") or not client:getData("tws-money") or not price or price == nil then
+			triggerClientEvent(client, "tws-clientTuningBuyItem", resourceRoot, false)
+		end
+		local isSuccess = false
+		if client:getData("tws-money") >= price then
+			exports["tws-main"]:takePlayerMoney(client, price)
+			isSuccess = true
+		end
+		triggerClientEvent(client, "tws-clientTuningBuyItem", resourceRoot, isSuccess)
 	end
 )

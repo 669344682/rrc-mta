@@ -51,21 +51,31 @@ function itemsList.draw(fade)
 
 	x = itemsList.x 
 	y = itemsList.y
+	local myMoney = localPlayer:getData("tws-money")
 	for i = math.max(1, selectedItem - 2), math.min(selectedItem + 2, #itemsTable) do
 		local item = itemsTable[i]
 		local alpha = 1 - math.abs(item.y + itemsOffsetY + listItem.height / 2 - (itemsList.y + itemsList.height/2)) / itemsList.height * 3
 		if alpha > 0 then
-			dxDrawRoundRectangle(x, fadeOffset + item.y + itemsOffsetY, listItem.width, listItem.height, getColor(colors.black, 150 * alpha), 10)
-			dxDrawText(item.text, x, fadeOffset + item.y + itemsOffsetY, x + listItem.width, fadeOffset + item.y + listItem.height + itemsOffsetY, getColor(colors.white, 200 * alpha), 1.2 * mainScale, "default-bold", "center", "center")
-
+			if not item.price then
+				item.price = 0
+			end
+			local textColor = getColor(colors.white, 200 * alpha)
+			local priceTextColor = getColor(colors.white, 200 * alpha)
+			local backgroundColor = getColor(colors.black, 150 * alpha)
+			if myMoney < item.price then
+				textColor = getColor(colors.white, 30 * alpha)
+				priceTextColor = tocolor(255, 0, 0, 200 * alpha)
+			end
+			dxDrawRoundRectangle(x, fadeOffset + item.y + itemsOffsetY, listItem.width, listItem.height, backgroundColor, 10)
+			dxDrawText(item.text, x, fadeOffset + item.y + itemsOffsetY, x + listItem.width, fadeOffset + item.y + listItem.height + itemsOffsetY, textColor, 1.2 * mainScale, "default-bold", "center", "center")
+			if myMoney < item.price then
+				dxDrawImage(x + listItem.width / 2 - 8, fadeOffset + item.y + itemsOffsetY + listItem.height / 2 - 8, 16, 16, "images/lock.png")
+			end		
 			-- Цена
 			local priceText = item.price
-			if not priceText then
-				priceText = "0"
-			end
 			local priceX = x + itemsList.width + 10 * mainScale
 			dxDrawRoundRectangle(priceX, fadeOffset + item.y + itemsOffsetY, listItem.width / 3, listItem.height, getColor(colors.black, 150 * alpha), 10)
-			dxDrawText("$" .. tostring(priceText), priceX, fadeOffset + item.y + itemsOffsetY, priceX + listItem.width / 3, fadeOffset + item.y + listItem.height + itemsOffsetY, getColor(colors.white, 200 * alpha), 1.2 * mainScale, "default-bold", "center", "center")
+			dxDrawText("$" .. tostring(priceText), priceX, fadeOffset + item.y + itemsOffsetY, priceX + listItem.width / 3, fadeOffset + item.y + listItem.height + itemsOffsetY, priceTextColor, 1.2 * mainScale, "default-bold", "center", "center")
 		end
 	end	
 
@@ -131,6 +141,6 @@ end
 
 function itemsList.select()
 	if itemsTable and #itemsTable > 0 then
-		tuningUpgrades.buy(mainSectionName .. "-" .. subsectionName, itemsTable[selectedItem].name, itemsTable[selectedItem].price)
+		tuningUpgrades.buy(mainSectionName .. "-" .. subsectionName, itemsTable[selectedItem].name, itemsTable[selectedItem].price, selectedItem)
 	end
 end

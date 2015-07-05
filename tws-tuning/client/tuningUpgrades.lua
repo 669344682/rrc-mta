@@ -3,10 +3,11 @@ local callbacks = {}
 local getCallbacks = {}
 
 ---------------------------------------------------------------------
--- НЕОН
+-- НЕОН --
 ---------------------------------------------------------------------
 
 local neonColor = {255, 255, 255, false}
+local neonPrice = 0
 
 local function updateNeonColor(r, g, b)
 	if not neonColor then
@@ -19,10 +20,11 @@ local function updateNeonColor(r, g, b)
 end
 
 local function buyNeonColor(r, g, b)
-	tuningVehicle.setTuning("neon", neonColor)
-
 	screens.fadeToScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton)
 	tuningCamera.setLookMode("default", false)
+
+	tuningUpgrades.pay(neonPrice, function() tuningVehicle.setTuning("neon", neonColor) end)
+	neonPrice = 0
 end
 
 local function resetNeon()
@@ -41,13 +43,14 @@ local function cancelNeonColor()
 	tuningCamera.setLookMode("default", false)
 end
 
-callbacks["visuals-neon"] = function(action, data)
+callbacks["visuals-neon"] = function(action, data, price)
 	if action == "buy" then
 		if not neonColor then
 			tuningVehicle.setTuning("neon", nil)
 			exports["tws-neon"]:setVehicleNeon(tuningVehicle.vehicle, nil)
 		else 
 			tuningCamera.setLookMode("neonColor")
+			neonPrice = price
 			screens.fadeToScreen("paletteScreen", updateNeonColor, buyNeonColor, cancelNeonColor, "Цвет неона")
 		end
 	elseif action == "show" then
@@ -83,16 +86,16 @@ end
 getCallbacks["visuals-neon"] = function()
 	local neon = tuningVehicle.tuning.neon
 	if not neon then
-		return 1
+		return 1, true
 	elseif neon[4] then
-		return 2
+		return 2, true
 	else 
-		return 3
+		return 3, true
 	end
 end
 
 ---------------------------------------------------------------------
--- КАРБОН
+-- КАРБОН -- 
 ---------------------------------------------------------------------
 
 local function getCarbonTypeFromDoubleSized(id)
@@ -108,15 +111,14 @@ end
 
 callbacks["visuals-carbon"] = function(action, data, price)
 	if action == "buy" then
-		if data == "bonnet" then
-			tuningVehicle.setTuning("bonnet", getCarbonTypeFromDoubleSized(1))
-			tuningUpgrades.pay(price)
+		if data == "bonnet" then	
+			tuningUpgrades.pay(price, function() tuningVehicle.setTuning("bonnet", getCarbonTypeFromDoubleSized(1)) end)
 		elseif data == "boot" then
-			tuningVehicle.setTuning("boot", getCarbonTypeFromDoubleSized(2))
+			tuningUpgrades.pay(price, function() tuningVehicle.setTuning("boot", getCarbonTypeFromDoubleSized(2)) end)
 		elseif data == "bonnet-default" then
-			tuningVehicle.setTuning("bonnet", nil)
+			tuningUpgrades.pay(price, function() tuningVehicle.setTuning("bonnet", nil) end)
 		elseif data == "boot-default" then
-			tuningVehicle.setTuning("boot", nil)
+			tuningUpgrades.pay(price, function() tuningVehicle.setTuning("boot", nil) end)
 		elseif data == "none" then
 			tuningVehicle.setTuning("bonnet", nil)
 			tuningVehicle.setTuning("boot", nil)
@@ -153,15 +155,15 @@ end
 
 getCallbacks["visuals-carbon"] = function()
 	if tuningVehicle.tuning.bonnet then
-		return 3
-	elseif tuningVehicle.tuning.boot then
-		return 4
+		return 2
 	end
 	return 1
 end
 ---------------------------------------------------------------------
--- ЦВЕТ
+-- ЦВЕТ --
 ---------------------------------------------------------------------
+
+local bodyColorPrice = 0
 
 local function updateBodyColor(r, g, b)
 	tuningVehicle.tuning.color = {r, g, b}
@@ -169,8 +171,13 @@ local function updateBodyColor(r, g, b)
 end
 
 local function buyBodyColor(r, g, b)
-	tuningVehicle.setTuning("color", {r, g, b})
-	tuningTexture.redraw()
+	tuningUpgrades.pay(bodyColorPrice, 
+		function()
+			tuningVehicle.setTuning("color", {r, g, b})
+			tuningTexture.redraw()
+		end
+	)
+	bodyColorPrice = 0
 
 	screens.fadeToScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton)
 	tuningCamera.setLookMode("default", false)
@@ -184,20 +191,21 @@ local function cancelBodyColor()
 	tuningCamera.setLookMode("default", false)
 end
 
-callbacks["visuals-bodyColor"] = function(action, data)
+callbacks["visuals-bodyColor"] = function(action, data, price)
 	if action == "show" then
+		bodyColorPrice = price
 		tuningCamera.setLookMode("bodyColor")
 		screens.fadeToScreen("paletteScreen", updateBodyColor, buyBodyColor, cancelBodyColor, "Цвет кузова")
 	end
 end
 
 ---------------------------------------------------------------------
--- НАКЛЕЙКИ
+-- НАКЛЕЙКИ --
 ---------------------------------------------------------------------
 
 local currentStickerIndex = nil
 
-local function stickersHandler(action, data)
+local function stickersHandler(action, data, price)
 	if not data and action == "show" then
 		return
 	end
@@ -228,22 +236,22 @@ local function stickersHandler(action, data)
 			if currentStickerIndex then
 				tuningTexture.removeSelectedSticker()
 			end
-			screens.changeScreen("stickerScreen", tonumber(data))
+			screens.changeScreen("stickerScreen", tonumber(data), price)
 			--stickerPreview.hide()
 		end
 	end
 end
 
-callbacks["vinyls-shapes"] = function(action, data)
-	stickersHandler(action, data)
+callbacks["vinyls-shapes"] = function(action, data, price)
+	stickersHandler(action, data, price)
 end
 
-callbacks["vinyls-flames"] = function(action, data)
-	stickersHandler(action, data)
+callbacks["vinyls-flames"] = function(action, data, price)
+	stickersHandler(action, data, price)
 end
 
 ---------------------------------------------------------------------
--- СКИНЫ
+-- СКИНЫ --
 ---------------------------------------------------------------------
 
 
@@ -280,7 +288,7 @@ local function cancelSkinColor()
 
 end
 
-callbacks["vinyls-paintjobs"] = function(action, data)
+callbacks["vinyls-paintjobs"] = function(action, data, price)
 	if not data and action == "show" then
 		return
 	end
@@ -294,13 +302,16 @@ callbacks["vinyls-paintjobs"] = function(action, data)
 		tuningTexture.restoreSkin()
 	elseif action == "buy" then
 		if data ~= "none" then
-			tuningVehicle.setTuning("paintjob", tonumber(data))
+			tuningUpgrades.pay(price, 
+				function() 
+					tuningVehicle.setTuning("paintjob", tonumber(data)) 
+				end
+			)
 		else
 			tuningVehicle.setTuning("paintjob", nil)
 		end
 	end
 end
-
 
 ---------------------------------------------------------------------
 -- УДАЛЕНИЕ НАКЛЕЕК
@@ -315,9 +326,9 @@ callbacks["vinyls-removing"] = function(action, data)
 end
 
 ---------------------------------------------------------------------
--- СПОЙЛЕРЫ
+-- СПОЙЛЕРЫ --
 ---------------------------------------------------------------------
-callbacks["visuals-spoilers"] = function(action, data)
+callbacks["visuals-spoilers"] = function(action, data, price)
 	if not data then
 		data = "spoiler0"
 		if action == "show" then
@@ -327,7 +338,7 @@ callbacks["visuals-spoilers"] = function(action, data)
 	local spoilerIndex = tonumber(string.sub(data, string.len("spoiler") + 1, -1))
 	if action == "buy" then
 		if spoilerIndex > 0 then
-			screens.fadeToScreen("spoilerScreen", spoilerIndex)
+			screens.fadeToScreen("spoilerScreen", spoilerIndex, price)
 		else
 			tuningVehicle.setTuning("spoiler", nil)
 		end
@@ -361,15 +372,15 @@ getCallbacks["visuals-spoilers"] = function()
 end
 
 ---------------------------------------------------------------------
--- ТОНИРОВКА
+-- ТОНИРОВКА --
 ---------------------------------------------------------------------
 
-callbacks["visuals-windows"] = function(action, data)
+callbacks["visuals-windows"] = function(action, data, price)
 	if not data and action == "show" then
 		return
 	end
 	if action == "buy" then
-		tuningVehicle.setTuning("windows", tonumber(data))
+		tuningUpgrades.pay(price, function() tuningVehicle.setTuning("windows", tonumber(data)) end)
 	elseif action == "show" then
 		exports["tws-vehicles"]:setVehicleWindowsLevel(tuningVehicle.vehicle, tonumber(data))
 	elseif action == "hide" then
@@ -387,9 +398,9 @@ getCallbacks["visuals-windows"] = function()
 end
 
 ---------------------------------------------------------------------
--- КОЛЕСА
+-- КОЛЕСА -- 
 ---------------------------------------------------------------------
-callbacks["visuals-wheels"] = function(action, data)
+callbacks["visuals-wheels"] = function(action, data, price)
 	if not data and action == "show" then
 		return
 	end
@@ -399,7 +410,11 @@ callbacks["visuals-wheels"] = function(action, data)
 
 	if action == "buy" then
 		if data > 0 then
-			tuningVehicle.setTuning("wheels", {id = data, color = {255, 255, 255}})
+			tuningUpgrades.pay(price, 
+				function()
+					tuningVehicle.setTuning("wheels", {id = data, color = {255, 255, 255}})
+				end
+			)
 		else
 			tuningVehicle.setTuning("wheels", nil)
 		end
@@ -431,10 +446,11 @@ end
 
 
 ---------------------------------------------------------------------
--- ЦВЕТ КОЛЕС
+-- ЦВЕТ КОЛЕС --
 ---------------------------------------------------------------------
 
 local wheelsColor = {255, 255, 255}
+local wheelsColorPrice = 0
 
 local function updateWheelsColor(r, g, b)
 	if not wheelsColor then
@@ -445,7 +461,11 @@ local function updateWheelsColor(r, g, b)
 end
 
 local function buyWheelsColor(r, g, b)
-	tuningVehicle.setTuning("wheels", {id = tuningVehicle.tuning.wheels.id, color = {r, g, b}})
+	tuningUpgrades.pay(wheelsColorPrice, 
+		function()
+			tuningVehicle.setTuning("wheels", {id = tuningVehicle.tuning.wheels.id, color = {r, g, b}})
+		end
+	)
 
 	screens.fadeToScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton)
 	tuningCamera.setLookMode("default", false)
@@ -467,8 +487,9 @@ local function cancelWheelsColor()
 
 end
 
-callbacks["visuals-wheelsColor"] = function(action, data)
+callbacks["visuals-wheelsColor"] = function(action, data, price)
 	if action == "show" then
+		wheelsColorPrice = price
 		screens.fadeToScreen("paletteScreen", updateWheelsColor, buyWheelsColor, cancelWheelsColor, "Цвет дисков")
 		tuningCamera.setLookMode("wheelView")
 	end
@@ -519,7 +540,20 @@ end
 ---------------------------------------------------------------------
 ---------------------------------------------------------------------
 
-function tuningUpgrades.buy(name, data, price)
+function tuningUpgrades.buy(name, data, price, id)
+	if not price or price == nil or price < 0 then
+		price = 0
+	end
+	--outputDebugString("Buy upgrade: " .. tostring(name) .. " [" .. tostring(data) .. "] " .. " " .. tostring(tuningUpgrades.getUpgrade(name)))
+	local upgradeID, ignoreBought = tuningUpgrades.getUpgrade(name)
+	if upgradeID == id and not ignoreBought then
+		if name ~= "none" then
+			outputChatBox("Вы уже приобрели этот товар!", 255, 0, 0)
+		else
+			outputChatBox("Невозможно приобрести этот товар!", 255, 0, 0)
+		end
+		return
+	end
 	if getElementData(localPlayer, "tws-money") < price then
 		outputChatBox("У вас недостаточно денег!", 255, 0, 0)
 		return
@@ -529,12 +563,15 @@ function tuningUpgrades.buy(name, data, price)
 		playSoundFrontEnd(tuningConfig.sounds.buy)
 		return
 	end
-	--outputDebugString("Buy upgrade: " .. tostring(name) .. " [" .. tostring(data) .. "] ")
+	--outputDebugString("Unhandled buy upgrade: " .. tostring(name) .. " [" .. tostring(data) .. "] ")
 end
 
-function tuningUpgrades.show(name, data)
+function tuningUpgrades.show(name, data, price)
+	if not price or price == nil or price < 0 then
+		price = 0
+	end
 	if callbacks[name] then
-		callbacks[name]("show", data)
+		callbacks[name]("show", data, price)
 		return
 	end
 	--outputDebugString("Show upgrade: " .. tostring(name) .. " [" .. tostring(data) .. "] ")
@@ -555,6 +592,30 @@ function tuningUpgrades.getUpgrade(name)
 	return 1
 end
 
-function tuningUpgrades.pay(price)
-	outputChatBox("tuningUpgrades.pay")
+local onSuccessCallback
+local onFailCallback
+
+function tuningUpgrades.pay(price, onSuccess, onFail)
+	onSuccessCallback = onSuccess
+	onFailCallback = onFail
+	triggerServerEvent("tws-serverTuningBuyItem", resourceRoot, price)
 end
+
+addEvent("tws-clientTuningBuyItem", true)
+addEventHandler("tws-clientTuningBuyItem", resourceRoot, 
+	function(isSuccess)
+		if isSuccess then
+			outputDebugString("Покупка успешна")
+			if onSuccessCallback then
+				onSuccessCallback()
+			end
+		else
+			if onFailCallback then
+				onFailCallback()
+			end
+			outputChatBox("У вас недостаточно денег!", 255, 0, 0)
+		end
+		onSuccessCallback = nil
+		onFailCallback = nil		
+	end
+)

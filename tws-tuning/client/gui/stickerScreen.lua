@@ -1,9 +1,11 @@
 stickerScreen = {}
 local canMoveSticker = false
 local lastColor = {255, 255, 255}
+local stickerPrice = 0
 
-function stickerScreen.start(id)
+function stickerScreen.start(id, price)
 	stickerScreen.stop()
+	stickerPrice = price
 
 	if id then
 		tuningTexture.addSticker(id)
@@ -66,7 +68,16 @@ end
 
 function stickerScreen.confirm()
 	canMoveSticker = false
-	screens.changeScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton)
+	tuningUpgrades.pay(stickerPrice, 
+		function() 
+			screens.changeScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton) 
+		end,
+
+		function()
+			tuningTexture.removeSelectedSticker()
+		end
+	)
+	stickerPrice = 0
 end
 
 function stickerScreen.updateColor(r, g, b)

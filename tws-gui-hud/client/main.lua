@@ -30,7 +30,7 @@ cashBlock.distance = hpBarBlock.height * 2
 cashBlock.textColor = tocolor(0, 110, 0)
 
 local function draw()
-	if not isHUDVisible then
+	if not isHUDVisible or not localPlayer:getData("tws-accountName") then
 		return
 	end
 	local b
