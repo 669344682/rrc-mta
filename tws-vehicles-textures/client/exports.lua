@@ -3,3 +3,7 @@ function drawToVehicleTexture(vehicle, tuningTable)
 		textureDrawing:drawTextureFromTuningTable(tuningTable, textureManager.texturesShadersList[vehicle].texture)
 	end
 end
+
+function updateVehicleTexture(vehicle, tuningTable)
+	textureManager:updateVehicleTexture(vehicle)
+end

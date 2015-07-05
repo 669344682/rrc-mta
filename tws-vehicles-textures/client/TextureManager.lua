@@ -16,19 +16,7 @@ function textureManager:init()
 	self.texturesShadersList = {} -- [vehicle] = {shader = шейдер, texture = renderTarget}
 end
 
-function textureManager:updateVehicleTexture(vehicle, renderTarget)
-	if not isElement(vehicle) then
-		-- Машина не существует
-		outputDebugString("WARNING: textureManager:updateVehicleTexture: Vehicle is not an element")
-		return
-	end
-	-- Тюнинг автомобиля
-	local vehicleTuningTable = getElementData(vehicle, "tws-tuning")
-	if not vehicleTuningTable then
-		--outputDebugString("WARNING: textureManager:updateVehicleTexture: Vehicle tuning table is nil")
-		return
-	end
-	-- Если для машины не создан шейдер и текстура 
+function textureManager:setupTextureShader(vehicle, renderTarget)
 	if not self.texturesShadersList[vehicle] then
 		-- Создание шейдера и текустуры для машины
 		local vehicleTexture = renderTarget
@@ -43,6 +31,22 @@ function textureManager:updateVehicleTexture(vehicle, renderTarget)
 		engineApplyShaderToWorldTexture(self.texturesShadersList[vehicle].shader, vehicleTextureNames.body, vehicle)
 		engineApplyShaderToWorldTexture(self.texturesShadersList[vehicle].shader, vehicleTextureNames.body_dam, vehicle)
 	end
+end
+
+function textureManager:updateVehicleTexture(vehicle, renderTarget)
+	if not isElement(vehicle) then
+		-- Машина не существует
+		outputDebugString("WARNING: textureManager:updateVehicleTexture: Vehicle is not an element")
+		return
+	end
+	-- Тюнинг автомобиля
+	local vehicleTuningTable = getElementData(vehicle, "tws-tuning")
+	if not vehicleTuningTable then
+		--outputDebugString("WARNING: textureManager:updateVehicleTexture: Vehicle tuning table is nil")
+		return
+	end
+	-- Если для машины не создан шейдер и текстура 
+	textureManager:setupTextureShader(vehicle, renderTarget)
 	-- Рисование текстуры на renderTarget автомобиля
 	textureDrawing:drawTextureFromTuningTable(vehicleTuningTable, self.texturesShadersList[vehicle].texture)
 	dxSetShaderValue(self.texturesShadersList[vehicle].shader, "gTexture", self.texturesShadersList[vehicle].texture)

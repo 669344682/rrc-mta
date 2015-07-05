@@ -1,0 +1,31 @@
+<meta>
+	<!-- SERVER SCRIPTS -->
+	<script src="server/main.lua"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/utils.lua" type="client"/>
+	<script src="client/colors.lua" type="client"/>
+	<script src="client/listArrow.lua" type="client"/>
+	<script src="client/carInfo.lua" type="client"/>
+	<script src="client/captionText.lua" type="client"/>
+	<script src="client/garageVehicles.lua" type="client"/>
+	<script src="client/buttonsTips.lua" type="client"/>
+	<script src="client/garageGUI.lua" type="client"/>
+	<script src="client/garageMain.lua" type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="clientEnterGarage" type="client"/>
+
+	<!-- FILES -->
+	<file src="images/arrow.png"/>
+	<file src="images/corner.png"/>
+	<file src="images/bg.png"/>
+	<file src="images/fg.png"/>
+	<file src="images/screen_shadow.png"/>
+	<file src="images/gradient.png"/>
+
+	<file src="fonts/carbon.ttf"/>
+	<file src="fonts/calibri.ttf"/>
+
+	<min_mta_version client="1.4.0" server="1.4.0"/>
+</meta>

@@ -50,7 +50,7 @@
 	<export function="getAllVehiclesModels"			 type="client"/>
 	<export function="getAllVehiclesModels"			 type="server"/>
 
-	<!-- textures -->
+	<!-- textures NOT WORKING -->
 	<export function="redrawVehicleTexture"			 type="client"/>
 	<export function="drawTableToRenderTarget"		 type="client"/>
 	<export function="changeVehicleTexture"			 type="client"/>

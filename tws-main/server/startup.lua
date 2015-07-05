@@ -20,6 +20,7 @@ local resources = {
 	"tws-blips",
 	"tws-camera",
 	"tws-carshop",
+	"tws-garage",
 	--"tws-challenge",
 	"tws-components",
 	"tws-drift",

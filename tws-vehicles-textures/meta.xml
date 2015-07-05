@@ -11,6 +11,7 @@
 	<script src="client/exports.lua" type="client"/>
 	
 	<export function="drawToVehicleTexture" type="client"/>
+	<export function="updateVehicleTexture" type="client"/>
 
 	<file src="shaders/texreplace.fx"/>
 </meta>
