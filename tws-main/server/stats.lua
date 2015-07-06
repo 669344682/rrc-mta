@@ -69,7 +69,7 @@ function getPlayerSessionTime(player)
 end
 
 local function payPlayerMoney(player)
-	outputChatBox("Пособие: вы получили $1000", player, 0, 255, 0)
+	outputChatBox("Вы получили бонусные $1000 за час игры на сервере!", player, 0, 255, 0)
 	givePlayerMoney(player, 1000)
 end
 
@@ -83,11 +83,11 @@ end
 
 local function onHour()
 	for i, player in ipairs(getElementsByType("player")) do
-		if getPlayerSessionTime(player) > 15 * 60 then
+		if getPlayerSessionTime(player) > 20 * 60 then
 			payPlayerMoney(player)
 			givePlayerRespects(player)
 		else
-			outputChatBox("Вы играли слишком мало, поэтому не получили зарплату за прошедший час", player, 255, 0, 0)
+			outputChatBox("Вы играли слишком мало, поэтому не получили бонусные деньги за прошедший час!", player, 255, 0, 0)
 		end
 		savePlayerAccountData(player)
 	end

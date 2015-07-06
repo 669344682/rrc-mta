@@ -7,9 +7,23 @@ local isButtonPanelVisible = false
 local screenWidth, screenHeight = guiGetScreenSize()
 local drawRect = dxDrawRectangle
 
+local clockBlock = {}
+clockBlock.offsetX = -10
+clockBlock.offsetY = 0
+clockBlock.width = 400
+clockBlock.height = 50
+
+clockBlock.x = clockBlock.offsetX + screenWidth - clockBlock.width
+clockBlock.y = clockBlock.offsetY
+
+local textBoldSize = 1 + screenHeight/480 + (3 - (screenHeight/480))*(screenHeight-480)/(1080-480)
+local font = "pricedown"
+local scaleX = 2.1
+local scaleY = 2.1
+
 local hpBarBlock = {}
 hpBarBlock.offsetX = -10
-hpBarBlock.offsetY = 10
+hpBarBlock.offsetY = 15 + clockBlock.height + clockBlock.offsetY
 
 hpBarBlock.width = 120
 hpBarBlock.height = 16
@@ -45,6 +59,24 @@ local function draw()
 	if not isHUDVisible or not localPlayer:getData("tws-accountName") then
 		return
 	end
+
+	-- Часы
+	local time_h, time_m = getTime()
+	if time_h < 10 then
+		time_h = "0"..time_h
+	end
+	if time_m < 10 then
+		time_m = "0"..time_m
+	end
+
+	local b = clockBlock
+	dxDrawText (time_h .. ":" .. time_m, b.x + textBoldSize, b.y, b.x + b.width, b.y + b.height, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "right", "top")
+	dxDrawText (time_h .. ":" .. time_m, b.x - textBoldSize, b.y, b.x + b.width, b.y + b.height, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "right", "top")
+	dxDrawText (time_h .. ":" .. time_m, b.x, b.y + textBoldSize, b.x + b.width, b.y + b.height, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "right", "top")
+	dxDrawText (time_h .. ":" .. time_m, b.x, b.y - textBoldSize, b.x + b.width, b.y + b.height, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "right", "top")
+
+	dxDrawText (time_h .. ":" .. time_m, b.x, b.y, b.x + b.width, b.y + b.height, tocolor(215, 215, 215), scaleX, scaleY or scaleX, font, "right", "top")
+
 	local b
 
 	b = hpBarBlock
@@ -54,7 +86,7 @@ local function draw()
 	drawRect(b.x, b.y, b.width * width, b.height, b.hpColor)
 	dxDrawImage(b.x - b.height - 6, b.y, b.height, b.height, "images/hp.png", 0, 0, 0, b.hpColor)
 
-	local by = 0
+	local by = hpBarBlock.y
 	if isElement(localPlayer.vehicle) then
 		by = b.y + hpCarBlock.distance
 		drawRect(b.x - b.borderWidth, by - b.borderWidth, b.width + b.borderWidth * 2, b.height + b.borderWidth * 2, tocolor(0, 0, 0))
