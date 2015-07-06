@@ -11,7 +11,7 @@ local vehicleEntered = false
 
 addEvent("twsGarageEnter", true)
 addEventHandler("twsGarageEnter", root, 
-	function(dimension, playerVehicles, exitToHotel)
+	function(dimension, playerVehicles)
 		vehicleEntered = getPedOccupiedVehicle(localPlayer)
 		if isElement(vehicleEntered) then
 			setElementPosition(vehicleEntered, 312.83554077148, -1499.7497558594, 154.49007415771)
@@ -30,10 +30,6 @@ addEventHandler("twsGarageEnter", root,
 		fadeCamera(true, 1)
 		-- Time
 		exports["tws-time"]:freezeWorldTimeAt(12, 0)
-
-		if exitToHotel then
-			garageExitPos = {2228.23828125, -1150.5301513672, 1025.2954101563}
-		end
 	end
 )
 
@@ -77,16 +73,24 @@ addEventHandler("twsGarageLeave", root,
 				setElementPosition(localPlayer, unpack(garageExitPos))
 			end
 		else
-			outputChatBox(garageExitPos[1] .. " " .. garageExitPos[2] .. " " .. garageExitPos[3])
 			triggerServerEvent("twsClientGarageTakeCar", resourceRoot, garageVehicles.getVehicleID(), unpack(garageExitPos))
 		end
 		exports["tws-utils"]:toggleHUD(true)
 		exports["tws-time"]:unfreezeWorldTime()
 		setTimer(function() fadeCamera(true, 1) end, math.max(getPlayerPing(localPlayer) * 2, 50), 1)  
-	end)
+	end
+)
 
 
 function clientEnterGarage(exitPos, exitInt)
+	local vehicle = getPedOccupiedVehicle(localPlayer)
+	if isElement(vehicle) then
+		local owner = getElementData(vehicle, "tws-owner")
+		if not owner or owner ~= getElementData(localPlayer, "tws-accountName") then
+			outputChatBox("Нельзя попасть в гараж, находясь в чужой машине. Выйдите из машины и попытайтесь ещё раз")
+			return
+		end
+	end 
 	if getVehicleOccupantsCount() > 1 then
 		outputChatBox("В гараж с пассажирами нельзя!")
 		return
@@ -103,7 +107,6 @@ function clientEnterGarage(exitPos, exitInt)
 		end, 1000, 1)
 
 	garageExitPos = exitPos
-	outputChatBox(garageExitPos[1] .. " " .. garageExitPos[2] .. " " .. garageExitPos[3])
 end
 
 addEventHandler("onClientKey", root, 

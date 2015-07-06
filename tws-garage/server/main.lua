@@ -25,13 +25,8 @@ addEventHandler("twsPlayerEnterGarage", root,
 		
 		setElementDimension(client, garageDimension)
 		setElementData(client, "tws-inGarage", true)
-
-		-- Restore interior
-		if exitToHotel then
-			setElementData(client, "tws-oldInt", 15)
-		else
-			setElementData(client, "tws-oldInt", getElementInterior(client))
-		end
+		
+		setElementData(client, "tws-oldInt", getElementInterior(client))
 		setElementInterior(client, 0)
 
 		triggerClientEvent(client, "twsGarageEnter", resourceRoot, garageDimension, toJSON(playerVehicles), exitToHotel)
@@ -47,7 +42,7 @@ addEventHandler("twsClientGarageLeave", root,
 
 		setElementDimension(client, 0)
 
-		
+		setElementInterior(client, 0)
 		if vehicleID then
 			setElementInterior(client, 0)
 		else
@@ -66,7 +61,6 @@ addEventHandler("twsClientGarageTakeCar", root,
 			destroyElement(currentVehicle)
 		end
 		setElementPosition(client, x, y, z)
-		outputChatBox(x .. " " .. y .. " " .. z)
 		local vehicle = exports["tws-vehicles"]:spawnPlayerVehicle(client, vehicleID, x, y, z, 0, 0, r)
 		removePedFromVehicle(client)
 		warpPedIntoVehicle(client, vehicle)
