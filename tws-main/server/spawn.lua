@@ -1,4 +1,8 @@
-hospitalSpawnPosition = {2283.2463378906, -1137.0402832031, 1050.8984375, 180}
+hospitalSpawnPositions = {
+	{1184.2950439453, -1323.5886230469, 13.574824333191, 270.53387451172},
+	{2030.6058349609, -1418.4337158203, 16.9921875, 133.98641967773}
+
+}
 carshopSpawnPosition = {1154.501, -1837.466, 14.5, 180}
 randomSpawnPositions = {
 	{1226.4674072266, -1824.6783447266, 13.589803695679, 180.05046081543},
@@ -30,7 +34,7 @@ function twsSpawnPlayer(player, spawnType, spawnInfo)
 		pos[2] = pos[2] + math.random(-25, 25) / 10
 		int = 0
 	elseif spawnType == "hospitalSpawnPosition" then
-		pos = {unpack(hospitalSpawnPosition)}
+		pos = {unpack(hospitalSpawnPositions[math.random(1, #hospitalSpawnPositions))}
 		pos[1] = pos[1] + math.random(-50, 50) / 10
 		pos[2] = pos[2] + math.random(-25, 25) / 10
 		int = 0
