@@ -1,3 +1,5 @@
+-- test
+
 local FONT_BIAS = 4 -- наложение (расстояние между цифрами)
 local REFRESH_FRAME_RATE = 3 -- обновление скорости
 
