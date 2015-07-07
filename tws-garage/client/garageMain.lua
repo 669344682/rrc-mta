@@ -77,7 +77,8 @@ addEventHandler("twsGarageLeave", root,
 		end
 		exports["tws-utils"]:toggleHUD(true)
 		exports["tws-time"]:unfreezeWorldTime()
-		setTimer(function() fadeCamera(true, 1) end, math.max(getPlayerPing(localPlayer) * 2, 50), 1)  
+		setTimer(function() fadeCamera(true, 1) end, math.max(getPlayerPing(localPlayer) * 2, 50), 1) 
+		setCameraTarget(localPlayer) 
 	end
 )
 

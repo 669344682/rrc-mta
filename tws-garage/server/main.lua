@@ -64,5 +64,6 @@ addEventHandler("twsClientGarageTakeCar", root,
 		local vehicle = exports["tws-vehicles"]:spawnPlayerVehicle(client, vehicleID, x, y, z, 0, 0, r)
 		removePedFromVehicle(client)
 		warpPedIntoVehicle(client, vehicle)
+		setCameraTarget(client)
 	end
 )
