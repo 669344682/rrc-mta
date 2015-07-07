@@ -4,6 +4,7 @@ hospitalSpawnPositions = {
 
 }
 carshopSpawnPosition = {1154.501, -1837.466, 14.5, 180}
+
 randomSpawnPositions = {
 	{1226.4674072266, -1824.6783447266, 13.589803695679, 180.05046081543},
 	{901.37432861328, -1527.5733642578, 13.544944763184, 272.99014282227},
@@ -18,7 +19,6 @@ randomSpawnPositions = {
 	{2857.1843261719, -1862.4997558594, 11.094980239868, 86.443664550781},
 	{1940.0806884766, -2104.0261230469, 13.559032440186, 263.73764038086}
 }
-spawnInterior = 11
 
 -- TODO: REWRITE THIS
 function twsSpawnPlayer(player, spawnType, spawnInfo)
