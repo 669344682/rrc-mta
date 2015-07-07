@@ -14,7 +14,7 @@ local itemsOffsetY = 0
 local mainSectionName = ""
 local subsectionName = ""
 
-function itemsList.start(y, width, sectionName)
+function itemsList.start(y, width, sectionName, itemID)
 	itemsList.stop()
 	
 	itemsList.started = true

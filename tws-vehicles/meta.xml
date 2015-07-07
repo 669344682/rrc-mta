@@ -73,9 +73,4 @@
 	<file src="images/cube_veh256.dds"/>
 
 	<file src="fonts/numbers.ttf"/>
-
-	<file src="images/carbon/bonnet1.png"/>
-	<file src="images/carbon/bonnet2.png"/>
-	<file src="images/carbon/boot1.png"/>
-	<file src="images/carbon/boot2.png"/>
 </meta>

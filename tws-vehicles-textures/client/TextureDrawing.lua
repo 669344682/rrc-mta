@@ -23,7 +23,7 @@ function textureDrawing:drawTextureOffset(tuningTable, offsetX, offsetY)
 
 	-- Карбоновый капот
 	if tuningTable.bonnet then
-		--dxDrawImage(offsetX, offsetY, self.textureSize.width, self.textureSize.height, "images/carbon/bonnet" .. tostring(tuningTable.bonnet) .. ".png")
+		dxDrawImage(offsetX, offsetY, self.textureSize.width, self.textureSize.height, "images/carbon/bonnet" .. tostring(tuningTable.bonnet) .. ".png")
 	end
 
 	-- Наклейки

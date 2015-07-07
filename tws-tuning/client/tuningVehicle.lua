@@ -100,6 +100,10 @@ function tuningVehicle.setTuning(key, value)
 	tuningVehicle.tuning[key] = value
 end
 
+function tuningVehicle.getOldTuning(key)
+	return vehicleTuning[key]
+end
+
 function tuningVehicle.restoreTuning(key)
 	tuningVehicle.tuning[key] = vehicleTuning[key]
 end

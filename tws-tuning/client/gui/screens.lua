@@ -53,5 +53,6 @@ function screens.draw()
 	if screensTable[currentScreen] then
 		screensTable[currentScreen].draw(fade)
 	end
+	moneyText.draw()
 	updateMouseClick()
 end

@@ -4,8 +4,11 @@ spoilerScreen.selectedColor = {255, 255, 255}
 spoilerScreen.selectedType = "normal"
 spoilerScreen.price = 0
 
+spoilerScreen.isLocked = false
+
 function spoilerScreen.start(id, price)
 	spoilerScreen.stop()
+	spoilerScreen.isLocked = false
 
 	spoilerScreen.price = price
 
@@ -28,6 +31,7 @@ function spoilerScreen.start(id, price)
 end
 
 function spoilerScreen.stop()
+	spoilerScreen.isLocked = false
 	unbindKey("enter", "down", spoilerScreen.confirm)
 	unbindKey("backspace", "down", spoilerScreen.back)
 
@@ -49,13 +53,20 @@ function spoilerScreen.back()
 end
 
 function spoilerScreen.confirm()
+	if spoilerScreen.isLocked then
+		return
+	end
+	spoilerScreen.isLocked = true
 	tuningUpgrades.pay(spoilerScreen.price,
 		function()
 			tuningVehicle.setTuning("spoiler", {id = spoilerScreen.selectedID, color = spoilerScreen.selectedColor, type = spoilerScreen.selectedType})
+			screens.changeScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton)
+		end,
+		function()
+			screens.changeScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton)
 		end
 	)
 	spoilerScreen.price = 0
-	screens.changeScreen("subsectionScreen", subsectionScreen.lastSubsection, subsectionScreen.lastButton)
 end
 
 function spoilerScreen.updateColor(r, g, b)

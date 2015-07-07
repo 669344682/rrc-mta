@@ -14,4 +14,9 @@
 	<export function="updateVehicleTexture" type="client"/>
 
 	<file src="shaders/texreplace.fx"/>
+	
+	<file src="images/carbon/bonnet1.png"/>
+	<file src="images/carbon/bonnet2.png"/>
+	<file src="images/carbon/boot1.png"/>
+	<file src="images/carbon/boot2.png"/>
 </meta>

@@ -130,21 +130,17 @@ callbacks["visuals-carbon"] = function(action, data, price)
 		tuningCamera.setLookMode("topRight")
 		if data == "bonnet" then
 			tuningVehicle.tuning.bonnet = getCarbonTypeFromDoubleSized(1)
-			tuningTexture.redraw()
 		elseif data == "boot" then
 			tuningVehicle.tuning.boot = getCarbonTypeFromDoubleSized(2)
-			tuningTexture.redraw()
 		elseif data == "bonnet-default" then
 			tuningVehicle.tuning.bonnet = nil
-			tuningTexture.redraw()
 		elseif data == "boot-default" then
 			tuningVehicle.tuning.boot = nil
-			tuningTexture.redraw()
 		elseif data == "none" then
 			tuningVehicle.tuning.bonnet = nil
 			tuningVehicle.tuning.boot = nil
-			tuningTexture.redraw()
 		end
+		tuningTexture.redraw()
 	elseif action == "hide" then
 		tuningVehicle.restoreTuning("bonnet")
 		tuningVehicle.restoreTuning("boot")
@@ -154,7 +150,7 @@ callbacks["visuals-carbon"] = function(action, data, price)
 end
 
 getCallbacks["visuals-carbon"] = function()
-	if tuningVehicle.tuning.bonnet then
+	if tuningVehicle.getOldTuning("bonnet") then
 		return 2
 	end
 	return 1
@@ -251,7 +247,7 @@ callbacks["vinyls-flames"] = function(action, data, price)
 end
 
 ---------------------------------------------------------------------
--- СКИНЫ --
+-- РАСКРАСКИ --
 ---------------------------------------------------------------------
 
 
@@ -310,6 +306,15 @@ callbacks["vinyls-paintjobs"] = function(action, data, price)
 		else
 			tuningVehicle.setTuning("paintjob", nil)
 		end
+	end
+end
+
+getCallbacks["vinyls-paintjobs"] = function()
+	local paintjobID = tuningVehicle.getOldTuning("paintjob")
+	if not paintjobID then
+		return 1
+	else
+		return paintjobID + 1
 	end
 end
 
