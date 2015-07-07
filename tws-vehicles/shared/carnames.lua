@@ -13,13 +13,13 @@ local modelNames = {
 	[526] = "BMW E34",
 	[401] = "Nissan Skyline R34",
 	[559] = "Toyota Supra",
-	--[562] = "Mitsubishi Eclipse",
+	[562] = "Mitsubishi Eclipse",
 	[477] = "Mazda RX7",
 	[480] = "Porsche 911",
 	[533] = "Honda S2000",
 	[517] = "Toyota Celica",
 	[405] = "Toyota Chaser Tourer V",
-	--[560] = "Subaru Impreza",
+	[560] = "Subaru Impreza",
 	[542] = "Dodge Challenger",
 	[439] = "Chevrolet Camaro Z28"
 }
