@@ -34,7 +34,7 @@ function twsSpawnPlayer(player, spawnType, spawnInfo)
 		pos[2] = pos[2] + math.random(-25, 25) / 10
 		int = 0
 	elseif spawnType == "hospitalSpawnPosition" then
-		pos = {unpack(hospitalSpawnPositions[math.random(1, #hospitalSpawnPositions))}
+		pos = {unpack(hospitalSpawnPositions[math.random(1, #hospitalSpawnPositions)])}
 		pos[1] = pos[1] + math.random(-50, 50) / 10
 		pos[2] = pos[2] + math.random(-25, 25) / 10
 		int = 0
