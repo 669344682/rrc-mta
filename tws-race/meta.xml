@@ -1,7 +1,8 @@
 <meta>
 	<oop>true</oop>
 	<!-- CLIENT -->
-	<script src="client/main.lua" type="client"/>
+	<script src="client/raceGameplay.lua" type="client"/>
+	<script src="client/raceHUD.lua" type="client"/>
 	<!-- SERVER -->
 	<script src="server/raceManager.lua" type="server"/>
 	<script src="server/exports.lua" type="server"/>
