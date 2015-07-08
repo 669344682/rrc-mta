@@ -31,6 +31,7 @@
 	<export function="setVehicleInfo"				 type="server"/>
 	<export function="getVehicleInfo"				 type="server"/>
 	<export function="fixVehicle"					 type="server"/>
+	<export function="fixGarageVehicle"				 type="server"/>
 	<export function="setVehicleHandlingType"		 type="server"/>
 
 	<export function="updateVehicleTuning"			 type="client"/>

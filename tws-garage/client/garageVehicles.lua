@@ -1,8 +1,12 @@
+local MAX_FIX_PRICE = 5000
+
 garageVehicles = {}
 local vehicle
 local vehicleID = 1
 local vehicles = {}
 garageVehicles.vehicleName = ""
+garageVehicles.isBroken = false
+garageVehicles.fixPrice = 0
 
 function garageVehicles.getVehicleID()
 	return vehicleID
@@ -99,6 +103,30 @@ function garageVehicles.updateVehicle()
 			end
 		end
 	end
+	garageVehicles.fixPrice = 0
+	local vehicleHealth = getElementHealth(vehicle)
+	if vehicleHealth < 1000 then
+		garageVehicles.isBroken = true
+		local maxHealth = 1000 - 250
+		garageVehicles.fixPrice = math.floor(((1 - (vehicleHealth - 250) / maxHealth) * MAX_FIX_PRICE) / 100) * 100
+	else
+		garageVehicles.isBroken = false
+	end
+end
+
+function garageVehicles.fixVehicle()
+	if not garageVehicles.isBroken then
+		return
+	end
+	fixVehicle(vehicle)
+	triggerServerEvent("twsClientGarageFixCar", resourceRoot, vehicleID, garageVehicles.fixPrice)
+	garageVehicles.isBroken = false
+	garageVehicles.fixPrice = 0
+	local info = vehicles[vehicleID]
+	if not info then
+		return false
+	end
+	info.damage = nil
 end
 
 function garageVehicles.next()

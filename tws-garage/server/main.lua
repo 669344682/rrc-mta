@@ -67,3 +67,25 @@ addEventHandler("twsClientGarageTakeCar", root,
 		setCameraTarget(client)
 	end
 )
+
+addEvent("twsClientGarageFixCar", true)
+addEventHandler("twsClientGarageFixCar", resourceRoot,
+	function(vehicleID, price)
+		local playerMoney = client:getData("tws-money")
+		if not playerMoney then
+			outputChatBox("Вы не залогинены", client, 255, 0, 0)
+			return
+		end
+		if playerMoney < price then
+			outputChatBox("У вас недостаточно денег для починки автомобиля. Требуется $" .. tostring(price), client, 255, 0, 0)
+			return
+		end
+		
+		if exports["tws-vehicles"]:fixGarageVehicle(client, vehicleID) then
+			outputChatBox("Автомобиль отремонтирован", client, 0, 255, 0)
+			exports["tws-main"]:takePlayerMoney(client, price)
+		else
+			outputChatBox("Не удалось починить автомобиль", client, 255, 0, 0)
+		end
+	end
+)

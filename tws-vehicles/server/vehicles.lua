@@ -24,6 +24,34 @@ function getPlayerGarageVehicleInfo(player, vehicleID)
 	return accountVehicles[vehicleID]
 end
 
+-- Изменяет таблицу настроек автомобиля из гаража
+function setPlayerGarageVehicleInfo(player, vehicleID, newInfo)
+	if not isElement(player) then
+		return false
+	end
+	if not vehicleID then
+		return false
+	end
+	local account = getPlayerAccount(player)
+	if isGuestAccount(account) then
+		return false
+	end
+	local accountVehicles = fromJSON(getAccountData(account, "vehicles"))
+	if not accountVehicles then
+		return false
+	end
+	if not accountVehicles[vehicleID] then
+		return false
+	end
+	accountVehicles[vehicleID] = newInfo
+	vehiclesJSON = toJSON(accountVehicles)
+	if not vehiclesJSON then
+		return false
+	end
+	setAccountData(account, "vehicles", vehiclesJSON)
+	return true
+end
+
 function createVehicleTWS(...)
 	local vehicle = createVehicle(...)
 	setVehicleColor(vehicle, 255, 255, 255, 255, 255, 255)
@@ -289,6 +317,33 @@ end
 function fixVehicle(vehicle)
 	_fixVehicle(vehicle)
 	triggerClientEvent(root, "tws-updateVehicleComponentsDamage", vehicle, true)
+end
+
+function fixGarageVehicle(player, vehicleID)
+	if not isElement(player) then
+		return false
+	end
+	if not vehicleID then
+		return false
+	end
+	local account = getPlayerAccount(player)
+	if isGuestAccount(account) then
+		return false
+	end
+	local accountName = getAccountName(account)
+
+	-- Информаця о машине, которую нужно починить
+	local vehicleInfo = getPlayerGarageVehicleInfo(player, vehicleID)
+	if not vehicleInfo then
+		return false, "nocar"
+	end
+
+	vehicleInfo.damage = {}
+	vehicleInfo.damage.health = 1000
+	vehicleInfo.damage.doors = nil
+	vehicleInfo.damage.panels = nil
+
+	return setPlayerGarageVehicleInfo(player, vehicleID, vehicleInfo)
 end
 
 function spawnPlayerVehicle(player, vehicleID, x, y, z, rx, ry, rz)

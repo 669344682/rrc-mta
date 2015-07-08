@@ -53,5 +53,6 @@ addEventHandler("onClientRender", root,
 			dxDrawText("АВТОМОБИЛЯ НЕТ В ГАРАЖЕ", 3, 3, screenWidth + 3, screenHeight + 3 , tocolor(0, 0, 0, 150), 3, "default-bold", "center", "center", false, false, false, true)
 			dxDrawText("АВТОМОБИЛЯ НЕТ В ГАРАЖЕ", 0, 0, screenWidth, screenHeight , tocolor(255, 0, 0), 3, "default-bold", "center", "center", false, false, false, true)
 		end
+		moneyText.draw()
 	end
 )
