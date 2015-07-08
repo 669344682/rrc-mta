@@ -49,7 +49,7 @@ function twsSpawnPlayer(player, spawnType, spawnInfo)
 		pos[1] = pos[1] + math.random(-50, 50) / 10
 		pos[2] = pos[2] + math.random(-25, 25) / 10
 		int = 0
-	elseif spawnType == "hospitalSpawnPosition" then
+	elseif spawnType == "hospital" then
 		pos = findNearestHospitalForPlayer(player)
 		pos[1] = pos[1] + math.random(-50, 50) / 10
 		pos[2] = pos[2] + math.random(-25, 25) / 10
