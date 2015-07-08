@@ -20,6 +20,22 @@ randomSpawnPositions = {
 	{1940.0806884766, -2104.0261230469, 13.559032440186, 263.73764038086}
 }
 
+local function findNearestHospitalForPlayer(player)
+	local minDistance = 50000
+	local minID = 1
+
+	local x, y, z = getElementPosition(player)
+	for i, pos in ipairs(hospitalSpawnPositions) do
+		local distance = getDistanceBetweenPoints2D(x, y, pos[1], pos[2])
+		if distance < minDistance then
+			minDistance = distance
+			minID = i
+		end
+	end
+
+	return {unpack(hospitalSpawnPositions[minID])}
+end
+
 -- TODO: REWRITE THIS
 function twsSpawnPlayer(player, spawnType, spawnInfo)
 	if not isElement(player) then
@@ -34,7 +50,7 @@ function twsSpawnPlayer(player, spawnType, spawnInfo)
 		pos[2] = pos[2] + math.random(-25, 25) / 10
 		int = 0
 	elseif spawnType == "hospitalSpawnPosition" then
-		pos = {unpack(hospitalSpawnPositions[math.random(1, #hospitalSpawnPositions)])}
+		pos = findNearestHospitalForPlayer(player)
 		pos[1] = pos[1] + math.random(-50, 50) / 10
 		pos[2] = pos[2] + math.random(-25, 25) / 10
 		int = 0

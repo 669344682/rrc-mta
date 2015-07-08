@@ -10,7 +10,7 @@ local drawRect = dxDrawRectangle
 local clockBlock = {}
 clockBlock.offsetX = -10
 clockBlock.offsetY = 0
-clockBlock.width = 400
+clockBlock.width = 120
 clockBlock.height = 50
 
 clockBlock.x = clockBlock.offsetX + screenWidth - clockBlock.width
@@ -70,12 +70,12 @@ local function draw()
 	end
 
 	local b = clockBlock
-	dxDrawText (time_h .. ":" .. time_m, b.x + textBoldSize, b.y, b.x + b.width + textBoldSize, b.y + b.height, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "right", "top")
-	dxDrawText (time_h .. ":" .. time_m, b.x - textBoldSize, b.y, b.x + b.width - textBoldSize, b.y + b.height, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "right", "top")
-	dxDrawText (time_h .. ":" .. time_m, b.x, b.y + textBoldSize, b.x + b.width, b.y + b.height + textBoldSize, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "right", "top")
-	dxDrawText (time_h .. ":" .. time_m, b.x, b.y - textBoldSize, b.x + b.width, b.y + b.height - textBoldSize, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "right", "top")
+	dxDrawText (time_h .. ":" .. time_m, b.x + textBoldSize, b.y, b.x + b.width + textBoldSize, b.y + b.height, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "center", "top")
+	dxDrawText (time_h .. ":" .. time_m, b.x - textBoldSize, b.y, b.x + b.width - textBoldSize, b.y + b.height, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "center", "top")
+	dxDrawText (time_h .. ":" .. time_m, b.x, b.y + textBoldSize, b.x + b.width, b.y + b.height + textBoldSize, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "center", "top")
+	dxDrawText (time_h .. ":" .. time_m, b.x, b.y - textBoldSize, b.x + b.width, b.y + b.height - textBoldSize, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "center", "top")
 
-	dxDrawText (time_h .. ":" .. time_m, b.x, b.y, b.x + b.width, b.y + b.height, tocolor(215, 215, 215), scaleX, scaleY or scaleX, font, "right", "top")
+	dxDrawText (time_h .. ":" .. time_m, b.x, b.y, b.x + b.width, b.y + b.height, tocolor(215, 215, 215), scaleX, scaleY or scaleX, font, "center", "top")
 
 	local b
 

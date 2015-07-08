@@ -7,12 +7,10 @@ addEventHandler("twsPlayerEnterGarage", root,
 		end
 		local garageDimension = exports["tws-main"]:getPlayerID(client)
 
-		local currentVehicle = getPedOccupiedVehicle(client)
-		local exitToHotel = false
-		if exports["tws-vehicles"]:isVehicleOwnedByPlayer(currentVehicle, client) then
+		local currentVehicle = client.vehicle
+		if isElement(currentVehicle) and exports["tws-vehicles"]:isVehicleOwnedByPlayer(currentVehicle, client) then
 			removePedFromVehicle(client)
 			exports["tws-vehicles"]:returnVehicleToGarage(currentVehicle)
-			exitToHotel = true
 		end
 
 		local playerVehicles = fromJSON(getAccountData(playerAccount, "vehicles"))
@@ -23,12 +21,13 @@ addEventHandler("twsPlayerEnterGarage", root,
 			end
 		end
 		
-		setElementDimension(client, garageDimension)
-		setElementData(client, "tws-inGarage", true)
-		
-		setElementData(client, "tws-oldInt", getElementInterior(client))
-		setElementInterior(client, 0)
+		client:setData("tws-garage-oldInterior", client.interior)
+		client:setData("tws-garage-oldDimension", client.dimension)
+		client.interior = 0
+		client.dimension = garageDimension
 
+		client:setData(	"tws-inGarage", true)
+		
 		triggerClientEvent(client, "twsGarageEnter", resourceRoot, garageDimension, toJSON(playerVehicles), exitToHotel)
 	end
 )
@@ -36,27 +35,33 @@ addEventHandler("twsPlayerEnterGarage", root,
 addEvent("twsClientGarageLeave", true)
 addEventHandler("twsClientGarageLeave", root, 
 	function(vehicleID)
-		if getElementData(client, "tws-inGarage") == false then
+		if client:getData("tws-inGarage") == false then
 			return false
 		end
 
-		setElementDimension(client, 0)
+		local dimension = client:getData("tws-garage-oldDimension")
+		if dimension then
+			client.dimension = dimension
+		end
 
-		setElementInterior(client, 0)
+		client.interior = 0
 		if vehicleID then
-			setElementInterior(client, 0)
+			client.interior = 0
 		else
-			setElementInterior(client, getElementData(client, "tws-oldInt"))
+			local interior = client:getData("tws-garage-oldInterior")
+			if interior then
+				client.interior = interior
+			end
 		end
 		triggerClientEvent(client, "twsGarageLeave", resourceRoot, vehicleID)
-		setElementData(client, "tws-inGarage", false)	
+		client:setData("tws-inGarage", false)
 	end
 )
 
 addEvent("twsClientGarageTakeCar", true)
 addEventHandler("twsClientGarageTakeCar", root, 
 	function(vehicleID, x, y, z)
-		local currentVehicle = getPedOccupiedVehicle(client)
+		local currentVehicle = client.vehicle
 		if currentVehicle then
 			destroyElement(currentVehicle)
 		end
