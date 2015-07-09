@@ -16,10 +16,11 @@ instructions.name = {
 
 ]]--
 
+local marker, blip
+
 instructions.welcoming = {
 	show = function()
-		setPlayerHudComponentVisible("radar", false)
-		setElementFrozen(localPlayer, true)
+		localPlayer.frozen = true
 		toggleAllControls(false, true, false)
 
 		window.text = "Добро пожаловать на сервер Russian Racing Club.\n"
@@ -38,67 +39,123 @@ instructions.welcoming = {
 	buttonClick = function()
 		gui.visible = false
 
-		continueAfterEvent("onAlphaFullyChanged", startInstruction, "panel1")
+		continueAfterEvent("onAlphaFullyChanged", resourceRoot, startInstruction, "panel")
 	end
 }
 
-instructions.panel1 = {
+instructions.panel = {
 	show = function()
-		local offsetX = 100
+		window.text = "Нажав на F1, вы попадаете в меню выбора\n"
+		window.text = window.text .. "где вы можете зайти в гараж, открыть карту, и так далее.\n\n"
 
-		arrow.x, arrow.y = offsetX, screenY - arrow.h - gui.panelheight
-		arrow.rotation = 45
-		arrow.visible = true
-
-		window.text = "Чтобы посмотреть свой профиль, нажмите на имя профиля.\n\n"
-		window.text = window.text .. "Чтобы передать кому-то деньги, нажмите на ваши деньги."
-		window.w, window.h = 500, 100
-		window.x, window.y = 40 + offsetX, arrow.y - window.h
+		window.w, window.h = 500, 160
+		window.x, window.y = screenX/2 - window.w/2, screenY/2 - window.h/2
 		window.visible = true
 
-		button.w = 100
-		button.text = "Дальше"
-		button.x = window.x + window.w - button.w
-		button.y = window.y + window.h + 10
+		button.x = window.x + window.w/2 - button.w/2
+		button.y = window.y + window.h - button.h - 20
 		button.visible = true
 	end,
 	buttonClick = function()
 		gui.visible = false
 
-		continueAfterEvent("onAlphaFullyChanged", startInstruction, "panel2")
+		continueAfterEvent("onAlphaFullyChanged", resourceRoot, startInstruction, "auto")
 	end
 }
 
-instructions.panel2 = {
+
+local function markerHit(hitElement)
+	if hitElement == localPlayer then
+		if localPlayer.vehicle then
+			marker:destroy(); marker = nil
+			blip:destroy(); blip = nil
+
+			removeEventHandler("onClientMarkerHit", marker, markerHit)
+
+			startInstruction("challenge")
+		else
+			outputChatBox("Вы должны быть в автомобиле!", 255, 50, 50)
+		end
+	end
+end
+
+instructions.auto = {
 	show = function()
-		local offsetX = 390
+		window.text = "Нажмите на F1 еще раз, чтобы скрыть меню и курсор.\n"
+		window.text = window.text .. "Чтобы продолжить обучение, сядьте в автомобиль.\n\n"
 
-		arrow.x = screenX - (offsetX * mainScale)
-		arrow.y = screenY - arrow.h - gui.panelheight
-		arrow.rotation = 0
-		arrow.visible = true
-
-		window.text = "По достижении нужного количества респектов\n"
-		window.text = window.text .. "Вы сможете купить новый уровень, нажав\n"
-		window.text = window.text .. "на кнопку уровня на панели."
-		window.w, window.h = 500, 100
-		window.x, window.y = screenX - (offsetX * mainScale) + arrow.w/2 - window.w/2, arrow.y - window.h
+		window.w, window.h = 500, 160
+		window.x, window.y = screenX/2 - window.w/2, screenY/2 - window.h/2
 		window.visible = true
 
-		button.w = 100
-		button.text = "Дальше"
-		button.x = window.x + window.w - button.w
-		button.y = window.y + window.h + 10
+		button.x = window.x + window.w/2 - button.w/2
+		button.y = window.y + window.h - button.h - 20
 		button.visible = true
 	end,
 	buttonClick = function()
 		gui.visible = false
 
-		continueAfterEvent("onAlphaFullyChanged", startInstruction, "panel3")
+		localPlayer.frozen = false
+		toggleAllControls(true, true, false)
+
+		continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
+		continueAfterEvent("onClientVehicleEnter", root,
+			function()
+				marker = createMarker(5295.377, -2073.993, 13.5, "cylinder", 3, 255, 0, 0, 150)
+				marker.dimension = localPlayer.dimension
+
+				blip = createBlipAttachedTo(marker)
+				blip.dimension = localPlayer.dimension
+
+				addEventHandler("onClientMarkerHit", marker, markerHit)
+			end
+		)
 	end
 }
 
-instructions.panel3 = {
+instructions.racemarker = {
+	show = function()
+		window.text = "На миникарте появилась точка. Езжайте туда.\n\n\n"
+
+		window.w, window.h = 400, 130
+		window.x, window.y = screenX/2 - window.w/2, screenY/2 - window.h/2
+		window.visible = true
+
+		button.x = window.x + window.w/2 - button.w/2
+		button.y = window.y + window.h - button.h - 20
+		button.visible = true
+	end,
+	buttonClick = function()
+		gui.visible = false
+
+		continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
+	end
+}
+
+
+instructions.challenge = {
+	show = function()
+		window.text = "Вы можете вызывать других игроков на дуэль.\n"
+		window.text = window.text .. "Изменить ставку вы можете в настройках через F1.\n\n"	
+		window.text = window.text .. "Чтобы вызвать кого-то на дуэль, включите\n"
+		window.text = window.text .. "курсор и нажмите на автомобиль оппонента.\n\n\n"
+
+		window.w, window.h = 500, 240
+		window.x, window.y = screenX/2 - window.w/2, screenY/2 - window.h/2
+		window.visible = true
+
+		button.x = window.x + window.w/2 - button.w/2
+		button.y = window.y + window.h - button.h - 20
+		button.visible = true
+	end,
+	buttonClick = function()
+		gui.visible = false
+
+		continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
+	end
+}
+
+instructions.map = {
 	show = function()
 		local offsetX = 300
 
@@ -107,15 +164,14 @@ instructions.panel3 = {
 		arrow.rotation = 0
 		arrow.visible = true
 
-		window.text = "Чтобы включить карту, нажмите на кнопку\n"
-		window.text = window.text .. "или используйте хоткей \"" .. tostring(mapHotkey) .."\".\n"
+		window.text = "Чтобы включить карту, используйте хоткей \"" .. tostring(mapHotkey) .."\".\n"
 		window.text = window.text .. "Вы можете поставить точку на карте\nнажатием правой кнопкой мыши."
 		window.w, window.h = 500, 100
 		window.x, window.y = screenX - (offsetX * mainScale) + arrow.w/2 - window.w/2, arrow.y - window.h
 		window.visible = true
 
 		button.w = 100
-		button.text = "Дальше"
+		button.text = "OK"
 		button.x = window.x + window.w - button.w
 		button.y = window.y + window.h + 10
 		button.visible = true
@@ -123,41 +179,9 @@ instructions.panel3 = {
 	buttonClick = function()
 		gui.visible = false
 
-		continueAfterEvent("onAlphaFullyChanged", startInstruction, "panel4")
+		continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
 	end
 }
-
-instructions.panel4 = {
-	show = function()
-		window.text = "Вы можете наводить на элементы панели,\n"
-		window.text = window.text .. "и над ними будут отображаться пояснения.\n\nНе забудьте: курсор включается кнопкой " .. tostring(mouseButton) .. "\n\n\n"
-		window.w, window.h = 500, 200
-		window.x, window.y = screenX/2 - window.w/2, screenY/2 - window.h/2
-		window.visible = true
-
-		button.w = 60
-		button.x = window.x + window.w/2 - button.w/2
-		button.y = window.y + window.h - button.h - 20
-		button.text = "OK"
-		button.visible = true
-	end,
-	buttonClick = function()
-		gui.visible = false
-
-		setTimer(
-			function()
-				setPlayerHudComponentVisible("radar", true)
-				setElementFrozen(localPlayer, false)
-				toggleAllControls(true, true, false)
-			end, 200, 1
-		)
-
-		continueAfterEvent("onAlphaFullyChanged", deinit)
-	end
-}
-
-instructions.panel = panel1
-
 
 instructions.VIP = {
 	show = function()
@@ -167,7 +191,8 @@ instructions.VIP = {
 		window.text = window.text .. "Теперь вы можете телепортироваться по карте.\n"
 		window.text = window.text .. "Для этого откройте карту, поставьте метку\n"
 		window.text = window.text .. "и нажмите на кнопку \"телепортироваться\".\n\n"
-		window.text = window.text .. "Чтобы пользоваться другими возможностями VIP,\nнажмите на кнопку \"VIP-Панель\" на нижней панели.\n\n\n\n"
+		window.text = window.text .. "Чтобы пользоваться всеми возможностями VIP,\n"
+		window.text = window.text .. "используйте кнопку \"VIP-Панель\" через F1.\n\n\n\n"
 		window.visible = true 
 
 		button.w = 60
@@ -185,7 +210,7 @@ instructions.VIP = {
 
 		gui.visible = false
 
-		continueAfterEvent("onAlphaFullyChanged", deinit)
+		continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
 	end
 }
 
@@ -211,7 +236,7 @@ instructions.garage = {
 			function()
 				if window.visible then
 					gui.visible = false
-					continueAfterEvent("onAlphaFullyChanged", deinit)
+					continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
 				end
 			end, 4000, 1
 		)
@@ -222,7 +247,7 @@ instructions.garage = {
 
 		gui.visible = false
 
-		continueAfterEvent("onAlphaFullyChanged", deinit)
+		continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
 	end
 }
 

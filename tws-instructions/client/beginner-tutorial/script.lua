@@ -13,13 +13,6 @@ addEventHandler("instructions.serverBeginningMapRoot", resourceRoot,
 	end
 ) 
 
-local barriers = {
-	{5269.875, -1952.5684814453, 16.05485534668, 90, 0, 60},
-	{5279.5834960938, -1927.4091796875, 14.463170051575, 74.99267578125, 270, 180},
-	{5294.8110351563, -1927.4091796875, 15.099292755127, 285, 270, 0},
-	{5296.4311523438, -1954.2944335938, 16.05485534668, 90, 0, 275}
-}
-
 local function toggleFog(state)
 	if state then
 		setFogDistance(50)
@@ -85,6 +78,6 @@ function startBeginnerTutorial()
 	addEventHandler("onClientColShapeHit", root, colShapeHit)
 
 	-- начальная позиция бота
-	local botStartPosition = {x = 5305.736, y = -2081.849, z = 15.002}
+	local botStartPosition = {x = 5305.318359375, y = -2082.5686035156, z = 15.004985809326}
 
 end

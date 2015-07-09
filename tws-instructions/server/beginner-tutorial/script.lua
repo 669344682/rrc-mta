@@ -17,9 +17,9 @@ addEventHandler("instructions.onClientBeginnerTutorialStart", resourceRoot,
 			return
 		end
 
-		client.vehicle.position = Vector3(5298.661, -2075.063, 14.975)
+		--client.vehicle.position = Vector3(5298.661, -2075.063, 14.975)
 		--client.vehicle.position = beginning.position
-		client.position = beginning.position
+		--client.position = beginning.position
 		client.dimension = id
 
 		triggerClientEvent("instructions.serverBeginningMapRoot", resourceRoot, mapRoot, id)

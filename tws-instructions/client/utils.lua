@@ -18,14 +18,14 @@ function toggleControlAndHud(bool)
 	end
 end
 
-function continueAfterEvent(event, func, ...)
+function continueAfterEvent(event, attachedTo, func, ...)
 	local function continue()
-		removeEventHandler(event, resourceRoot, continue)
+		removeEventHandler(event, attachedTo, continue)
 
 		func(unpack(arg))
 	end
 
-	addEventHandler(event, resourceRoot, continue)
+	addEventHandler(event, attachedTo, continue)
 end
 
 function getElementSpeed(theElement, unit)
