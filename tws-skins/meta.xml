@@ -1,0 +1,117 @@
+<meta>
+	<oop>true</oop>
+
+	<!-- SKINS -->
+	<file src="skins/16.dff"/>
+	<file src="skins/16.txd"/>
+
+	<file src="skins/26.dff"/>
+	<file src="skins/26.txd"/>
+
+	<file src="skins/27.dff"/>
+	<file src="skins/27.txd"/>
+
+	<file src="skins/39.dff"/>
+	<file src="skins/39.txd"/>
+
+	<file src="skins/51.dff"/>
+	<file src="skins/51.txd"/>
+
+	<file src="skins/52.dff"/>
+	<file src="skins/52.txd"/>
+
+	<file src="skins/53.dff"/>
+	<file src="skins/53.txd"/>
+
+	<file src="skins/54.dff"/>
+	<file src="skins/54.txd"/>
+
+	<file src="skins/57.dff"/>
+	<file src="skins/57.txd"/>
+
+	<file src="skins/58.dff"/>
+	<file src="skins/58.txd"/>
+
+	<file src="skins/62.dff"/>
+	<file src="skins/62.txd"/>
+
+	<file src="skins/63.dff"/>
+	<file src="skins/63.txd"/>
+
+	<file src="skins/64.dff"/>
+	<file src="skins/64.txd"/>
+
+	<file src="skins/68.dff"/>
+	<file src="skins/68.txd"/>
+
+	<file src="skins/71.dff"/>
+	<file src="skins/71.txd"/>
+
+	<file src="skins/75.dff"/>
+	<file src="skins/75.txd"/>
+
+	<file src="skins/77.dff"/>
+	<file src="skins/77.txd"/>
+
+	<file src="skins/78.dff"/>
+	<file src="skins/78.txd"/>
+
+	<file src="skins/80.dff"/>
+	<file src="skins/80.txd"/>	
+
+	<file src="skins/81.dff"/>
+	<file src="skins/81.txd"/>	
+
+	<file src="skins/83.dff"/>
+	<file src="skins/83.txd"/>
+
+	<file src="skins/84.dff"/>
+	<file src="skins/84.txd"/>
+
+	<file src="skins/128.dff"/>
+	<file src="skins/128.txd"/>
+
+	<file src="skins/131.dff"/>
+	<file src="skins/131.txd"/>
+
+	<file src="skins/132.dff"/>
+	<file src="skins/132.txd"/>
+
+	<file src="skins/134.dff"/>
+	<file src="skins/134.txd"/>
+
+	<file src="skins/144.dff"/>
+	<file src="skins/144.txd"/>
+
+	<file src="skins/146.dff"/>
+	<file src="skins/146.txd"/>
+
+	<file src="skins/153.dff"/>
+	<file src="skins/153.txd"/>
+
+	<file src="skins/154.dff"/>
+	<file src="skins/154.txd"/>
+
+	<file src="skins/155.dff"/>
+	<file src="skins/155.txd"/>
+
+	<file src="skins/159.dff"/>
+	<file src="skins/159.txd"/>
+
+	<file src="skins/168.dff"/>
+	<file src="skins/168.txd"/>
+
+	<file src="skins/171.dff"/>
+	<file src="skins/171.txd"/>
+
+	<!-- SHARED -->
+	<script src="shared/skins.lua" type="shared"/>
+	<export function="getVIPSkins" type="shared"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/client.lua" type="client"/>
+	<script src="client/replacing.lua" type="client"/>
+
+	<!-- SERVER SCRIPTS -->
+	<script src="server/server.lua" type="server"/>
+</meta>

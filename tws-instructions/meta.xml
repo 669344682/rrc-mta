@@ -1,0 +1,41 @@
+<meta>
+	<oop>true</oop>
+    <min_mta_version client="1.4.1" server="1.4.1" />
+
+    <!-- MAP -->
+    <map src="stuff/new-town.map" dimension="-1"></map>
+
+
+    <!-- CLIENT FILES -->
+	<file src="stuff/arrow.png" type="client" />
+	<file src="stuff/OpenSans-Regular.ttf" type="client" />
+
+
+    <!-- CLIENT -->
+	<script src="client/utils.lua" type="client" />
+    
+	<script src="client/briefing/gui.lua" type="client" />
+	<script src="client/briefing/base.lua" type="client" />
+    <script src="client/briefing/instructions.lua" type="client" />
+    <script src="client/briefing/main.lua" type="client" />
+
+    <script src="client/bot/bot_path.lua" type="client" />
+    <script src="client/bot/bot_recording.lua" type="client" />
+    <script src="client/bot/bot_playback.lua" type="client" />
+
+    <script src="client/beginner-tutorial/script.lua" type="client" />
+
+    <!-- SERVER -->
+    <script src="server/bot/bot_recording.lua" type="server" />
+
+    <script src="server/briefing/client_functions.lua" type="server" />
+    <script src="server/briefing/main.lua" type="server" />
+
+    <script src="server/beginner-tutorial/script.lua" type="server" />
+
+
+    <!-- EXPORT FUNCTIONS -->
+    <export function="startInstruction" type="shared"/>
+    <export function="init" type="shared"/>
+    <export function="deinit" type="shared"/>
+</meta>
