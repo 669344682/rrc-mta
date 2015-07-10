@@ -6,6 +6,11 @@ local RaceState = {
 	RUNNING = "running"
 }
 
+local RaceEvent = {
+	PLAYER_REMOVED 	= "tws-race-playerRemoved",
+	PLAYER_ADDED	= "tws-race-playerAdded"
+}
+
 raceManager = {}
 raceManager.activeRaces = {}
 
@@ -90,6 +95,7 @@ function raceManager:addPlayerToRace(raceID, player)
 	table.insert(race.players, player)
 	player:setData(RACE_ID_DATA, raceID)
 	-- TODO: triggerClientEvent
+	triggerClientEvent("tws-race-playerAdded")
 	return true
 end
 
@@ -117,14 +123,24 @@ function raceManager:removePlayerFromRace(player)
 		return false
 	end
 	table.remove(race.players, playerID)
-	-- TODO: triggerClientEvent
+	self:triggerEventForAllPlayers(playerRaceID, RaceEvent.PLAYER_REMOVED, player, playerID)
 	return true
+end
+
+function raceManager:triggerEventForAllPlayers(raceID, eventName, ...)
+	local race = self:getRaceByID(raceID)
+	if not race then
+		return false
+	end
+	for i, p in ipairs(race.players) do
+		triggerClientEvent(p, eventName, resourceRoot, ...)
+	end	
 end
 
 -- Старт гонки
 function raceManager:startRace(raceID)
 	local race = self:getRaceByID(raceID)
-	if race then
+	if not race then
 		return false, "bad_race"
 	end
 	if #race.players == 0 then

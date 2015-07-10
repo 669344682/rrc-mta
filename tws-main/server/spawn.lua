@@ -73,15 +73,10 @@ function twsSpawnPlayer(player, spawnType, spawnInfo)
 			if isFirstSpawn then
 				outputChatBox("Посетите автомагазин, чтобы купить свой первый автомобиль", player, 0, 255, 0)
 				setElementRotation(player, 0, 0, pos[4])
-				setTimer(
-					function()
-						--exports["tws-instructions"]:startInstruction(player, "carshop")
-					end,
 				1000, 1)
 			end
 		end, 1000, 1)
 
-	--triggerClientEvent(player, "twsSpawn", root)
 	triggerClientEvent(player, "tws-tuningSync", resourceRoot)
 end
 

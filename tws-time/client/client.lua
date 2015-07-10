@@ -1,8 +1,3 @@
-local screenX, screenY = guiGetScreenSize()
-local textBoldSize = 1 + screenY/480 + (3 - (screenY/480))*(screenY-480)/(1080-480)
-local font = "pricedown"
-local scaleX = screenX/640 + (2 - (screenY/640))*(screenY-640)/(1920-640)
-local scaleY = screenY/480 + (3 - (screenY/480))*(screenY-480)/(1080-480)
 local worldTimeFrozen = false
 local start_h, start_m = 24, 0
 local setWorldTime = setTime
@@ -44,25 +39,6 @@ setTime(start_h, start_m)
 setTimer(function()
 	--setTime(tonumber(time_h), tonumber(time_m) + 1)
 end, minuteDuration, 0)
-
---[[addEventHandler("onClientRender", root,
-	function()
-		if not isClockVisible then
-			return
-		end
-		local x1 = screenX * 0.86125
-		local y1 = screenY * 0.05
-		local x2 = screenX * 0.94
-		local y2 = screenY * 0.15
-
-		dxDrawText (time_h .. ":" .. time_m, x1 + textBoldSize, y1, x2, y2, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "center", "center")
-		dxDrawText (time_h .. ":" .. time_m, x1 - textBoldSize, y1, x2, y2, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "center", "center")
-		dxDrawText (time_h .. ":" .. time_m, x1, y1 + textBoldSize, x2, y2, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "center", "center")
-		dxDrawText (time_h .. ":" .. time_m, x1, y1 - textBoldSize, x2, y2, tocolor(0, 0, 0), scaleX, scaleY or scaleX, font, "center", "center")
-
-		dxDrawText (time_h .. ":" .. time_m, x1, y1, x2, y2, tocolor(215, 215, 215), scaleX, scaleY or scaleX, font, "center", "center")
-	end
-)]]
 
 
 function freezeWorldTimeAt(h, m)
