@@ -1,16 +1,3 @@
-local RACE_ID_DATA = "tws-race-currentRaceID"
-
--- Возможные состояния гонки
-local RaceState = {
-	WAITING = "waiting",
-	RUNNING = "running"
-}
-
-local RaceEvent = {
-	PLAYER_REMOVED 	= "tws-race-playerRemoved",
-	PLAYER_ADDED	= "tws-race-playerAdded"
-}
-
 raceManager = {}
 raceManager.activeRaces = {}
 
@@ -94,8 +81,7 @@ function raceManager:addPlayerToRace(raceID, player)
 	-- Добавление игрока в гонку
 	table.insert(race.players, player)
 	player:setData(RACE_ID_DATA, raceID)
-	-- TODO: triggerClientEvent
-	triggerClientEvent("tws-race-playerAdded")
+	self:triggerEventForAllPlayers(playerRaceID, RaceEvent.PLAYER_ADDED, player, #race.players)
 	return true
 end
 
@@ -149,8 +135,7 @@ function raceManager:startRace(raceID)
 	if #race.checkpoints == 0 then
 		return false, "no_checkpoints"
 	end	
-	-- TODO: старт гонки
-	-- TODO: triggerClientEvent
+	self:triggerEventForAllPlayers(playerRaceID, RaceEvent.RACE_STARTED)
 	race.finishTimer = setTimer(function(raceID) raceManager:finishRace(raceID) end, race.maxTime, 1, raceID)
 	race.state = RaceState.RUNNING
 	return true
@@ -163,8 +148,7 @@ function raceManager:finishRace(raceID)
 		return false, "bad_race"
 	end
 
-	-- TODO: Финиш гонки
-	-- TODO: triggerClientEvent
+	self:triggerEventForAllPlayers(playerRaceID, RaceEvent.RACE_FINISHED)
 	self:removeRace(raceID)
 	return true
 end
