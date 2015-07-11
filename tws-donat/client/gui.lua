@@ -4,8 +4,6 @@ canvas = twsGUI:createCanvas(resourceRoot)
 windowsW, windowsH = 588, 580
 windowsX, windowsY = screenX/2 - windowsW/2, screenY/2 - windowsH/2
 isGUIVisible = false
-carNumberText = ""
-carNumberRegion = ""
 carNumberTextNew = ""
 carNumberRegionNew = ""
 
@@ -227,16 +225,20 @@ addEventHandler("onClientRender", root,
 		elseif twsGUI:isVisible(gui.window2) then
 			local x, y, w, h
 
-			-- current number
-			x, y = twsGUI:getPosition(gui.carNumberEdit)
-			x, y = windowsX + x, windowsY + y + 1
-			w, h = twsGUI:getSize(gui.carNumberEdit)
-			dxDrawText(carNumberText, x, y, x + w, y + h, tocolor(255, 255, 255), 1, numbersFont, "center", "center") 
-			-- current region
-			x, y = twsGUI:getPosition(gui.carRegionEdit)
-			x, y = windowsX + x, windowsY + y + 1
-			w, h = twsGUI:getSize(gui.carRegionEdit)
-			dxDrawText(carNumberRegion, x, y, x + w, y + h, tocolor(255, 255, 255), 1, numbersFont, "center", "center") 
+			if localPlayer.vehicle then
+				local number = localPlayer.vehicle:getData("tws-numberPlate")[1]
+				local region = localPlayer.vehicle:getData("tws-numberPlate")[2]
+				-- current number
+				x, y = twsGUI:getPosition(gui.carNumberEdit)
+				x, y = windowsX + x, windowsY + y + 1
+				w, h = twsGUI:getSize(gui.carNumberEdit)
+				dxDrawText(number, x, y, x + w, y + h, tocolor(255, 255, 255), 1, numbersFont, "center", "center") 
+				-- current region
+				x, y = twsGUI:getPosition(gui.carRegionEdit)
+				x, y = windowsX + x, windowsY + y + 1
+				w, h = twsGUI:getSize(gui.carRegionEdit)
+				dxDrawText(region, x, y, x + w, y + h, tocolor(255, 255, 255), 1, numbersFont, "center", "center") 
+			end
 
 			-- new number
 			x, y = twsGUI:getPosition(gui.carNumberNewEdit)

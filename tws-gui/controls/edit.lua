@@ -84,7 +84,10 @@ local function keyHandler(key, state, isRepeating)
 	end
 
 	if key == "backspace" then
-		currentActiveEdit.text = string.sub(currentActiveEdit.text, 1, -2)
+		local before = currentActiveEdit.text
+		local after = string.sub(currentActiveEdit.text, 1, -2)
+		currentActiveEdit.text = after
+		triggerEvent("onLuckyGUIChanged", resourceRoot, currentActiveEdit.id, before, after, true)
 	elseif key == "tab" then
 		gotoNextEdit()
 	end
@@ -109,7 +112,7 @@ local function characterHandler(character)
 		local before = currentActiveEdit.text
 		local after = currentActiveEdit.text .. character
 		currentActiveEdit.text = after
-		triggerEvent("onLuckyGUIChanged", resourceRoot, currentActiveEdit.id, before, after)
+		triggerEvent("onLuckyGUIChanged", resourceRoot, currentActiveEdit.id, before, after, false)
 	end
 end
 addEventHandler("onClientCharacter", root, characterHandler)
