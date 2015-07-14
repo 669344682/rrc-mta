@@ -391,9 +391,20 @@ function spawnPlayerVehicle(player, vehicleID, x, y, z, rx, ry, rz)
 		returnVehicleToGarage(v)
 	end
 
-	-- Спавн автомобиля
-	local vehicle = createVehicleTWS(vehicleInfo.model, x, y, z, rx, ry, rz, " ")
+	-- Спавн автомобиля	
+	local playerID = getElementData(player, "tws-id")
+	if not playerID then
+		return
+	end
+	local spawnX, spawnY, spawnY = x, y, z
+
+	-- Фикс проваливающихся колес при спавне
+	-- Если спавнить машину с измененным хандлингом рядом с другим игроком, 
+	-- колеса машины игрока проваливаются под землю
+	-- spawnX = 2500 + playerID * 250, 0, 0
+	local vehicle = createVehicleTWS(vehicleInfo.model, spawnX, spawnY, spawnY, rx, ry, rz, " ")
 	applyInfoToVehicle(vehicle, vehicleInfo)
+	-- setElementPosition(vehicle, x, y, z)
 
 	-- Название аккаунта владельца
 	setElementData(vehicle, "tws-owner", accountName)
