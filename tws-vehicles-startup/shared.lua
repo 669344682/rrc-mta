@@ -23,6 +23,7 @@ vehiclesResources = {
 	"vaz2112",
 	"vaz2170",
 	"BMW_850CSI",
+	"Ford_Mustang_GT",
 }
 
 local encodeBytesCount = 1024
