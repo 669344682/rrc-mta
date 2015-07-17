@@ -22,7 +22,7 @@ vehiclesResources = {
 	"vaz2110",
 	"vaz2112",
 	"vaz2170",
-	"BMW_850CSI"
+	"BMW_850CSI",
 }
 
 local encodeBytesCount = 1024
