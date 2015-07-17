@@ -10,8 +10,13 @@ local resources = {
 	--"tws-map-vazcarshop",
 	--"tws-map-carshop2",
 
+	-- GUI
+	"tws-gui",
+	"tws-gui-login",
+	"tws-gui-map",
+	"tws-gui-hud",
+
 	-- Ресурсы
-	--"tws-donat",
 	"tws-shared",
 	"tws-teleports",
 	"tws-utils",
@@ -39,12 +44,8 @@ local resources = {
 	"tws-voice",
 	"tws-weather",
 	"tws-wheels",
-
-	-- GUI
-	"tws-gui",
-	"tws-gui-login",
-	"tws-gui-map",
-	"tws-gui-hud"
+	"tws-skins",
+	"tws-donat",
 }
 
 

@@ -1,4 +1,3 @@
-twsGUI = exports["tws-gui"]
 gui = {}
 canvas = twsGUI:createCanvas(resourceRoot)
 windowsW, windowsH = 588, 580
@@ -208,6 +207,10 @@ gui.carplateButton = twsGUI:createButton(posX + editW + editW2 + spacing*2, offs
 -- drawing a square colored by name and some carNumbers text
 addEventHandler("onClientRender", root,
 	function()
+		if not isGUIrunning then
+			return
+		end
+
 		if twsGUI:isVisible(gui.window1) then
 			local r = localPlayer:getData("nameColor_R")
 			local g = localPlayer:getData("nameColor_G")
