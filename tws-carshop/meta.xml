@@ -12,4 +12,5 @@
 	<script src="client/carshopTeleports.lua"	 type="client"/>
 	<script src="client/captionText.lua"		 type="client"/>
 	<script src="client/buttonsTips.lua"		 type="client"/>
+	<script src="client/moneyText.lua"		 	 type="client"/>
 </meta>

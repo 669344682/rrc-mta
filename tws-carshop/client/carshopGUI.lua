@@ -57,6 +57,7 @@ function carshopGUI:draw()
 
 	captionText:draw()
 	buttonsTips:draw()
+	moneyText:draw()
 end
 
 function carshopGUI:onKey(button, press)
