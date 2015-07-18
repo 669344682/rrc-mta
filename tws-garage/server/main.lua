@@ -1,96 +1,87 @@
-addEvent("twsPlayerEnterGarage", true)
-addEventHandler("twsPlayerEnterGarage", root,
+addEvent("tws-serverGarageEnter", true)
+addEvent("tws-serverGarageExit", true)
+
+addEventHandler("tws-serverGarageEnter", resourceRoot,
 	function()
 		local playerAccount = getPlayerAccount(client)
 		if isGuestAccount(playerAccount) then
-			return false
+			triggerClientEvent(player, "tws-clientGarageEnter", resourceRoot, false, "Вы не залогинены")
+			return
 		end
-		local garageDimension = exports["tws-main"]:getPlayerID(client)
-
-		local currentVehicle = client.vehicle
-		if isElement(currentVehicle) and exports["tws-vehicles"]:isVehicleOwnedByPlayer(currentVehicle, client) then
-			removePedFromVehicle(client)
-			exports["tws-vehicles"]:returnVehicleToGarage(currentVehicle)
+		-- Массив машин игрока
+		local playerVehiclesJSON = getAccountData(playerAccount, "vehicles")
+		if not playerVehiclesJSON then
+			triggerClientEvent(player, "tws-clientGarageEnter", resourceRoot, false, "Не удалось получить список ваших автомобилей")
+			return
 		end
-
-		local playerVehicles = fromJSON(getAccountData(playerAccount, "vehicles"))
-		if playerVehicles then
+		local playerVehiclesTable = fromJSON(playerVehiclesJSON)
+		if playerVehiclesTable then
 			local spawnedVehicles = exports["tws-vehicles"]:getPlayerSpawnedVehicles(client)
 			for k,v in pairs(spawnedVehicles) do
-				playerVehicles[k].spawned = true
+				playerVehiclesTable[k].spawned = true
+			end
+		else
+			triggerClientEvent(player, "tws-clientGarageEnter", resourceRoot, false, "Ошибка получения списка ваших автомобилей")
+			return
+		end
+
+		-- Координаты игрока перед входом в гараж
+		local garageEnterInfo = {
+			position = client.position,
+			rotation = client.rotation
+		}
+
+		if isElement(client.vehicle) then
+			-- Если игрок в машине, запоминаем координаты машины
+			garageEnterInfo.position = client.vehicle.position
+			garageEnterInfo.rotation = client.vehicle.rotation
+
+			-- Если игрок в машине, принадлежащей ему, отправляем её в гараж
+			if exports["tws-vehicles"]:isVehicleOwnedByPlayer(client.vehicle, client) then
+				exports["tws-vehicles"]:returnVehicleToGarage(client.vehicle)
 			end
 		end
-		
-		client:setData("tws-garage-oldInterior", client.interior)
-		client:setData("tws-garage-oldDimension", client.dimension)
-		client.interior = 0
-		client.dimension = garageDimension
+		-- Кладём координаты в дату
+		client:setData("tws-garageEnterInfo", garageEnterInfo)
 
-		client:setData(	"tws-inGarage", true)
-		
-		triggerClientEvent(client, "twsGarageEnter", resourceRoot, garageDimension, toJSON(playerVehicles), exitToHotel)
+		client:setData("tws-inGarage", true)
+		client.interior = 0
+		client.dimension = exports["tws-main"]:getPlayerID(client)
+
+		triggerClientEvent(client, "tws-clientGarageEnter", resourceRoot, true, toJSON(playerVehiclesTable))
 	end
 )
 
-addEvent("twsClientGarageLeave", true)
-addEventHandler("twsClientGarageLeave", root, 
-	function(vehicleID)
+addEventHandler("tws-serverGarageExit", resourceRoot,
+	function(selectedVehicleID)
 		if client:getData("tws-inGarage") == false then
-			return false
+			return
 		end
 
-		local dimension = client:getData("tws-garage-oldDimension")
-		if dimension then
-			client.dimension = dimension
-		end
-
-		client.interior = 0
-		if vehicleID then
-			client.interior = 0
-		else
-			local interior = client:getData("tws-garage-oldInterior")
-			if interior then
-				client.interior = interior
-			end
-		end
-		triggerClientEvent(client, "twsGarageLeave", resourceRoot, vehicleID)
 		client:setData("tws-inGarage", false)
-	end
-)
+		client.dimension = 0
+		client.interior = 0
 
-addEvent("twsClientGarageTakeCar", true)
-addEventHandler("twsClientGarageTakeCar", root, 
-	function(vehicleID, x, y, z)
-		local currentVehicle = client.vehicle
-		if currentVehicle then
-			destroyElement(currentVehicle)
+		if selectedVehicleID then
+			local vehicle = exports["tws-vehicles"]:spawnPlayerVehicle(client, selectedVehicleID, 0, 0, 0)
+			removePedFromVehicle(client)
+			warpPedIntoVehicle(client, vehicle)
+			setCameraTarget(client)
 		end
-		setElementPosition(client, x, y, z)
-		local vehicle = exports["tws-vehicles"]:spawnPlayerVehicle(client, vehicleID, x, y, z, 0, 0, r)
-		removePedFromVehicle(client)
-		warpPedIntoVehicle(client, vehicle)
-		setCameraTarget(client)
-	end
-)
 
-addEvent("twsClientGarageFixCar", true)
-addEventHandler("twsClientGarageFixCar", resourceRoot,
-	function(vehicleID, price)
-		local playerMoney = client:getData("tws-money")
-		if not playerMoney then
-			outputChatBox("Вы не залогинены", client, 255, 0, 0)
-			return
+		local garageEnterInfo = client:getData("tws-garageEnterInfo")
+		if not garageEnterInfo then
+			garageEnterInfo = {position: Vector3(0, 0, 0), rotation: Vector3(0, 0, 0)}
 		end
-		if playerMoney < price then
-			outputChatBox("У вас недостаточно денег для починки автомобиля. Требуется $" .. tostring(price), client, 255, 0, 0)
-			return
-		end
-		
-		if exports["tws-vehicles"]:fixGarageVehicle(client, vehicleID) then
-			outputChatBox("Автомобиль отремонтирован", client, 0, 255, 0)
-			exports["tws-main"]:takePlayerMoney(client, price)
+
+		if isElement(client.vehicle) then
+			client.vehicle.position = garageEnterInfo.position
+			client.vehicle.rotation = garageEnterInfo.rotation
 		else
-			outputChatBox("Не удалось починить автомобиль", client, 255, 0, 0)
+			client.position = garageEnterInfo.position
+			client.rotation = garageEnterInfo.rotation
 		end
+
+		triggerClientEvent(client, "tws-clientGarageExit", resourceRoot)
 	end
 )

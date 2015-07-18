@@ -1,4 +1,4 @@
--- Вывод информации о запуске ресурсов в debugscript
+-- Вывод подробной информации о запуске ресурсов в debugscript
 local OUTPUT_STARTUP_INFO = false
 
 -- Resources autostart list
@@ -10,6 +10,9 @@ local resources = {
 	--"tws-map-vazcarshop",
 	--"tws-map-carshop2",
 
+	-- Utils
+	"tws-utils",
+
 	-- GUI
 	"tws-gui",
 	"tws-gui-login",
@@ -19,13 +22,13 @@ local resources = {
 	-- Ресурсы
 	"tws-shared",
 	"tws-teleports",
-	"tws-utils",
 	"tws-assets",
 	"tws-admin",
 	"tws-blips",
 	"tws-camera",
 	"tws-carshop",
 	"tws-garage",
+
 	--"tws-challenge",
 	"tws-components",
 	"tws-drift",
@@ -74,11 +77,11 @@ addEventHandler("onResourceStart", resourceRoot,
 			local res = getResourceFromName(name)
 			if res then
 				if startResource(res) then 
-					outputStartupInfo("Запуск ресурса: '" .. name .. "'")
+					outputStartupInfo("Ресурс успешно запущен: '" .. name .. "'")
 					successCounter = successCounter + 1
 				else
 					if getResourceState(res) == "running" then
-						outputStartupInfo("Ресурс уже запущен: '" .. name .. "'")
+						outputStartupInfo("Не удалось запустить ресурс: '" .. name .. "' (уже запущен)")
 					else
 						outputStartupInfo("Не удалось запустить ресурс: '" .. name .. "'", 2)
 						failCounter = failCounter + 1

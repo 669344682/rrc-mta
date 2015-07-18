@@ -1,113 +1,90 @@
 garageMain = {}
+-- Находится ли игрок в гараже
 garageMain.isActive = false
+-- Место нахождения машины в гараже и угол поворота
+garageMain.position = {312.83554077148, -1499.7497558594, 104.2}
+garageMain.rotation = {0, 0, 325.4970703125}
+-- Координаты входа в гараж
+garageMain.enterPosition = {0, 0, 0}
+garageMain.enterRotation = {0, 0, 0}
 
-local garagePos = {312.83554077148, -1499.7497558594, 104.2	}
-local garageRot = {0, 0, 325.4970703125}
+addEvent("tws-clientGarageEnter", true)
+addEvent("tws-clientGarageExit", true)
 
-local garageExitPos = {0, 0, 10}
-local oldTime = {}
-
-local vehicleEntered = false
-
-addEvent("twsGarageEnter", true)
-addEventHandler("twsGarageEnter", root, 
-	function(dimension, playerVehicles)
-		vehicleEntered = getPedOccupiedVehicle(localPlayer)
-		if isElement(vehicleEntered) then
-			setElementPosition(vehicleEntered, 312.83554077148, -1499.7497558594, 154.49007415771)
-			setElementFrozen(vehicleEntered, true)
-		else
-			setElementFrozen(localPlayer, true)
-			setElementPosition(localPlayer, 312.83554077148, -1499.7497558594, 154.49007415771)
+local function onClientGarageEnter(isSuccess, data)
+	-- В случае ошибки "data" - описание ошибки
+	-- В случае успешного входа в гараж "data" - массив машин игрока
+	if not isSuccess or (isSuccess and not data) then
+		-- Отмена входа в гараж при ошибке
+		if not data or type(data) ~= "string" then
+			data = ""
 		end
-
-		exports["tws-camera"]:startGarageCamera(unpack(garagePos))
-		garageVehicles.init(dimension, playerVehicles, garagePos, garageRot)
-		garageGUI.isEnabled = true
-		exports["tws-utils"]:toggleHUD(false)
-
-		garageMain.isActive = true
+		outputChatBox("Не удалось войти в гараж. " .. data, 255, 0, 0)
 		fadeCamera(true, 1)
-		-- Time
-		exports["tws-time"]:freezeWorldTimeAt(12, 0)
+		return
 	end
-)
+	local playerVehiclesTable = data
+	-- Камера
+	exports["tws-camera"]:startGarageCamera(unpack(garageMain.position))
+	-- Отключение HUD
+	exports["tws-utils"]:toggleHUD(false)
+	-- Заморозка времени
+	exports["tws-time"]:freezeWorldTimeAt(12, 0)
 
-local function getPlayerOrVehicle()
-	local veh = getPedOccupiedVehicle(localPlayer)
-	if veh then 
-		return veh
-	end
-	return localPlayer
+	-- Инициализация гаража
+	garageVehicles.init(playerVehiclesTable, garageMain.position, garageMain.rotation)
+	garageGUI.isEnabled = true
+	garageMain.isActive = true
+	fadeCamera(true, 1)
 end
+addEventHandler("tws-clientGarageEnter", resourceRoot, onClientGarageEnter)
 
-local function getVehicleOccupantsCount()
-	local veh = getPedOccupiedVehicle(localPlayer)
-	
-	if veh then 
-		local count = 0
-		for id,occupant in pairs(getVehicleOccupants(veh)) do
-			if (occupant and getElementType(occupant) == "player") then
-				count = count + 1
-			end
-		end
-		return count
-	end
-	return 0
+local function onClientGarageExit()
+	exports["tws-camera"]:resetCamera()
+	exports["tws-utils"]:toggleHUD(true)
+	exports["tws-time"]:unfreezeWorldTime()
+
+	garageVehicles.destroy()
+	garageGUI.isEnabled = false
+	garageMain.isActive = false
+
+	setCameraTarget(localPlayer) 
+
+	setTimer(function() fadeCamera(true, 1) end, math.max(getPlayerPing(localPlayer) * 2, 50), 1) 
 end
+addEventHandler("tws-clientGarageExit", resourceRoot, onClientGarageExit)
 
-addEvent("twsGarageLeave", true)
-addEventHandler("twsGarageLeave", root, 
-	function(id)
-		exports["tws-camera"]:resetCamera()
-		garageVehicles.destroy()
-		garageGUI.isEnabled = false
-		garageMain.isActive = false
-
-		setElementFrozen(localPlayer, false)
-		if not id then
-			if isElement(vehicleEntered) then
-				setElementFrozen(vehicleEntered, false)
-				setElementPosition(vehicleEntered, unpack(garageExitPos))
-			else
-				setElementPosition(localPlayer, unpack(garageExitPos))
-			end
-		else
-			triggerServerEvent("twsClientGarageTakeCar", resourceRoot, garageVehicles.getVehicleID(), unpack(garageExitPos))
-		end
-		exports["tws-utils"]:toggleHUD(true)
-		exports["tws-time"]:unfreezeWorldTime()
-		setTimer(function() fadeCamera(true, 1) end, math.max(getPlayerPing(localPlayer) * 2, 50), 1) 
-		setCameraTarget(localPlayer) 
+-- Exported
+function clientEnterGarage()
+	local accountName = localPlayer:getData("tws-accountName")
+	if not accountName then
+		outputChatBox("Вы должны быть залогинены, чтобы попасть в гараж", 255, 0, 0)
+		return false
 	end
-)
-
-
-function clientEnterGarage(exitPos, exitInt)
-	local vehicle = getPedOccupiedVehicle(localPlayer)
-	if isElement(vehicle) then
-		local owner = getElementData(vehicle, "tws-owner")
-		if not owner or owner ~= getElementData(localPlayer, "tws-accountName") then
-			outputChatBox("Нельзя попасть в гараж, находясь в чужой машине. Выйдите из машины и попытайтесь ещё раз")
-			return
+	if isElement(localPlayer.vehicle) then
+		local vehicleOwner = getElementData(localPlayer.vehicle, "tws-owner")
+		if not vehicleOwner or vehicleOwner ~= accountName then
+			outputChatBox("Нельзя попасть в гараж, находясь в чужой машине. Выйдите из машины и попытайтесь ещё раз", 255, 0, 0)
+			return false
 		end
 	end 
 	if getVehicleOccupantsCount() > 1 then
 		outputChatBox("В гараж с пассажирами нельзя!")
-		return
+		return false
 	end
-	exitPos = {getElementPosition(localPlayer)}
-	exitInt = getElementInterior(localPlayer)
-	if exitInt ~= 0 then
-		outputChatBox("В гараж можно попасть только находясь на улице")
-		return
+	if localPlayer.interior ~= 0 or localPlayer.dimension ~= 0 then
+		outputChatBox("В гараж можно попасть только находясь на улице", 255, 0, 0)
+		return false
 	end
-	fadeCamera(false, 1)
-	setTimer(function()
-			triggerServerEvent("twsPlayerEnterGarage", resourceRoot)
-		end, 1000, 1)
 
-	garageExitPos = exitPos
+	fadeCamera(false, 1)
+	setTimer(triggerServerEvent, 1000, 1, "tws-serverGarageEnter", resourceRoot)
+	return true
+end
+
+function clientExitGarage(selectedVehicleID)
+	fadeCamera(false, 1)
+	setTimer(triggerServerEvent, 1000, 1, "tws-serverGarageExit", resourceRoot, selectedVehicleID)
 end
 
 addEventHandler("onClientKey", root, 
@@ -116,22 +93,15 @@ addEventHandler("onClientKey", root,
 			return
 		end
 		if button == "enter" then
-			fadeCamera(false, 1)
 			local info = garageVehicles.getVehicleInfo()
 			if info.spawned then
-				outputChatBox("Машины нет в гараже")
+				outputChatBox("Выбранной машины нет в гараже", 255, 0, 0)
 				return
 			end
 
-			
-			setTimer(function()
-				triggerServerEvent("twsClientGarageLeave", resourceRoot, garageVehicles.getVehicleID())
-			end, 1000, 1)
+			clientExitGarage(garageVehicles.getVehicleID())
 		elseif button == "backspace" then
-			fadeCamera(false, 1)
-			setTimer(function()
-				triggerServerEvent("twsClientGarageLeave", resourceRoot)
-			end, 1000, 1)
+			clientExitGarage()
 		end
 	end
 )

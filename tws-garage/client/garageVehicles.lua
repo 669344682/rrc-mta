@@ -20,7 +20,7 @@ function garageVehicles.getVehicleInfo()
 	return info
 end
 
-function garageVehicles.init(dimension, playerVehicles, pos, rot)
+function garageVehicles.init(playerVehicles, pos, rot)
 	if not playerVehicles then
 		outputDebugString("Vehicles list is nil")
 		vehicles = {}
@@ -46,8 +46,7 @@ function garageVehicles.init(dimension, playerVehicles, pos, rot)
 	end
 	vehicle = createVehicle(411, unpack(pos))
 	setElementRotation(vehicle, unpack(rot))
-	setElementDimension(vehicle, dimension)
-	--setElementFrozen(vehicle, true)
+	setElementDimension(vehicle, localPlayer.dimension)
 	setVehicleColor(vehicle, 255, 255, 255)
 	vehicleID = 1
 

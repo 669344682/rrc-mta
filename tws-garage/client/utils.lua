@@ -21,3 +21,18 @@ function dxDrawScreenShadow()
     dxDrawImage(0, 0, screenWidth, screenHeight, "images/screen_shadow.png")
     dxDrawImage(0, 0, screenWidth, screenHeight, "images/screen_shadow.png", 180, 0, 0)
 end
+
+function getVehicleOccupantsCount()
+	local veh = getPedOccupiedVehicle(localPlayer)
+	
+	if veh then 
+		local count = 0
+		for id,occupant in pairs(getVehicleOccupants(veh)) do
+			if (occupant and getElementType(occupant) == "player") then
+				count = count + 1
+			end
+		end
+		return count
+	end
+	return 0
+end
