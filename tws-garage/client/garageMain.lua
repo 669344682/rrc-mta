@@ -22,6 +22,9 @@ local function onClientGarageEnter(isSuccess, data)
 		outputChatBox("Не удалось войти в гараж. " .. data, 255, 0, 0)
 		fadeCamera(true, 1)
 		localPlayer.frozen = false
+		if isElement(localPlayer.vehicle) then 
+			localPlayer.vehicle.frozen = false
+		end
 		return
 	end
 	local playerVehiclesTable = data
@@ -33,6 +36,9 @@ local function onClientGarageEnter(isSuccess, data)
 	exports["tws-time"]:freezeWorldTimeAt(12, 0)
 
 	localPlayer.frozen = true
+	if isElement(localPlayer.vehicle) then 
+		localPlayer.vehicle.frozen = true
+	end
 	-- Инициализация гаража
 	garageVehicles.init(playerVehiclesTable, garageMain.position, garageMain.rotation)
 	garageGUI.isEnabled = true
@@ -53,7 +59,12 @@ local function onClientGarageExit()
 	setCameraTarget(localPlayer) 
 
 	setTimer(function() fadeCamera(true, 1) end, math.max(getPlayerPing(localPlayer) * 2, 50), 1) 
-	setTimer(function() localPlayer.frozen = false outputDebugString("GarageExit: Unfreeze") end, 900, 1)
+	setTimer(function() 
+		localPlayer.frozen = false 
+		if isElement(localPlayer.vehicle) then 
+			localPlayer.vehicle.frozen = false
+		end
+	end, 900, 1)
 	outputDebugString("GarageExit: Frozen - " .. tostring(localPlayer.frozen))
 end
 addEventHandler("tws-clientGarageExit", resourceRoot, onClientGarageExit)

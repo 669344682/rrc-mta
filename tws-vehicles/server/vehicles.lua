@@ -316,7 +316,6 @@ end
 
 function fixVehicle(vehicle)
 	_fixVehicle(vehicle)
-	triggerClientEvent(root, "tws-updateVehicleComponentsDamage", vehicle, true)
 end
 
 function fixGarageVehicle(player, vehicleID)

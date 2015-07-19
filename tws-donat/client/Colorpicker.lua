@@ -114,7 +114,7 @@ function Colorpicker:draw(fade)
 	y = y + colorBarBorder + 2
 	dxDrawRectangle(cp.x, y - colorBarBorder, cp.width, colorBarHeight + colorBarBorder * 2, getColor(colors.background2))
 	dxDrawImage(cp.x, y, cp.width, colorBarHeight, "images/h.png")
-	if getKeyState("mouse1") and isPointInRect(mx, my, cp.x, y, cp.width, colorBarHeight) then
+	if getKeyState("mouse1") and utils.isPointInRect(mx, my, cp.x, y, cp.width, colorBarHeight) then
 		currentHue = (mx - cp.x) / cp.width
 		currentState = "value"
 		Colorpicker:updateValue()
@@ -128,7 +128,7 @@ function Colorpicker:draw(fade)
 	dxDrawRectangle(cp.x, y, colorGridWidth, colorGridHeight)
 	dxDrawImage(cp.x, y, colorGridWidth, colorGridHeight, "images/preview.png", 0, 0, 0, currentHueColor)
 
-	if getKeyState("mouse1") and isPointInRect(mx, my, cp.x, y, colorGridWidth, colorGridHeight) then
+	if getKeyState("mouse1") and utils.isPointInRect(mx, my, cp.x, y, colorGridWidth, colorGridHeight) then
 		selectionX = math.floor((mx - cp.x + selectionRectSize) / colorGridWidth * 15)
 		selectionY = math.floor((my - y + selectionRectSize) / colorGridHeight * 10)
 		currentState = "grid"
@@ -149,7 +149,7 @@ function Colorpicker:draw(fade)
 	local by = y
 	local bw = okButtonWidth
 	local bh = okButtonHeight
-	if isPointInRect(mx, my, bx, by, bw, bh) then
+	if utils.isPointInRect(mx, my, bx, by, bw, bh) then
 		buttonColor = getColor(colors.buttonOver)
 		if isMouseClick() then
 			Colorpicker:selectColor()
