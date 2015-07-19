@@ -1,0 +1,13 @@
+<meta>
+	<oop>true</oop>
+	<!-- SERVER SCRIPTS -->
+	<script src="server/damage_sync.lua" type="server"/>
+	<script src="server/exports.lua" type="server"/>
+
+	<!-- CLIENT SCRIPTS -->
+	<script src="client/custom_components.lua" type="client"/>
+
+	<!-- EXPORTS -->
+	<export function="setVehicleTuningComponentLevel" type="server"/>
+	<export function="setVehicleTuningComponentLevel" type="client"/>
+</meta>
