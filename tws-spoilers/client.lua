@@ -42,8 +42,8 @@ function setVehicleSpoiler(vehicle, id)
 
 	addVehicleUpgrade(vehicle, spoilersIDs[id])
 	setVehicleSpoilerType(vehicle, "normal")
-	
-	vehicle:setData(vehicle, "tws-boot-level", 0, false)
+
+	vehicle:setData("tws-boot-level", 0, false)
 end
 
 function setVehicleSpoilerType(vehicle, spoilerType)
@@ -86,5 +86,5 @@ function removeVehicleSpoiler(vehicle)
 		removeVehicleUpgrade(vehicle, id)
 	end
 	
-	vehicle:setData(vehicle, "tws-boot-level", 1, false)
+	vehicle:setData("tws-boot-level", 1, false)
 end

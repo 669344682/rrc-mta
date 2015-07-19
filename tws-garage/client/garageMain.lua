@@ -53,7 +53,8 @@ local function onClientGarageExit()
 	setCameraTarget(localPlayer) 
 
 	setTimer(function() fadeCamera(true, 1) end, math.max(getPlayerPing(localPlayer) * 2, 50), 1) 
-	setTimer(function() localPlayer.frozen = false end, 900, 1)
+	setTimer(function() localPlayer.frozen = false outputDebugString("GarageExit: Unfreeze") end, 900, 1)
+	outputDebugString("GarageExit: Frozen - " .. tostring(localPlayer.frozen))
 end
 addEventHandler("tws-clientGarageExit", resourceRoot, onClientGarageExit)
 
