@@ -316,6 +316,7 @@ end
 
 function fixVehicle(vehicle)
 	_fixVehicle(vehicle)
+	exports["tws-vehicles-textures"]:updateVehicleTexture(vehicle)
 end
 
 function fixGarageVehicle(player, vehicleID)

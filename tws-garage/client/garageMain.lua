@@ -11,7 +11,7 @@ garageMain.enterRotation = {0, 0, 0}
 addEvent("tws-clientGarageEnter", true)
 addEvent("tws-clientGarageExit", true)
 
-local function onClientGarageEnter(isSuccess, data)
+local function onClientGarageEnter(isSuccess, data, vehicleToShow)
 	-- В случае ошибки "data" - описание ошибки
 	-- В случае успешного входа в гараж "data" - массив машин игрока
 	if not isSuccess or (isSuccess and not data) then
@@ -22,12 +22,14 @@ local function onClientGarageEnter(isSuccess, data)
 		outputChatBox("Не удалось войти в гараж. " .. data, 255, 0, 0)
 		fadeCamera(true, 1)
 		localPlayer.frozen = false
-		if isElement(localPlayer.vehicle) then 
-			localPlayer.vehicle.frozen = false
-		end
 		return
 	end
 	local playerVehiclesTable = data
+
+	localPlayer:setPosition(unpack(garageMain.position))
+	localPlayer.position = localPlayer.position + Vector3(0, 0, 10)
+	localPlayer.frozen = true
+
 	-- Камера
 	exports["tws-camera"]:startGarageCamera(unpack(garageMain.position))
 	-- Отключение HUD
@@ -35,15 +37,23 @@ local function onClientGarageEnter(isSuccess, data)
 	-- Заморозка времени
 	exports["tws-time"]:freezeWorldTimeAt(12, 0)
 
-	localPlayer.frozen = true
-	if isElement(localPlayer.vehicle) then 
-		localPlayer.vehicle.frozen = true
-	end
 	-- Инициализация гаража
-	garageVehicles.init(playerVehiclesTable, garageMain.position, garageMain.rotation)
 	garageGUI.isEnabled = true
 	garageMain.isActive = true
+	garageVehicles.init(playerVehiclesTable, garageMain.position, garageMain.rotation)
+	garageVehicles.showVehicle(vehicleToShow)
 	fadeCamera(true, 1)
+
+	if isElement(localPlayer.vehicle) then
+		outputChatBox("fix0")
+		local fixCamera = function()
+			outputChatBox("fix")
+			exports["tws-camera"]:resetCamera()
+			exports["tws-camera"]:startGarageCamera(unpack(garageMain.position))
+			removeEventHandler("onClientPlayerVehicleExit", localPlayer.vehicle, fixCamera)
+		end
+		addEventHandler("onClientPlayerVehicleExit", localPlayer.vehicle, fixCamera)
+	end
 end
 addEventHandler("tws-clientGarageEnter", resourceRoot, onClientGarageEnter)
 
@@ -60,12 +70,8 @@ local function onClientGarageExit()
 
 	setTimer(function() fadeCamera(true, 1) end, math.max(getPlayerPing(localPlayer) * 2, 50), 1) 
 	setTimer(function() 
-		localPlayer.frozen = false 
-		if isElement(localPlayer.vehicle) then 
-			localPlayer.vehicle.frozen = false
-		end
+		localPlayer.frozen = false
 	end, 900, 1)
-	outputDebugString("GarageExit: Frozen - " .. tostring(localPlayer.frozen))
 end
 addEventHandler("tws-clientGarageExit", resourceRoot, onClientGarageExit)
 
@@ -93,7 +99,7 @@ function clientEnterGarage()
 	end
 
 	fadeCamera(false, 1)
-	setTimer(triggerServerEvent, 1000, 1, "tws-serverGarageEnter", resourceRoot)
+	setTimer(triggerServerEvent, 1000, 1, "tws-serverGarageEnter", resourceRoot, garageMain.position)
 	return true
 end
 

@@ -61,11 +61,16 @@ function textureDrawing:drawTextureOffset(tuningTable, offsetX, offsetY)
 	end
 end
 
-function textureDrawing:drawScratchTexture()
-
+function textureDrawing:drawScratchTexture(vehicle)
+	for i = 0, 5 do
+		local doorState = getVehicleDoorState(vehicle, i)
+		if doorState >= 2 then
+			dxDrawImage(0, 0, 1024, 1024, "images/scratch_" .. tostring(i) ..".png")
+		end
+	end
 end
 
-function textureDrawing:drawTextureFromTuningTable(tuningTable, renderTarget)
+function textureDrawing:drawTextureFromTuningTable(vehicle, tuningTable, renderTarget)
 	if not tuningTable then
 		outputDebugString("WARNING: textureDrawing:drawTextureFromTuningTable: tuningTable is nil")
 		return
@@ -78,7 +83,7 @@ function textureDrawing:drawTextureFromTuningTable(tuningTable, renderTarget)
 	dxSetRenderTarget(renderTarget, true)
 	textureDrawing:drawTextureOffset(tuningTable, 0, 0)
 	textureDrawing:drawTextureOffset(tuningTable, self.textureSize.width, self.textureSize.height)
-	textureDrawing:drawScratchTexture()
+	textureDrawing:drawScratchTexture(vehicle)
 
 	dxSetRenderTarget()
 end

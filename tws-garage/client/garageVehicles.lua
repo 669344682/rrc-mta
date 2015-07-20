@@ -78,6 +78,7 @@ function garageVehicles.updateVehicle()
 	if info.number then
 		exports["tws-vehicles"]:setVehicleNumberPlate(vehicle, info.number[1], info.number[2])
 	end
+	vehicle:setData("tws-spoiler-level", 0)
 
 	garageVehicles.vehicleName = exports["tws-vehicles"]:getVehicleNameFromModel(info.model)
 	if info.tuning.neon then
@@ -126,6 +127,20 @@ function garageVehicles.fixVehicle()
 		return false
 	end
 	info.damage = nil
+end
+
+function garageVehicles.showVehicle(id)
+	if not garageMain.isActive then
+		return 
+	end
+	vehicleID = id
+	if vehicleID > #vehicles then
+		vehicleID = #vehicles
+	end
+	if vehicleID < 1 then
+		vehicleID = 1
+	end
+	garageVehicles.updateVehicle()
 end
 
 function garageVehicles.next()

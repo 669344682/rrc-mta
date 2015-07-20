@@ -2,7 +2,7 @@ addEvent("tws-serverGarageEnter", true)
 addEvent("tws-serverGarageExit", true)
 
 addEventHandler("tws-serverGarageEnter", resourceRoot,
-	function()
+	function(garagePosition)
 		local playerAccount = getPlayerAccount(client)
 		if isGuestAccount(playerAccount) then
 			triggerClientEvent(player, "tws-clientGarageEnter", resourceRoot, false, "Вы не залогинены")
@@ -14,6 +14,28 @@ addEventHandler("tws-serverGarageEnter", resourceRoot,
 			triggerClientEvent(player, "tws-clientGarageEnter", resourceRoot, false, "Не удалось получить список ваших автомобилей")
 			return
 		end
+
+		-- Координаты игрока перед входом в гараж
+		local garageEnterInfo = {
+			position = client.position,
+			rotation = client.rotation
+		}
+
+		local vehicleToShow = 1
+
+		if isElement(client.vehicle) then
+			-- Если игрок в машине, запоминаем координаты машины
+			garageEnterInfo.position = client.vehicle.position
+			garageEnterInfo.rotation = client.vehicle.rotation
+
+			-- Если игрок в машине, принадлежащей ему, отправляем её в гараж
+			if exports["tws-vehicles"]:isVehicleOwnedByPlayer(client.vehicle, client) then
+				vehicleToShow = exports["tws-vehicles"]:getVehicleGarageID(client.vehicle)
+				exports["tws-vehicles"]:returnVehicleToGarage(client.vehicle)
+				removePedFromVehicle(client)
+			end
+		end
+
 		local playerVehiclesTable = fromJSON(playerVehiclesJSON)
 		if playerVehiclesTable then
 			local spawnedVehicles = exports["tws-vehicles"]:getPlayerSpawnedVehicles(client)
@@ -25,30 +47,16 @@ addEventHandler("tws-serverGarageEnter", resourceRoot,
 			return
 		end
 
-		-- Координаты игрока перед входом в гараж
-		local garageEnterInfo = {
-			position = client.position,
-			rotation = client.rotation
-		}
-
-		if isElement(client.vehicle) then
-			-- Если игрок в машине, запоминаем координаты машины
-			garageEnterInfo.position = client.vehicle.position
-			garageEnterInfo.rotation = client.vehicle.rotation
-
-			-- Если игрок в машине, принадлежащей ему, отправляем её в гараж
-			if exports["tws-vehicles"]:isVehicleOwnedByPlayer(client.vehicle, client) then
-				exports["tws-vehicles"]:returnVehicleToGarage(client.vehicle)
-			end
-		end
 		-- Кладём координаты в дату
 		client:setData("tws-garageEnterInfo", garageEnterInfo)
 
 		client:setData("tws-inGarage", true)
 		client.interior = 0
 		client.dimension = exports["tws-main"]:getPlayerID(client)
+		client:setPosition(unpack(garagePosition))
+		client.position = client.position + Vector3(0, 0, 10)
 
-		triggerClientEvent(client, "tws-clientGarageEnter", resourceRoot, true, toJSON(playerVehiclesTable))
+		triggerClientEvent(client, "tws-clientGarageEnter", resourceRoot, true, toJSON(playerVehiclesTable), vehicleToShow)
 	end
 )
 

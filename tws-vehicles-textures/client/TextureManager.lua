@@ -39,6 +39,9 @@ function textureManager:updateVehicleTexture(vehicle, renderTarget)
 		outputDebugString("WARNING: textureManager:updateVehicleTexture: Vehicle is not an element")
 		return
 	end
+	if not isElementStreamedIn(vehicle) then
+		return
+	end
 	-- Тюнинг автомобиля
 	local vehicleTuningTable = getElementData(vehicle, "tws-tuning")
 	if not vehicleTuningTable then
@@ -48,7 +51,7 @@ function textureManager:updateVehicleTexture(vehicle, renderTarget)
 	-- Если для машины не создан шейдер и текстура 
 	textureManager:setupTextureShader(vehicle, renderTarget)
 	-- Рисование текстуры на renderTarget автомобиля
-	textureDrawing:drawTextureFromTuningTable(vehicleTuningTable, self.texturesShadersList[vehicle].texture)
+	textureDrawing:drawTextureFromTuningTable(vehicle, vehicleTuningTable, self.texturesShadersList[vehicle].texture)
 	dxSetShaderValue(self.texturesShadersList[vehicle].shader, "gTexture", self.texturesShadersList[vehicle].texture)
 end
 
@@ -93,11 +96,13 @@ end)
 
 addEventHandler("onClientRestore", root, function(didClearRenderTargets)
 		if not didClearRenderTargets then
+			outputDebugString("TextureManager: didClearRenderTargets = false")
 			return
 		end
 		for vehicle, _ in pairs(textureManager.texturesShadersList) do
 			textureManager:updateVehicleTexture(vehicle)
 		end
+		outputDebugString("TextureManager: Текстуры автомобилей были перерисованы.")
 	end
 )
 
@@ -117,3 +122,16 @@ addCommandHandler("textures_info", function()
 	end	
 	outputChatBox("Textures and shaders count: " .. count)
 end)
+
+addEventHandler("onClientVehicleDamage", root,
+	function()
+		textureManager:updateVehicleTexture(source)
+	end
+)
+
+addEvent("tws-onServerUpdateVehicleTexture", true)
+addEventHandler("tws-onServerUpdateVehicleTexture", root,
+	function()
+		textureManager:updateVehicleTexture(source)
+	end
+)

@@ -61,14 +61,7 @@
 	<file src="shaders/texreplace.fx"/>
 	<file src="shaders/car_windows.fx"/>
 	<file src="shaders/color_replace.fx"/>
-
-	<file src="images/scratch.png"/>
-	<file src="images/scratch_0.png"/>
-	<file src="images/scratch_1.png"/>
-	<file src="images/scratch_2.png"/>
-	<file src="images/scratch_3.png"/>
-	<file src="images/scratch_4.png"/>
-	<file src="images/scratch_5.png"/>
+	
 	<file src="images/rust.png"/>
 	<file src="images/number.png"/>
 	<file src="images/cube_veh256.dds"/>

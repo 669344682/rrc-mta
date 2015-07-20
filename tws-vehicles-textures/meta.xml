@@ -13,10 +13,20 @@
 	<export function="drawToVehicleTexture" type="client"/>
 	<export function="updateVehicleTexture" type="client"/>
 
+	<export function="updateVehicleTexture" type="server"/>
+
 	<file src="shaders/texreplace.fx"/>
 	
 	<file src="images/carbon/bonnet1.png"/>
 	<file src="images/carbon/bonnet2.png"/>
 	<file src="images/carbon/boot1.png"/>
 	<file src="images/carbon/boot2.png"/>
+
+	<file src="images/scratch.png"/>
+	<file src="images/scratch_0.png"/>
+	<file src="images/scratch_1.png"/>
+	<file src="images/scratch_2.png"/>
+	<file src="images/scratch_3.png"/>
+	<file src="images/scratch_4.png"/>
+	<file src="images/scratch_5.png"/>
 </meta>
