@@ -82,8 +82,8 @@ function drawing()
 			end
 
 			local crownShowing = player:getData("isCrownShowing")
-			local crownColor = getlocalPlayerColor() or RGBToHex(255, 255, 255)
-			local nameColor = getlocalPlayerColor() or RGBToHex(255, 255, 255)
+			local crownColor = getPlayerColor(player) or RGBToHex(255, 255, 255)
+			local nameColor = getPlayerColor(player) or RGBToHex(255, 255, 255)
 			local name = player.name
 			local id = " (" .. tostring(getElementData(player, "tws-id")) .. ")"
 
@@ -95,16 +95,16 @@ function drawing()
 end
 addEventHandler("onClientRender", root, drawing)
 
-function getlocalPlayerColor()
-	if not localPlayer:getData("isVIP") then
+function getPlayerColor(player)
+	if not player:getData("isVIP") then
 		return
 	end
 
 	local color
 
-	local r = localPlayer:getData("nameColor_R")
-	local g = localPlayer:getData("nameColor_G")
-	local b = localPlayer:getData("nameColor_B")
+	local r = player:getData("nameColor_R")
+	local g = player:getData("nameColor_G")
+	local b = player:getData("nameColor_B")
 
 	if not (r or g or b) then
 		return

@@ -229,8 +229,13 @@ addEventHandler("onClientRender", root,
 			local x, y, w, h
 
 			if localPlayer.vehicle then
-				local number = localPlayer.vehicle:getData("tws-numberPlate")[1]
-				local region = localPlayer.vehicle:getData("tws-numberPlate")[2]
+				local number = localPlayer.vehicle:getData("tws-numberPlate") and localPlayer.vehicle:getData("tws-numberPlate")[1] or false
+				local region = localPlayer.vehicle:getData("tws-numberPlate") and localPlayer.vehicle:getData("tws-numberPlate")[2] or false
+
+				if not number or not region then
+					return
+				end
+
 				-- current number
 				x, y = twsGUI:getPosition(gui.carNumberEdit)
 				x, y = windowsX + x, windowsY + y + 1

@@ -3,7 +3,12 @@
 	"tws-rbump",
 	"tws-skirts",
 	"tws-sunroof",
-	"tws-spoiler"
+	"tws-spoiler",
+	"tws-boot",
+	"tws-exhaust",
+	"tws-interior",
+	"tws-intake",
+	"tws-bonnet"
 }
 
 
@@ -46,7 +51,7 @@ function updatingComponents()
 					if level then
 						local activeLevel = vehicle:getData(component .. "-activeLevel")
 						if activeLevel ~= level then
-							vehicle:setData(component .. "-activeLevel", level)
+							vehicle:setData(component .. "-activeLevel", level, false)
 
 							-- скрываем все компоненты
 							for i = 0, 5 do
