@@ -349,15 +349,17 @@ end
 function spawnPlayerVehicle(player, vehicleID, x, y, z, rx, ry, rz)
 	if not isElement(player) then
 		--outputChatBox(1)
-		return false
+		return false, "bad_player_element"
 	end
+	vehicleID = tonumber(vehicleID)
+	outputChatBox(table.concat({x, y, z}))
 	if not vehicleID then
 		--outputChatBox(2)
-		return false
+		return false, "bad_vehicle_id"
 	end
 	if not x or not y or not z then
 		--outputChatBox (3)
-		return false
+		return false, "bad_spawn_position"
 	end
 	if not rx or not ry or not rz then
 		--outputChatBox (4)
@@ -365,7 +367,7 @@ function spawnPlayerVehicle(player, vehicleID, x, y, z, rx, ry, rz)
 	end
 	local account = getPlayerAccount(player)
 	if isGuestAccount(account) then
-		return false
+		return false, "bad_account"
 	end
 	local accountName = getAccountName(account)
 	local spawnedVehiclesTable = spawnedVehicles[accountName]
@@ -373,8 +375,7 @@ function spawnPlayerVehicle(player, vehicleID, x, y, z, rx, ry, rz)
 	-- Заспавнен ли автомобиль
 	if spawnedVehiclesTable then
 		if spawnedVehicles[accountName][vehicleID] then
-			outputDebugString("Vehicle already spawned")
-			return false, "spawned"
+			return false, "car_already_spawned"
 		end
 	else
 		spawnedVehicles[accountName] = {}
@@ -383,7 +384,8 @@ function spawnPlayerVehicle(player, vehicleID, x, y, z, rx, ry, rz)
 	-- Информаця о машине, которую нужно заспавнить
 	local vehicleInfo = getPlayerGarageVehicleInfo(player, vehicleID)
 	if not vehicleInfo then
-		return false, "nocar"
+		outputDebugString("No vehicle with ID=" .. tostring(vehicleID))
+		return false, "no_such_car"
 	end
 
 	-- Удаление остальных машин
@@ -394,7 +396,7 @@ function spawnPlayerVehicle(player, vehicleID, x, y, z, rx, ry, rz)
 	-- Спавн автомобиля	
 	local playerID = getElementData(player, "tws-id")
 	if not playerID then
-		return
+		playerID = 1
 	end
 	local spawnX, spawnY, spawnY = x, y, z
 
@@ -474,23 +476,3 @@ addEventHandler("onResourceStop", resourceRoot,
 		end
 	end
 )
-
-
-addCommandHandler("getcar",
-	function(player, cmd, id)
-		if not id then id = 1 end
-		local x, y, z = getElementPosition(player)
-		local vehicle = spawnPlayerVehicle(player, tonumber(id), x + 4, y, z)
-		--warpPedIntoVehicle(player, vehicle)
-	end
-)
-
-addCommandHandler("getcars",
-	function(player, cmd)
-		local x, y, z = getElementPosition(player)
-		for id = 1, 24 do
-			local vehicle = spawnPlayerVehicle(player, tonumber(id), x, y + id * 3, z, 0, 0, 90)
-		end
-	end
-)
-

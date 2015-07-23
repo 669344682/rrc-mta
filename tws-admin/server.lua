@@ -1,3 +1,19 @@
+function outputPlayerAdminString(text, player, messageType)
+	local r, g, b = 0, 255, 0
+	if messageType == 2 then
+		r, g, b = 255, 0, 0
+	end
+	outputChatBox("[ADMIN] " .. text, player, r, g, b, true)
+end
+
+function outputError(text, player)
+	outputPlayerAdminString(text, player, 2)
+end
+
+function outputText(text, player)
+	outputPlayerAdminString(text, player, 1)
+end
+
 function isPlayerAdmin(player)
 	if not isElement(player) then
 		return nil
@@ -67,25 +83,25 @@ end
 addAdminCommandHandler("givemoney",
 	function(player, cmd, idOrName, amount)
 		if not idOrName then
-			outputChatBox("[ADMIN] Неверно введена команда. /givemoney <ID/имя> <сумма>", player, 255, 0, 0)
+			outputError("Неверно введена команда. /givemoney <ID/имя> <сумма>", player)
 			return
 		end
 		if not amount then
-			outputChatBox("[ADMIN] Неверно введена команда. /givemoney <ID/имя> <сумма>", player, 255, 0, 0)
+			outputError("Неверно введена команда. /givemoney <ID/имя> <сумма>", player)
 			return
 		end
 		amount = tonumber(amount)
 		if not amount then
-			outputChatBox("[ADMIN] Неверно введена команда. /givemoney <ID/имя> <сумма>", player, 255, 0, 0)
+			outputError("Неверно введена команда. /givemoney <ID/имя> <сумма>", player)
 			return
 		end
 		local targetPlayer = getPlayerFromIdOrName(idOrName)
 		if not targetPlayer then
-			outputChatBox("[ADMIN] Игрок с таким именем или ID не найден.", player, 255, 0, 0)
+			outputError("Игрок с таким именем или ID не найден.", player)
 			return
 		end
 		exports["tws-main"]:givePlayerMoney(targetPlayer, amount)
-		outputChatBox("[ADMIN] Вы дали $" .. amount .. " игроку #FFFFFF" .. getPlayerName(targetPlayer), player, 0, 255, 0, true)
+		outputText("Вы дали $" .. amount .. " игроку #FFFFFF" .. getPlayerName(targetPlayer), player)
 	end
 )
 
@@ -97,20 +113,20 @@ addAdminCommandHandler("fixcar",
 				return
 			end
 			exports["tws-vehicles"]:fixVehicle(vehicle)
-			outputChatBox("[ADMIN] Вы починили свой автомобиль", player, 0, 255, 0)
+			outputText("Вы починили свой автомобиль", player)
 		else
 			local targetPlayer = getPlayerFromIdOrName(idOrName)
 			if not targetPlayer then
-				outputChatBox("[ADMIN] Игрок с таким именем или ID не найден.", player, 255, 0, 0)
+				outputError("Игрок с таким именем или ID не найден.", player)
 				return
 			end
 			local vehicle = getPedOccupiedVehicle(targetPlayer)
 			if not isElement(vehicle) then
-				outputChatBox("[ADMIN] Игрок #FFFFFF" .. getPlayerName(targetPlayer) .. "#FF0000 не находится в автомобиле", player, 255, 0, 0, true)
+				outputError("Игрок #FFFFFF" .. getPlayerName(targetPlayer) .. "#FF0000 не находится в автомобиле", player)
 				return
 			end
 			exports["tws-vehicles"]:fixVehicle(vehicle)
-			outputChatBox("[ADMIN] Вы починили автомобиль игрока #FFFFFF" .. getPlayerName(targetPlayer), player, 0, 255, 0, true)
+			outputText("Вы починили автомобиль игрока #FFFFFF" .. getPlayerName(targetPlayer), player)
 		end
 	end
 )
@@ -129,6 +145,63 @@ addAdminCommandHandler("getallcars",
 		end
 		setAccountData(account, "vehicles", toJSON(carTable))
 
-		outputChatBox("[ADMIN] Вы получили все машины", player, 0, 255, 0)
+		outputText("Вы получили все машины", player)
+	end
+)
+
+addAdminCommandHandler("getcar",
+	function(player, cmd, id)
+		if not id then id = 1 end
+		local x, y, z = getElementPosition(player)
+		local rx, ry, rz = 0, 0, player.rotation.z
+		if player.vehicle then
+			x, y, z = getElementPosition(player.vehicle)
+			rx, ry, rz = getElementRotation(player.vehicle)
+		end
+		local vehicle, errorDesc = exports["tws-vehicles"]:spawnPlayerVehicle(player, id, x, y, z, rx, ry, rz)
+		if vehicle then
+			removePedFromVehicle(player)
+			warpPedIntoVehicle(player, vehicle)
+			outputText("Вы заспавнили автомобиль из своего гаража", player)
+		else
+			local errorText = "Неизвестная ошибка (" .. errorDesc .. ")"
+			if errorDesc == "no_such_car" then
+				errorText = "Автомобиля с таким ID нет в гараже"
+			elseif errorDesc == "car_already_spawned" then
+				errorDesc = "Автомобиль уже заспавнен"
+			elseif errorDesc == "bad_account" then
+				errorDesc = "Вы не залогинены"
+			end
+			outputError("Не удалось заспавнить автомобиль. " .. tostring(errorText), player)
+		end
+	end
+)
+
+addAdminCommandHandler("getcars",
+	function(player, cmd)
+		local x, y, z = getElementPosition(player)
+		for id = 1, 24 do
+			local vehicle = exports["tws-vehicles"]:spawnPlayerVehicle(player, id, x, y + id * 3, z, 0, 0, 90)
+		end
+		outputText("Вы заспавнили все автомобили из своего гаража", player)
+	end
+)
+
+addAdminCommandHandler("getplayercar",
+	function(player, cmd, idOrName, vehicleID)
+		if not id then id = 1 end
+		local targetPlayer = getPlayerFromIdOrName(idOrName)
+		if not isElement(targetPlayer) then
+			outputError("Игрок с таким именем или ID не найден.", player)
+			return
+		end
+		local positionAndRotation = {player:getPosition(), 0, 0, player.rotation.z}
+		local vehicle = exports["tws-vehicles"]:spawnPlayerVehicle(targetPlayer, id, unpack(positionAndRotation))
+		if vehicle then
+			warpPedIntoVehicle(player, vehicle)
+			outputText("Вы заспавнили автомобиль из гаража игрока #FFFFFF" .. tostring(targetPlayer.name), player)
+		else
+			outputError("Не удалось заспавнить автомобиль", player)
+		end
 	end
 )

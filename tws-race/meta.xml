@@ -1,0 +1,19 @@
+<meta>
+	<oop>true</oop>
+	
+	<!-- SHARED -->
+	<script src="shared/defines.lua" 		type="shared"/>
+
+	<!-- CLIENT -->
+	<script src="client/raceGameplay.lua" 	type="client"/>
+	<script src="client/raceHUD.lua" 		type="client"/>
+
+	<!-- SERVER -->
+	<script src="server/raceManager.lua" 	type="server"/>
+	<script src="server/exports.lua" 		type="server"/>
+
+	<!-- EXPORTED -->
+	<export function="createRace" 			type="server"/>
+	<export function="startRace"  			type="server"/>
+	<export function="finishRace" 			type="server"/>
+</meta>
