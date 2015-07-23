@@ -1,0 +1,30 @@
+<meta>
+	<oop>true</oop>
+	<script src="webui.lua"	 type="client"/>
+	<script src="main.lua"	 type="client"/>
+
+	<file src="screens/blank.html"/>
+	<file src="screens/jquery.min.js"/>
+
+	<!-- Login screen -->
+	<file src="screens/login/index.html"/>
+	<file src="screens/login/index.js"/>
+	<file src="screens/login/style.css"/>
+	<file src="screens/login/img/background1.jpg"/>
+	<file src="screens/login/img/background2.jpg"/>
+	<file src="screens/login/img/background3.jpg"/>
+	<file src="screens/login/img/background4.jpg"/>
+	<file src="screens/login/img/background5.jpg"/>
+	<file src="screens/login/img/background6.jpg"/>
+	<file src="screens/login/img/background7.jpg"/>
+	<file src="screens/login/img/background8.jpg"/>
+	<file src="screens/login/img/background9.jpg"/>
+	<file src="screens/login/img/background10.jpg"/>
+	<file src="screens/login/img/background11.jpg"/>
+	<file src="screens/login/img/background12.jpg"/>
+	<file src="screens/login/img/background13.jpg"/>
+	<file src="screens/login/img/background14.jpg"/>
+	<file src="screens/login/img/background15.jpg"/>
+	<file src="screens/login/img/background16.jpg"/>
+	<file src="screens/login/img/background17.jpg"/>
+</meta>

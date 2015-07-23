@@ -83,6 +83,7 @@ function raceManager:addPlayerToRace(raceID, player)
 	-- Добавление игрока в гонку
 	table.insert(race.players, player)
 	player:setData(RACE_ID_DATA, raceID)
+	triggerClientEvent(player, RaceEvent.JOINED, resourceRoot, race.checkpoints, race.settings)
 	self:triggerEventForAllPlayers(playerRaceID, RaceEvent.PLAYER_ADDED, player, #race.players)
 	return true
 end
