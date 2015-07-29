@@ -81,7 +81,7 @@ function drawing()
 				break
 			end
 
-			local crownShowing = player:getData("isCrownShowing")
+			local crownShowing = player:getData("isVIP") and player:getData("isCrownShowing") or false
 			local crownColor = getPlayerColor(player) or RGBToHex(255, 255, 255)
 			local nameColor = getPlayerColor(player) or RGBToHex(255, 255, 255)
 			local name = player.name

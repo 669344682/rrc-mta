@@ -26,6 +26,14 @@ addEventHandler ( "onClientPlayerQuit", root,
 		voicePlayers[source] = nil
 	end
 )
+
+setTimer(
+	function()
+		if not getKeyState("z") then
+			voicePlayers[localPlayer] = nil
+		end
+	end, 100, 0
+)
 ---
 
 function checkValidPlayer ( player )
