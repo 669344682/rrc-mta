@@ -143,6 +143,20 @@ addEventHandler("onClientPreRender", root,
 				speedoX = speedoX + differenceX
 				speedoY = speedoY + differenceY
 
+				-- ограничение по X
+				if speedoX + speedoW/2 > screenX then
+					speedoX = screenX - speedoW/2
+				elseif speedoX + speedoW/2 < 0 then
+					speedoX = 0 - speedoW/2
+				end
+
+				-- ограничение по Y
+				if speedoY + speedoH/2 > screenY then
+					speedoY = screenY - speedoH/2
+				elseif speedoY + speedoH/2 < 0 then
+					speedoY = 0 - speedoH/2
+				end
+
 				isSpeedoPosChanged = true
 			else -- рисуем icon_hover при наведении
 				dxDrawImage(mouseX - w/2, mouseY - h/2, w, h, icon_hover)
