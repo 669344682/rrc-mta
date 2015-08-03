@@ -1,0 +1,35 @@
+<meta>
+	<oop>true</oop>
+	<file src="img/topleft.png" type="client" />
+	<file src="img/topright.png" type="client" />
+	<file src="img/botleft.png" type="client" />
+	<file src="img/botright.png" type="client" />
+	<file src="img/top.png" type="client" />
+	<file src="img/bottom.png" type="client" />
+	<file src="img/left.png" type="client" />
+	<file src="img/right.png" type="client" />
+	<file src="img/middle.png" type="client" />
+	<file src="img/close.png" type="client" />
+
+	<file src="icons/ok.png" type="client" />
+	<file src="icons/error.png" type="client" />
+	<file src="icons/list.png" type="client" />
+	<file src="icons/info.png" type="client" />
+	<file src="icons/plus.png" type="client" />
+	<file src="icons/question.png" type="client" />
+	<file src="icons/race.png" type="client" />
+	<file src="icons/warning.png" type="client" />
+	<file src="icons/cash.png" type="client" />
+	<file src="icons/cashbag.png" type="client" />
+
+	<script src="client/utils.lua" type="client" />
+    <script src="client/main.lua" type="client" />
+    <script src="client/exports.lua" type="client" />
+    
+    <script src="server/main.lua" type="server" />
+    <script src="server/exports.lua" type="server" />
+
+    <export function="showMessage" type="shared"/>
+    <export function="hideMessage" type="client"/>
+    <export function="hideAllMessages" type="client"/>
+</meta>

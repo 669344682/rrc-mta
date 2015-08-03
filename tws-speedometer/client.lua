@@ -1,16 +1,10 @@
--- test
+loadstring(exports["tws-shared"]:include("utils"))()
 
 local FONT_BIAS = 4 -- наложение (расстояние между цифрами)
 local REFRESH_FRAME_RATE = 3 -- обновление скорости
 
 local isSpeedoVisible = true
-local screenX, screenY = guiGetScreenSize()
 local speedometer = dxCreateTexture("speedo.png", "argb", true, "clamp")
-local pointer = dxCreateTexture("pointer.png", "argb", true, "clamp")
-local pointerOffsetY = 12
-local pointerOffsetR = -128
-local speedoW, speedoH = speedometer:getSize()
-local speedoX, speedoY = screenX - speedoW - 100, screenY - speedoH - 50
 local icon_hover = dxCreateTexture("icons/hover.png", "argb", true, "clamp")
 local icon_move = dxCreateTexture("icons/move.png", "argb", true, "clamp")
 local isHovering1, isHovering2 = false, false
@@ -18,7 +12,26 @@ local lastCursorPosX, lastCursorPosY
 local isSpeedoPosChanged = false
 local font = {}
 
+-- масштабирование
+local speedoW, speedoH
+local localScale = mainScale * 0.55
+
+local somePixels = 3
+
+speedoW, speedoH = speedometer:getSize()
+speedoW, speedoH = math.round(speedoW * localScale) + somePixels, math.round(speedoH * localScale) + somePixels
+
+
+
+
+
+
+-- фиксированные координаты
+local speedoX = screenX - speedoW
+local speedoY = screenY - speedoH
+
 -- читаем настройки (speedoX, speedoY)
+--[[
 local node = xmlLoadFile("settings.xml")
 if node then
 	node_x = node:findChild("speedoX", 0)
@@ -27,6 +40,7 @@ if node then
 	speedoX = tonumber(node_x.value)
 	speedoY = tonumber(node_y.value)
 end
+]]--
 
 addEvent("onSpeedoPosChanged", false)
 
@@ -34,6 +48,7 @@ for i = 0, 9 do
 	font[i] = {}
 	font[i].texture = dxCreateTexture("FontPNG/" .. tostring(i) .. ".png", "argb", true, "clamp")
 	font[i].width, font[i].height = font[i].texture:getSize()
+	font[i].width, font[i].height = math.round(font[i].width * localScale), math.round(font[i].height * localScale)
 end
 
 addCommandHandler("cursor", function() showCursor(not isCursorShowing()) end)
@@ -56,6 +71,8 @@ local vehicleSpeed, frameCounter = 0, 0
 addEventHandler("onClientPreRender", root,
 	function()
 		if localPlayer.vehicle and isSpeedoVisible then
+			localPlayer:setData("isSpeedoVisible", true, false)
+
 			local speed, tab = vehicleSpeed, {}
 
 			local trueSpeed = math.round(getElementSpeed(localPlayer.vehicle, 1)^1.02)
@@ -76,8 +93,8 @@ addEventHandler("onClientPreRender", root,
 			-- сам спидометр
 			dxDrawImage(speedoX, speedoY, speedoW, speedoH, speedometer)
 
-			local angle = pointerOffsetR + trueSpeed * 0.82
-			dxDrawImage(speedoX, speedoY + pointerOffsetY, speedoW, speedoH, pointer, angle < 126 and angle or 126)
+		--	local angle = pointerOffsetR + trueSpeed * 0.82
+		--	dxDrawImage(speedoX, speedoY + pointerOffsetY, speedoW, speedoH, pointer, angle < 126 and angle or 126)
 
 			-- рисуем цифры с центрированием по горизонтали (с поддержкой разной ширины цифр)
 			local width_all = 0
@@ -100,12 +117,21 @@ addEventHandler("onClientPreRender", root,
 
 				width = width + font[n].width - FONT_BIAS
 			end
-
-			
+		else
+			localPlayer:setData("isSpeedoVisible", false, false)
 		end
 	end
 )
 
+function setVisible(isVisible)
+	isSpeedoVisible = isVisible == true
+end
+
+function getPosition()
+	return speedoX, speedoY, speedoX + speedoW, speedoY + speedoH
+end
+
+--[[
 addEventHandler("onClientPreRender", root,
 	function()
 		if not isSpeedoVisible then 
@@ -211,7 +237,4 @@ addEventHandler("onClientResourceStop", resourceRoot,
 		setCursorAlpha(255)
 	end
 )
-
-function setVisible(isVisible)
-	isSpeedoVisible = isVisible == true
-end
+--]]

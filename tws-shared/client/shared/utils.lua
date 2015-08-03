@@ -2,6 +2,7 @@ utils = {}
 
 -- Глобальные переменные для размера экрана
 screenWidth, screenHeight = guiGetScreenSize()
+screenX, screenY = guiGetScreenSize()
 
 mainScale = 1 * screenHeight / 600
 
@@ -24,4 +25,11 @@ function utils.triggerServerEventOnTimer(eventName, source, delay, ...)
 			triggerServerEvent(eventName, source, ...)
 		end
 	, delay, 1, ...)
+end
+
+function math.round(number, decimals, method)
+    decimals = decimals or 0
+    local factor = 10 ^ decimals
+    if (method == "ceil" or method == "floor") then return math[method](number * factor) / factor
+    else return tonumber(("%."..decimals.."f"):format(number)) end
 end

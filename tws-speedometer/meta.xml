@@ -20,4 +20,5 @@
     <script src="client.lua" type="client" />
 
     <export function="setVisible" type="client"/>
+    <export function="getPosition" type="client"/>
 </meta>
