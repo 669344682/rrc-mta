@@ -83,7 +83,7 @@ manager.messages = {}
 function manager:showMessage(title, text, icon, time, wordWrappingEnabled)
 	local message = {}
 	local direction = direction or "up"
-	local wordWrappingEnabled = wordWrappingEnabled == nil and true
+	local wordWrappingEnabled = (wordWrappingEnabled == (nil or true)) and true or false
 
 	message.direction = direction
 	message.w = manager.w
@@ -98,6 +98,7 @@ function manager:showMessage(title, text, icon, time, wordWrappingEnabled)
 	message.title = (title ~= "") and title or false
 	message.text = text
 	message.iconOffset = 0
+	message.wordWrappingEnabled = wordWrappingEnabled or true
 
 	if icon then
 		for key, value in pairs(manager.icons) do
@@ -107,16 +108,6 @@ function manager:showMessage(title, text, icon, time, wordWrappingEnabled)
 				break
 			end
 		end
-	end
-
-	if wordWrappingEnabled then
-		local iconW = message.icon and message.iconOffset or 0
-		local str, newLines, lastLine = makeStringWordWrap(text, (manager.w - iconW)/4.2)
-		if newLines > 5 then
-			outputDebugString("tws-message-manager: too much text (id: " .. tostring(message.id) .. ")")
-			return false
-		end
-		message.text = str
 	end
 
 	local didWeFoundAPlaceForNewMessage = false
@@ -344,10 +335,10 @@ addEventHandler("onClientRender", root,
 
 				-- text, title
 				if message.title then
-					dxDrawText(message.title, X + img.topleft.w + message.iconOffset, Y + img.topleft.h, img.topleft.w + rightX, Y + img.topleft.h + middleHeight, bgColor, 1, "default-bold", "left", "top")
-					dxDrawText(message.text, X + img.topleft.w + message.iconOffset, Y + img.topleft.h + 20, img.topleft.w + rightX, Y + img.topleft.h + middleHeight, bgColor, 1, "default", "left", "top")
+					dxDrawText(message.title, X + img.topleft.w + message.iconOffset, Y + img.topleft.h, img.topleft.w + rightX, Y + img.topleft.h + middleHeight, bgColor, 1, "default-bold", "left", "top", false, false, false, true)
+					dxDrawText(message.text, X + img.topleft.w + message.iconOffset, Y + img.topleft.h + 20, img.topleft.w + rightX, Y + img.topleft.h + middleHeight, bgColor, 1, "default", "left", "top", false, message.wordWrappingEnabled, false, not message.wordWrappingEnabled)
 				else
-					dxDrawText(message.text, X + img.topleft.w + message.iconOffset, Y + img.topleft.h, img.topleft.w + rightX, Y + img.topleft.h + middleHeight, bgColor, 1, "default", "left", "top")
+					dxDrawText(message.text, X + img.topleft.w + message.iconOffset, Y + img.topleft.h, img.topleft.w + rightX, Y + img.topleft.h + middleHeight, bgColor, 1, "default", "left", "top", false, message.wordWrappingEnabled, false, not message.wordWrappingEnabled)
 				end
 			else
 				table.remove(manager.messages, index)
