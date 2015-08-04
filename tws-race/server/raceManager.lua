@@ -532,6 +532,10 @@ local function playerQuit()
 	local creatorAccount = source:getAccount()
 	local race = raceManager:getRaceByCreatorAccount(account)
 	if race then
+		if race.state ~= "waiting" then
+			return
+		end
+
 		for _, player in ipairs(race.players) do
 			exports["tws-message-manager"]:showMessage(player, "Гонка", "Организатор гонки " .. tostring(getPlayerName(source)) .. " покинул сервер!\n\nГонка закончится через 5 минут, если организатор не переподключится.", "race", 15000, true)
 		end
@@ -550,6 +554,10 @@ addEventHandler("onPlayerQuit", root, playerQuit)
 local function playerLogin(_, account)
 	local race = raceManager:getRaceByCreatorAccount(account)
 	if race then
+		if race.state ~= "waiting" then
+			return
+		end
+
 		local creator = account:getPlayer()
 		if not creator then
 			return
