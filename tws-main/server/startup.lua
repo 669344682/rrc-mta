@@ -49,6 +49,7 @@ local resources = {
 	"tws-wheels",
 	"tws-skins",
 	"tws-donat",
+	"tws-message-manager"
 }
 
 

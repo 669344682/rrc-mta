@@ -65,6 +65,10 @@ end
 function refreshData(_, account)
 	local player = account.player
 
+	if not player then
+		return
+	end
+
 	local VIPBoughtAtTimestamp = player.account:getData("VIPBoughtAtTimestamp") 
 	local VIPExpiresAtTimestamp = player.account:getData("VIPExpiresAtTimestamp")
 	--outputChatBox(0)

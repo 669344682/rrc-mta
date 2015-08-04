@@ -1,4 +1,4 @@
--- showMessage(showTo, string text, string title, string icon, int time = false, bool wordWrappingEnabled = true)
+-- showMessage(showTo, string title, string text, string icon, int time = false, bool wordWrappingEnabled = true)
 --
 -- showTo может быть:
 -- nil - показывает всем игрокам

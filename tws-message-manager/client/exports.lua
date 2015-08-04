@@ -1,4 +1,5 @@
-﻿-- showMessage(string text, string title, string icon, int time = false, bool wordWrappingEnabled = true)
+﻿-- showMessage(string title, string text, string icon, int time = false, bool wordWrappingEnabled = true)
+-- чтобы не было заголовка title = ""
 --
 -- icons = {ok, error, list, info, plus, question, race, warning, cash, cashbag}
 --

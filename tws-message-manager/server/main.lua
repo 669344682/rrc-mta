@@ -12,6 +12,7 @@ function manager:showMessage(...)
 			end
 		end
 	else
-		triggerClientEvent("tws-message.showMessageFromServer", resourceRoot, ...)
+		table.remove(arg, 1)
+		triggerClientEvent("tws-message.showMessageFromServer", resourceRoot, unpack(arg))
 	end
 end

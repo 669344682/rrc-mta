@@ -80,10 +80,10 @@ end
 
 manager.messages = {}
 
-function manager:showMessage(text, title, icon, time, wordWrappingEnabled)
+function manager:showMessage(title, text, icon, time, wordWrappingEnabled)
 	local message = {}
 	local direction = direction or "up"
-	local wordWrappingEnabled = wordWrappingEnabled or true
+	local wordWrappingEnabled = wordWrappingEnabled == nil and true
 
 	message.direction = direction
 	message.w = manager.w
@@ -95,7 +95,7 @@ function manager:showMessage(text, title, icon, time, wordWrappingEnabled)
 	message.id = self.availableID
 	message.shown = false
 	message.x = manager.x
-	message.title = title
+	message.title = (title ~= "") and title or false
 	message.text = text
 	message.iconOffset = 0
 
