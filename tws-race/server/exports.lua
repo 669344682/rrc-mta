@@ -1,8 +1,14 @@
--- createRace(int maxPlayersCount, int maxTime, table checkpointsTable)
--- maxPlayersCount 	- лимит игроков
--- maxTime 			- лимит времени в секундах
--- playersTable		- массив игроков (игроков можно добавить после создания гонки)
--- checkpointsTable - массив чекпойнтов
+-- createRace(table settings)
+--
+-- settings.maxPlayersCount 	- лимит игроков 
+-- settings.players				- массив игроков 
+-- settings.checkpoints			- массив чекпойнтов
+-- settings.countdownEnabled	- true, чтобы был отсчет
+-- settings.countdownFreeze 	- true, чтобы при отсчете игроков фризило на месте 
+--
+-- settings.leavingVehicleAllowed		- можно ли выходить из авто
+-- settings.changingVehicleAllowed		- можно ли менять авто
+-- settings.announcingWinnersEnabled	- объявлять ли победителей (объявляются после окончания гонки)
 --
 -- Возвращает ID гонки
 function createRace(...)

@@ -1,19 +1,38 @@
 <meta>
 	<oop>true</oop>
-	
-	<!-- SHARED -->
-	<script src="shared/defines.lua" 		type="shared"/>
 
-	<!-- CLIENT -->
-	<script src="client/raceGameplay.lua" 	type="client"/>
-	<script src="client/raceHUD.lua" 		type="client"/>
+	<file src="files/tahomabold.ttf" />
+	<file src="files/pencil.png" />
+	<file src="files/line.png" />
 
-	<!-- SERVER -->
-	<script src="server/raceManager.lua" 	type="server"/>
-	<script src="server/exports.lua" 		type="server"/>
+	<file src="files/main.png" />
+	<file src="files/main-hovered.png" />
+	<file src="files/main-pressed.png" />
 
-	<!-- EXPORTED -->
-	<export function="createRace" 			type="server"/>
-	<export function="startRace"  			type="server"/>
-	<export function="finishRace" 			type="server"/>
+	<file src="files/button-checkpoint-add.png" />
+	<file src="files/button-checkpoint-del.png" />
+	<file src="files/button-checkpoint-hide.png" />
+	<file src="files/button-createrace.png" />
+	<file src="files/button-abandon.png" />
+	<file src="files/button-edge.png" />
+	<file src="files/button-empty.png" />
+	<file src="files/arrow.png" />
+
+	<file src="files/button-startrace.png" />
+	<file src="files/button-addplayer.png" />
+	<file src="files/button-removeplayer.png" />
+	<file src="files/button-players.png" />
+	<file src="files/button-blip.png" />
+	<file src="files/button-abandon2.png" />
+	<file src="files/button-line-start.png" />
+	<file src="files/button-line-finish.png" />
+
+	<script src="client/utils.lua" type="client" />
+    <script src="client/gameplay.lua" type="client" />
+    <script src="client/editor_gui.lua" type="client" />
+    <script src="client/editor.lua" type="client" />
+    <script src="client/editor_management.lua" type="client" />
+
+    <script src="server/raceManager.lua" type="server" />
+    <script src="server/exports.lua" type="server" />
 </meta>

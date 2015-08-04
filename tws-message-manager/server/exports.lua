@@ -1,7 +1,7 @@
 -- showMessage(showTo, string title, string text, string icon, int time = false, bool wordWrappingEnabled = true)
 --
 -- showTo может быть:
--- nil - показывает всем игрокам
+-- "all" - показывает всем игрокам
 -- player - показывает конкретному игроку
 -- table - показывает игрокам в массиве
 --

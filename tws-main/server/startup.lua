@@ -23,6 +23,7 @@ local resources = {
 	"tws-shared",
 	"tws-teleports",
 	"tws-assets",
+	"tws-message-manager",
 	"tws-admin",
 	"tws-blips",
 	"tws-camera",
@@ -49,7 +50,7 @@ local resources = {
 	"tws-wheels",
 	"tws-skins",
 	"tws-donat",
-	"tws-message-manager"
+	"tws-race"
 }
 
 

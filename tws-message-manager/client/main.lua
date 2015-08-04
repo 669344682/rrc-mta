@@ -98,7 +98,7 @@ function manager:showMessage(title, text, icon, time, wordWrappingEnabled)
 	message.title = (title ~= "") and title or false
 	message.text = text
 	message.iconOffset = 0
-	message.wordWrappingEnabled = wordWrappingEnabled or true
+	message.wordWrappingEnabled = wordWrappingEnabled
 
 	if icon then
 		for key, value in pairs(manager.icons) do

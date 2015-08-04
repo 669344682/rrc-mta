@@ -13,10 +13,8 @@ function manager:showMessage(...)
 				triggerClientEvent(player, "tws-message.showMessageFromServer", resourceRoot, unpack(arg))
 			end
 		end
-	else
-		if type(showTo) ~= "string" then
-			table.remove(arg, 1)
-		end
+	elseif showTo == "all" then
+		table.remove(arg, 1)
 		triggerClientEvent("tws-message.showMessageFromServer", resourceRoot, unpack(arg))
 	end
 end
