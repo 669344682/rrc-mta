@@ -23,7 +23,7 @@ local raceVehicle -- автомобиль локалплеера
 
 local function doDisqualifyClient()
 	exports["tws-message-manager"]:showMessage("Гонка", "Вы были дисквалифицированы из гонки.", "race", 7000, true)
-	triggerServerEvent("tws-race.onClientDisqualified", resourceRoot)
+	triggerServerEvent("tws-race.onClientDisqualified", root, localPlayer:getData("raceID"))
 end
 
 -- отсчет до дисквалификации

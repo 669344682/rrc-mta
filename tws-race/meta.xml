@@ -35,4 +35,10 @@
 
     <script src="server/raceManager.lua" type="server" />
     <script src="server/exports.lua" type="server" />
+
+    <export function="createRace" type="server"/>
+    <export function="startRace" type="server"/>
+    <export function="addPlayerToRace" type="server"/>
+    <export function="removePlayerFromRace" type="server"/>
+    <export function="abandonRace" type="server"/>
 </meta>

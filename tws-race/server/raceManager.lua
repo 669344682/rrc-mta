@@ -68,7 +68,7 @@ function raceManager:createRace(settings)
 	race.announcingWinnersEnabled = settings.announcingWinnersEnabled or false
 
 	-- через какое время будут объявлены победители?
-	race.announcingTimeToWait = 10000
+	race.announcingTimeToWait = settings.announcingTimeToWait or 10000
 
 	-- таблица победителей
 	race.winners = {}
@@ -76,7 +76,7 @@ function raceManager:createRace(settings)
 	-- создана ли едитолом
 	race.isCreatedByEditor = settings.isCreatedByEditor or false
 
-	--outputChatBox("race with id " .. tostring(race.id) .. " has just been created")
+	--outputChatBox("race #" .. tostring(race.id) .. " has just been created")
 
 	return race.id
 end
@@ -111,6 +111,7 @@ function raceManager:startRace(raceID)
 				self:unfreezeRacePlayers(race.id)
 				for _, player in ipairs(race.players) do
 					race.startedAt = getTickCount()
+					player:setData("tws-race.finished", false)
 					triggerClientEvent(player, "tws-race.onRaceStart", resourceRoot, race)
 				end
 			end, 4000, 1
@@ -118,6 +119,7 @@ function raceManager:startRace(raceID)
 	else
 		for _, player in ipairs(race.players) do
 			race.startedAt = getTickCount()
+			player:setData("tws-race.finished", false)
 			triggerClientEvent(player, "tws-race.onRaceStart", resourceRoot, race)
 		end
 	end
@@ -180,7 +182,7 @@ end
 function raceManager:abandonRace(raceID, reason)
 	local race = self:getRaceByID(raceID)
 	if not race then
-		return
+		return false
 	end
 
 	local text
@@ -192,14 +194,18 @@ function raceManager:abandonRace(raceID, reason)
 		text = "Гонка была отменена."
 	end
 
-	-- информируем игроков, что гонка отменена
-	for _, player in ipairs(race.players) do
-		exports["tws-message-manager"]:showMessage(player, "Гонка", text, "race", 10000, true)
+	if reason == false then
+		-- информируем игроков, что гонка отменена
+		for _, player in ipairs(race.players) do
+			exports["tws-message-manager"]:showMessage(player, "Гонка", text, "race", 10000, true)
+		end
 	end
 
 	self:endRace(raceID)
 
 	race.state = "abandoned"
+
+	return true
 end
 
 function raceManager:addPlayerToRace(player, raceID)
@@ -315,8 +321,8 @@ function raceManager:announceWinnners(raceID)
 	end
 
 	local firstPlace = race.winners[1] and race.winners[1].playerName or nil
-	local secondPlace = race.winners[2] and race.winners[1].playerName or nil
-	local thirdPlace = race.winners[3] and race.winners[1].playerName or nil
+	local secondPlace = race.winners[2] and race.winners[2].playerName or nil
+	local thirdPlace = race.winners[3] and race.winners[3].playerName or nil
 
 	local text = ""
 
@@ -327,15 +333,30 @@ function raceManager:announceWinnners(raceID)
 	text = thirdPlace and (text .. "#CD7F32Третье место: " .. tostring(thirdPlace)) or text
 	text = text .. "\n\n"
 
+	-- объявляем победителям
 	for place, winner in ipairs(race.winners) do
-		if winner.player == race.creatorAccount:getPlayer() then
-			race.creatorInformed = true
+		if race.creatorAccount then
+			if winner.player == race.creatorAccount:getPlayer() then
+				race.creatorInformed = true
+			end
 		end
 
-		text = text .. "#00FF00Ваше место в гонке: #" .. place
-
-		exports["tws-message-manager"]:showMessage(winner.player, "Гонка завершена", text, "race")
+		exports["tws-message-manager"]:showMessage(winner.player, "Гонка завершена", text .. "#00FF00Ваше место в гонке: #" .. place, "race")
 	end
+
+	-- объявляем тем, кто не успел финишировать
+	for _, player in ipairs(race.players) do
+		if not player:getData("tws-race.finished") then
+			if not race.creatorInformed and race.creatorAccount then
+				if player == race.creatorAccount:getPlayer() then
+					race.creatorInformed = true
+				end
+			end
+
+			exports["tws-message-manager"]:showMessage(player, "Гонка завершена", text .. "#FFFFFFВы не успели финишировать.", "race")
+		end
+	end
+
 
 	if not race.creatorInformed then
 		if not race.creatorAccount then
@@ -351,23 +372,7 @@ function raceManager:announceWinnners(raceID)
 	end
 end
 
---exports["tws-message-manager"]:showMessage("all", "Гонка завершена", "#FFFF00Первое место: AboriginalSalamander21\n#F0F0F0Второе место: UnevenEyebrows34\n#CD7F32Третье место: SuddenJupiter93\n\n#00FF00Ваше место в гонке: #3", "race", false, false)
-
-function raceManager:outputChatBoxToRacers(text, raceID, r, g, b, sendToCreator)
-	local race = self:getRaceByID(raceID)
-	if not race then
-		return
-	end
-
-	for _, player in ipairs(race.players) do
-		if sendToCreator == false then
-			if player == race.creatorAccount:getPlayer() then
-				return
-			end
-		end
-		outputChatBox(text, player, r or 235, g or 235, b or 235)
-	end
-end
+--exports["tws-message-manager"]:showMessage("all", "Гонка завершена", "#FFFF00Первое место: AboriginalSalamander21\n#F0F0F0Второе место: UnevenEyebrows34\n#CD7F32Третье место: SuddenJupiter93\n\n#FFFFFFВы не успели финишировать.", "race", false, false)
 
 -- выкидываем игроков из гонок при выходе с сервера
 function playerQuit()
@@ -380,7 +385,7 @@ function playerQuit()
 end
 addEventHandler("onPlayerQuit", root, playerQuit)
 
--- чистим дату у игроков при рестарте ресурса
+-- чистим дату у игроков при остановке ресурса
 addEventHandler("onResourceStop", root,
 	function(resourceStopped)
 		if resourceStopped == getThisResource() then
@@ -588,9 +593,17 @@ addEventHandler("tws-race.onClientFinished", resourceRoot,
 			return
 		end
 
-		client:setData("raceID", false)
+		local winner = {
+			player = client,
+			playerName = client:getName()
+		}
+
+		client:setData("tws-race.finished", true)
+
+		table.insert(race.winners, winner)
 
 		if #race.winners >= race.maxPlayersCount then
+			--outputChatBox("race #" .. race.id .. " has just been ended")
 			raceManager:endRace(race.id)
 		end
 
@@ -598,7 +611,7 @@ addEventHandler("tws-race.onClientFinished", resourceRoot,
 			race.state = "finishing"
 
 			-- если гонка сделана в едиторе
-			if race.isCreatedByEditor then
+			if race.announcingWinnersEnabled then
 				-- оповещаем игроков, что гонка завершена
 				for _, player in ipairs(race.players) do
 					if player ~= client then
@@ -616,13 +629,6 @@ addEventHandler("tws-race.onClientFinished", resourceRoot,
 				)
 			end
 		end
-
-		local winner = {
-			player = client,
-			playerName = client:getName()
-		}
-
-		table.insert(race.winners, winner)	
 	end
 )
 
