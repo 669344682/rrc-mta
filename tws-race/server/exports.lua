@@ -11,7 +11,7 @@
 -- settings.announcingTimeToWait		- время, через которое объявят победителей и закончится гонка 
 --										  (после финиширования первого игрока) (default: 10000)
 --
--- Возвращает ID гонки
+-- Возвращает ID гонки или false вместе с названием ошибки
 function createRace(...)
 	return raceManager:createRace(...)
 end

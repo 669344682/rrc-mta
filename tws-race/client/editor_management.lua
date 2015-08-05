@@ -129,8 +129,6 @@ function startLineDrawing(line)
 			startLine = {}
 
 			addEventHandler("onClientPreRender", root, clientRender)
-			localPlayer:setFrozen(true)
-			localPlayer.vehicle:setFrozen(true)
 			toggleAllControls(false, true, false)
 			currentLine = {}
 
@@ -173,8 +171,6 @@ function startLineDrawing(line)
 			finishLine = {}
 
 			addEventHandler("onClientPreRender", root, clientRender)
-			localPlayer:setFrozen(true)
-			localPlayer.vehicle:setFrozen(true)
 			toggleAllControls(false, true, false)
 			currentLine = {}
 
@@ -202,8 +198,6 @@ function stopLineDrawing()
 	destroyElement(checkpoint)
 	label:setVisible(false)
 	labelShadow:setVisible(false)
-	localPlayer:setFrozen(false)
-	localPlayer.vehicle:setFrozen(false)
 	if whatLine == "start" then
 		triggerServerEvent("tws-race.onCreatorDrawnLine", resourceRoot, whatLine, currentLine)
 		startLine = currentLine
@@ -306,8 +300,15 @@ function startRace(response)
 end
 
 addEventHandler("tws-race.onCreatorReconnect", resourceRoot,
-	function()
+	function(race)
+		local checkpoints = race.checkpoints
+
 		showMainButton()
 		switchToStage(2)
+
+		checkpointsForLines[1] = checkpoints[1]
+		checkpointsForLines[2] = checkpoints[2]
+		checkpointsForLines[3] = checkpoints[#checkpoints-1]
+		checkpointsForLines[4] = checkpoints[#checkpoints]
 	end
 )

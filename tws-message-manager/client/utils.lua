@@ -1,4 +1,5 @@
-screenX, screenY = guiGetScreenSize()
+loadstring(exports["tws-shared"]:include("utils"))()
+
 _, speedoY, _, speedoY2 = exports["tws-speedometer"]:getPosition()
 speedoH = speedoY2 - speedoY
 --

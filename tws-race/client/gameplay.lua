@@ -294,6 +294,7 @@ addEventHandler("tws-race.onClientRaceLeave", resourceRoot,
 		removeEventHandler("onClientRender", root, drawingLines)
 		removeEventHandler("onClientVehicleEnter", root, vehicleEnter)
 		removeEventHandler("onClientVehicleExit", root, vehicleExit)
+		removeEventHandler("onClientRender", root, disqualifyCountDown)
 	end
 )
 

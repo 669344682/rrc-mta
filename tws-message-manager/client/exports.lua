@@ -1,5 +1,7 @@
-﻿-- showMessage(string title, string text, string icon, int time = false, bool wordWrappingEnabled = true)
--- чтобы не было заголовка title = ""
+﻿-- showMessage(string title, string text, string icon, int time = false, bool wordWrappingEnabled = true, string buttonYes = false, string buttonNo = false)
+-- title - заголовок (чтобы не было title = "")
+-- buttonYes - название левой кнопки ("yes" при клике)
+-- buttonNo - название правой кнопки ("no" при клике)
 --
 -- icons = {ok, error, list, info, plus, question, race, warning, cash, cashbag}
 --
@@ -25,5 +27,5 @@ end
 
 -- срабатывает один раз при клике на сообщение (после клика оно скрывается)
 --
--- в параметрах ID
+-- в параметрах ID, button (может быть равен false, "yes", "no")
 addEvent("tws-message.onClientMessageClick")

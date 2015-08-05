@@ -8,7 +8,6 @@ addEvent("tws-race.onCreatorToggleBlip", true)
 addEvent("tws-race.onClientFinished", true)
 addEvent("tws-race.onClientDisqualified", true)
 
-
 raceManager = {}
 raceManager.activeRaces = {}
 raceManager.uniqueID = 1
@@ -18,12 +17,20 @@ function raceManager:createRace(settings)
 	race.state = "waiting"
 	race.players = {}
 
+	-- чекпоинты
+	if not settings.checkpoints then
+		return false, "no checkpoints"
+	end
+
+	if #settings.checkpoints < 3 then
+		return false, "#checkpoints < 3"
+	end
+	race.checkpoints = settings.checkpoints
+
 	-- ид гонки
 	self.activeRaces[self.uniqueID] = race
 	race.id = self.uniqueID
 	self.uniqueID = self.uniqueID + 1
-
-	-- настройки
 
 	-- игроки
 	if settings.players then
@@ -35,19 +42,14 @@ function raceManager:createRace(settings)
 	-- создатель гонки
 	if settings.creatorAccount then
 		race.creatorAccount = settings.creatorAccount
+		race.creator = getPlayerByAccountName(race.creatorAccount)
+		race.creator:setData("creator_raceID", race.id)
 
-		race.creatorAccount:setData("creator_raceID", race.id)
-		race.creatorAccount:getPlayer():setData("creator_raceID", race.id)
-
-		local creator = race.creatorAccount:getPlayer()
-		if creator then
+		if race.creator then
 			local text = "Вы успешно создали гонку! (ID: " .. tostring(race.id) .. ")\n\nТеперь вы можете управлять своей\nгонкой. При готовности всех игроков\nначинайте гонку."
-			exports["tws-message-manager"]:showMessage(creator, "Менеджер создания гонок", text, "ok", 15000, false)
+			exports["tws-message-manager"]:showMessage(race.creator, "Менеджер создания гонок", text, "ok", 15000, false)
 		end
 	end
-
-	-- чекпоинты
-	race.checkpoints = settings.checkpoints or {}
 
 	-- лимит игроков
 	race.maxPlayersCount = settings.maxPlayersCount or 32767
@@ -79,6 +81,16 @@ function raceManager:createRace(settings)
 	--outputChatBox("race #" .. tostring(race.id) .. " has just been created")
 
 	return race.id
+end
+
+function getPlayerByAccountName(accountName)
+	for _, player in ipairs(getElementsByType("player")) do
+		if player.account:getName() == accountName then
+			return player
+		end
+	end
+
+	return false
 end
 
 function raceManager:startRace(raceID)
@@ -157,9 +169,9 @@ function raceManager:endRace(raceID)
 
 	-- удаляет создателя, если таковой имеется
 	if race.creatorAccount then
-		race.creatorAccount:setData("creator_raceID", false)
-		race.creatorAccount:getPlayer():setData("creator_raceID", false)
 		race.creatorAccount = nil
+		race.creator:setData("creator_raceID", false)
+		race.creator = nil
 	end
 
 	-- чистим дату, триггерим эвент
@@ -256,11 +268,8 @@ function raceManager:removePlayerFromRace(player, raceID)
 
 	-- если все игроки выбыли из гонки
 	if #race.players == 0 and race.state == "running" then
-		if race.creatorAccount then
-			local creator = race.creatorAccount:getPlayer()
-			if creator then
-				exports["tws-message-manager"]:showMessage(creator, "Гонка завершена", "Все игроки выбыли из гонки.", "race", false, true)
-			end
+		if race.creator then
+			exports["tws-message-manager"]:showMessage(race.creator, "Гонка завершена", "Все игроки выбыли из гонки.", "race", false, true)
 		end
 
 		self:endRace(raceID)
@@ -335,8 +344,8 @@ function raceManager:announceWinnners(raceID)
 
 	-- объявляем победителям
 	for place, winner in ipairs(race.winners) do
-		if race.creatorAccount then
-			if winner.player == race.creatorAccount:getPlayer() then
+		if race.creator then
+			if winner.player == race.creator then
 				race.creatorInformed = true
 			end
 		end
@@ -347,8 +356,8 @@ function raceManager:announceWinnners(raceID)
 	-- объявляем тем, кто не успел финишировать
 	for _, player in ipairs(race.players) do
 		if not player:getData("tws-race.finished") then
-			if not race.creatorInformed and race.creatorAccount then
-				if player == race.creatorAccount:getPlayer() then
+			if not race.creatorInformed and race.creator then
+				if player == race.creator then
 					race.creatorInformed = true
 				end
 			end
@@ -359,16 +368,11 @@ function raceManager:announceWinnners(raceID)
 
 
 	if not race.creatorInformed then
-		if not race.creatorAccount then
+		if not race.creator then
 			return
 		end
 
-		local creator = race.creatorAccount:getPlayer()
-		if not creator then
-			return
-		end
-
-		exports["tws-message-manager"]:showMessage(creator, "Гонка завершена", text, "race")
+		exports["tws-message-manager"]:showMessage(race.creator, "Гонка завершена", text, "race")
 	end
 end
 
@@ -402,7 +406,8 @@ addEventHandler("tws-race.onCreatorCreateRace", resourceRoot,
 	function(checkpoints)
 		local settings = {}
 
-		settings.creatorAccount = client:getAccount()
+		settings.creator = client
+		settings.creatorAccount = client.account:getName()
 		settings.checkpoints = checkpoints
 		settings.countdownEnabled = true
 		settings.countdownFreeze = true
@@ -426,13 +431,11 @@ function addOrRemovePlayer(playerID)
 
 	local player = exports["tws-main"]:getPlayerByID(playerID)
 	if not player then
-		exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрока с ID " .. playerID .. " не существует!", "error", 5000, false)
-		--outputChatBox("Игрока с ID " .. playerID .. " не существует!", client, 255, 100, 100)
-		--outputChatBox("Ошибка #" .. debug.getinfo(1).currentline .. " " .. debug.getinfo(1).source, client, 255, 100, 100)
+		exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрока с ID " .. playerID .. " не существует!", "error", 5000, true)
 		return
 	end
 
-	local race = raceManager:getRaceByCreatorAccount(client:getAccount())
+	local race = raceManager:getRaceByCreatorAccount(client.account:getName())
 	if not race then
 		return
 	end
@@ -471,7 +474,7 @@ addEventHandler("tws-race.onCreatorRemovePlayer", resourceRoot, addOrRemovePlaye
 -- стартовая и финишная линия
 addEventHandler("tws-race.onCreatorDrawnLine", resourceRoot,
 	function(whatLine, line)
-		local creatorAccount = client:getAccount()
+		local creatorAccount = client.account:getName()
 		local race = raceManager:getRaceByCreatorAccount(creatorAccount)
 		if race then
 			if whatLine == "start" then
@@ -493,7 +496,7 @@ addEventHandler("tws-race.onCreatorDrawnLine", resourceRoot,
 -- запускаем гонку (editor)
 addEventHandler("tws-race.onCreatorAsksForRaceStarting", resourceRoot,
 	function()
-		local race = raceManager:getRaceByCreatorAccount(client:getAccount())
+		local race = raceManager:getRaceByCreatorAccount(client.account:getName())
 
 		if not race then
 			exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Ошибка при старте гонки #" .. debug.getinfo(1).currentline .. " " .. debug.getinfo(1).source, "error", 5000, true)
@@ -511,7 +514,7 @@ addEventHandler("tws-race.onCreatorAsksForRaceStarting", resourceRoot,
 -- отменяем гонку
 addEventHandler("tws-race.onCreatorAbandonRace", resourceRoot,
 	function()
-		local race = raceManager:getRaceByCreatorAccount(client:getAccount())
+		local race = raceManager:getRaceByCreatorAccount(client.account:getName())
 		if not race then
 			return
 		end
@@ -523,7 +526,7 @@ addEventHandler("tws-race.onCreatorAbandonRace", resourceRoot,
 -- делаем блип
 addEventHandler("tws-race.onCreatorToggleBlip", resourceRoot,
 	function()
-		local race = raceManager:getRaceByCreatorAccount(client:getAccount())
+		local race = raceManager:getRaceByCreatorAccount(client.account:getName())
 		if not race then
 			return
 		end
@@ -533,54 +536,53 @@ addEventHandler("tws-race.onCreatorToggleBlip", resourceRoot,
 )
 
 -- делаем таймер для удаления гонки при выходе создателя
-local function playerQuit()
-	local creatorAccount = source:getAccount()
-	local race = raceManager:getRaceByCreatorAccount(account)
+local function playerLogout(account)
+	local creatorAccount = account:getName()
+	local race = raceManager:getRaceByCreatorAccount(creatorAccount)
 	if race then
 		if race.state ~= "waiting" then
 			return
 		end
 
+		race.creator = nil
+
 		for _, player in ipairs(race.players) do
-			exports["tws-message-manager"]:showMessage(player, "Гонка", "Организатор гонки " .. tostring(getPlayerName(source)) .. " покинул сервер!\n\nГонка закончится через 5 минут, если организатор не переподключится.", "race", 15000, true)
+			exports["tws-message-manager"]:showMessage(player, "Гонка", "Организатор гонки " .. tostring(getPlayerName(source)) .. " покинул сервер!\n\nГонка закончится через 10 минут, если организатор не переподключится.", "race", 15000, true)
 		end
 
 		race.timer = setTimer(
 			function()
 				race.timer = nil
 				raceManager:abandonRace(race.id, "timer")
-			end, 1000 * 60 * 5, 1
+			end, 1000 * 60 * 10, 1
 		)
 	end
 end
-addEventHandler("onPlayerQuit", root, playerQuit)
+addEventHandler("onPlayerLogout", root, playerLogout)
 
 -- восстанавливаем права создателя при логине
 local function playerLogin(_, account)
-	local race = raceManager:getRaceByCreatorAccount(account)
+	local race = raceManager:getRaceByCreatorAccount(account:getName())
 	if race then
 		if race.state ~= "waiting" then
 			return
 		end
 
-		local creator = account:getPlayer()
-		if not creator then
-			return
-		end
-		creator:setData("creator_raceID", race.id)
+		race.creator = account:getPlayer()
+		race.creator:setData("creator_raceID", race.id)
 
 		if race.timer and isTimer(race.timer) then
 			killTimer(race.timer)
 		end
 
 		for _, player in ipairs(race.players) do
-			exports["tws-message-manager"]:showMessage(player, "Гонка", "Организатор гонки " .. tostring(getPlayerName(creator)) .. " (" .. exports["tws-main"]:getPlayerID(creator) .. ") вернулся на сервер!", "race", 5000, true)
+			exports["tws-message-manager"]:showMessage(player, "Гонка", "Организатор гонки " .. tostring(getPlayerName(race.creator)) .. " (" .. exports["tws-main"]:getPlayerID(race.creator) .. ") вернулся на сервер!", "race", 5000, true)
 		end
 
-		exports["tws-message-manager"]:showMessage(creator, "Менеджер создания гонок", "Ваши права организатора гонки были восстановлены.", "race", 10000, true)
+		exports["tws-message-manager"]:showMessage(race.creator, "Менеджер создания гонок", "Ваши права организатора гонки были восстановлены.", "race", 10000, true)
 
-		raceManager:addPlayerToRace(creator, race.id)
-		triggerClientEvent(creator, "tws-race.onCreatorReconnect", resourceRoot)
+		raceManager:addPlayerToRace(race.creator, race.id)
+		triggerClientEvent(race.creator, "tws-race.onCreatorReconnect", resourceRoot, race)
 	end
 end
 addEventHandler("onPlayerLogin", root, playerLogin)

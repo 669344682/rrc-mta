@@ -70,7 +70,7 @@ end
 -- позиции сообщений
 manager.positions = {}
 local yPos = screenY - manager.h - manager.spacing + manager.offsetY
-for i = 1, 20 do
+for i = 1, 50 do
 	table.insert(manager.positions, {y = yPos})
 	yPos = yPos - manager.h - manager.spacing
 end
@@ -80,7 +80,9 @@ end
 
 manager.messages = {}
 
-function manager:showMessage(title, text, icon, time, wordWrappingEnabled)
+
+
+function manager:showMessage(title, text, icon, time, wordWrappingEnabled, buttonYes, buttonNo)
 	local message = {}
 	local direction = direction or "up"
 	local wordWrappingEnabled = (wordWrappingEnabled == (nil or true)) and true or false
@@ -99,6 +101,10 @@ function manager:showMessage(title, text, icon, time, wordWrappingEnabled)
 	message.text = text
 	message.iconOffset = 0
 	message.wordWrappingEnabled = wordWrappingEnabled
+	message.buttonYes = buttonYes or false
+	message.buttonNo = buttonNo or false
+	message.buttonW = 100
+	message.buttonH = 20
 
 	if icon then
 		for key, value in pairs(manager.icons) do
@@ -333,6 +339,52 @@ addEventHandler("onClientRender", root,
 					dxDrawImage(X + img.topleft.w, Y + img.topleft.h, message.icon.w, message.icon.h, message.icon.texture, 0, 0, 0, bgColor)
 				end
 
+				-- buttons
+				local cursorX, cursorY
+				if message.buttonYes or message.buttonNo then
+					cursorX, cursorY = getCursorPosition()
+					if cursorX and cursorY then
+						cursorX, cursorY = cursorX * screenX, cursorY * screenY
+					end
+
+					message.buttonY = Y + message.h - img.botleft.h - message.buttonH
+					message.buttonYesX = (message.icon and message.icon.w or 0) + X + img.botleft.w
+					message.buttonNoX = X + message.w - img.botright.w - message.buttonW
+
+					y = message.buttonY
+					w = message.buttonW
+					h = message.buttonH
+				end
+
+				-- yes button
+				if message.buttonYes then
+					local color = tocolor(0, 40, 51, message.alpha)
+					if cursorX and cursorY then
+						if utils.isPointInRect(cursorX, cursorY, message.buttonYesX, message.buttonY, message.buttonW, message.buttonH) then
+							color = tocolor(0, 40 * 1.2, 51 * 1.2, message.alpha)
+						end
+					end
+					x = message.buttonYesX
+					dxDrawRectangle(x-1, y-1, w+2, h+2, tocolor(0, 0, 0, message.alpha))
+					dxDrawRectangle(x, y, w, h, color)
+					dxDrawText(message.buttonYes, x, y, x+w, y+h, bgColor, 1, "default", "center", "center")
+				end
+
+				-- no button
+				if message.buttonNo then
+					local color = tocolor(0, 40, 51, message.alpha)
+					if cursorX and cursorY then
+						if utils.isPointInRect(cursorX, cursorY, message.buttonNoX, message.buttonY, message.buttonW, message.buttonH) then
+							color = tocolor(0, 40 * 1.2, 51 * 1.2, message.alpha)
+						end
+					end
+					x = message.buttonNoX
+					dxDrawRectangle(x-1, y-1, w+2, h+2, tocolor(0, 0, 0, message.alpha))
+					dxDrawRectangle(x, y, w, h, color)
+					dxDrawText(message.buttonNo, x, y, x+w, y+h, bgColor, 1, "default", "center", "center")
+				end
+
+
 				-- text, title
 				if message.title then
 					dxDrawText(message.title, X + img.topleft.w + message.iconOffset, Y + img.topleft.h, img.topleft.w + rightX, Y + img.topleft.h + middleHeight, bgColor, 1, "default-bold", "left", "top", false, false, false, true)
@@ -379,19 +431,29 @@ addEventHandler("onClientRender", root,
 
 
 			for _, message in ipairs(manager.messages) do
-				if cursorX > message.x and cursorX < message.x + message.w then
-					if cursorY > message.y and cursorY < message.y + message.h then
 
+				if utils.isPointInRect(cursorX, cursorY, message.x, message.y, message.w, message.h) then
+					if not manager.mouseClick1 and manager.mouseClick2 then
+						if not message.clicked then
+							local button = false
 
-						if not manager.mouseClick1 and manager.mouseClick2 then
-							if not message.clicked then
-								triggerEvent("tws-message.onClientMessageClick", root, message.id)
-								message.clicked = true
+							if message.buttonYes then
+								if utils.isPointInRect(cursorX, cursorY, message.buttonYesX, message.buttonY, message.buttonW, message.buttonH) then
+									button = "yes"
+								end
 							end
-						end
 
-						break
+							if message.buttonNo then
+								if utils.isPointInRect(cursorX, cursorY, message.buttonNoX, message.buttonY, message.buttonW, message.buttonH) then
+									button = "no"
+								end
+							end
+
+							triggerEvent("tws-message.onClientMessageClick", root, message.id, button)
+						end
 					end
+
+					break
 				end
 			end
 
@@ -402,8 +464,17 @@ addEventHandler("onClientRender", root,
 
 addEvent("tws-message.onClientMessageClick", true)
 addEventHandler("tws-message.onClientMessageClick", resourceRoot,
-	function(id)
-		manager:hideMessage(id)
+	function(id, button)
+		local message = manager:getMessageByID(id)
+		if not (message.buttonYes or message.buttonNo) then
+			manager:hideMessage(id)
+			message.clicked = true
+		else
+			if button then
+				manager:hideMessage(id)
+				message.clicked = true
+			end
+		end
 	end
 )
 
