@@ -16,6 +16,7 @@
 	<file src="icons/list.png" type="client" />
 	<file src="icons/info.png" type="client" />
 	<file src="icons/plus.png" type="client" />
+	<file src="icons/minus.png" type="client" />
 	<file src="icons/question.png" type="client" />
 	<file src="icons/race.png" type="client" />
 	<file src="icons/warning.png" type="client" />

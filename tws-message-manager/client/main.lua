@@ -52,6 +52,7 @@ manager.icons = {
 	["list"] = {},
 	["info"] = {},
 	["plus"] = {},
+	["minus"] = {},
 	["question"] = {},
 	["race"] = {},
 	["warning"] = {},
@@ -469,10 +470,12 @@ addEventHandler("tws-message.onClientMessageClick", resourceRoot,
 		if not (message.buttonYes or message.buttonNo) then
 			manager:hideMessage(id)
 			message.clicked = true
+			triggerServerEvent("tws-message.onClientMessageClick", root, id, button)
 		else
 			if button then
 				manager:hideMessage(id)
 				message.clicked = true
+				triggerServerEvent("tws-message.onClientMessageClick", root, id, button)
 			end
 		end
 	end

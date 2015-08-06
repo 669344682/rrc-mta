@@ -9,7 +9,7 @@
 -- buttonYes - название левой кнопки ("yes" при клике)
 -- buttonNo - название правой кнопки ("no" при клике)
 --
--- icons = {ok, error, list, info, plus, question, race, warning, cash, cashbag}
+-- icons = {ok, error, list, info, plus, minus, question, race, warning, cash, cashbag}
 --
 -- ничего не возвращает
 function showMessage(...)

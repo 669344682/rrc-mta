@@ -33,6 +33,7 @@
     <script src="client/editor.lua" type="client" />
     <script src="client/editor_management.lua" type="client" />
 
+    <script src="server/utils.lua" type="server" />
     <script src="server/raceManager.lua" type="server" />
     <script src="server/exports.lua" type="server" />
 

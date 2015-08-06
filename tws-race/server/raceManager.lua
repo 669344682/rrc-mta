@@ -7,6 +7,8 @@ addEvent("tws-race.onCreatorAbandonRace", true)
 addEvent("tws-race.onCreatorToggleBlip", true)
 addEvent("tws-race.onClientFinished", true)
 addEvent("tws-race.onClientDisqualified", true)
+addEvent("tws-message.onClientMessageClick", true)
+addEvent("tws-race.onClientInviteResponse", true)
 
 raceManager = {}
 raceManager.activeRaces = {}
@@ -70,7 +72,7 @@ function raceManager:createRace(settings)
 	race.announcingWinnersEnabled = settings.announcingWinnersEnabled or false
 
 	-- через какое время будут объявлены победители?
-	race.announcingTimeToWait = settings.announcingTimeToWait or 10000
+	race.announcingTimeToWait = settings.announcingTimeToWait or 60000
 
 	-- таблица победителей
 	race.winners = {}
@@ -100,6 +102,8 @@ function raceManager:startRace(raceID)
 	end
 
 	race.state = "running"
+
+	race.maxPlayersCount = #race.players
 
 	-- удаляем блип, если есть
 	if race.blip then
@@ -422,8 +426,41 @@ addEventHandler("tws-race.onCreatorCreateRace", resourceRoot,
 	end
 )
  
+-- добавляем игроков из едитора
+addEventHandler("tws-race.onClientInviteResponse", resourceRoot,
+	function(raceID, response)
+		local race = raceManager:getRaceByID(raceID)
+		if not race then
+			return
+		end
 
--- добавляем или удаляем игроков (editor)
+		if not client then
+			return
+		end
+
+		if race.state ~= "waiting" then
+			exports["tws-message-manager"]:showMessage(client, "Гонка", "Гонка уже началась!", "error", 3000, true)
+			return
+		end
+
+		if response == "yes" then
+			local isAdded = raceManager:addPlayerToRace(client, race.id)
+			if isAdded then
+				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Вы были допущены к гонке!", "plus", 5000, true)
+				if race.creator then
+					exports["tws-message-manager"]:showMessage(race.creator, "Менеджер создания гонок", "Игрок " .. tostring(client.name) .. " согласился принять участие в гонке!", "plus", 4000, true)
+				end
+			end
+		elseif response == "no" then
+			if race.creator then
+				exports["tws-message-manager"]:showMessage(race.creator, "Менеджер создания гонок", "Игрок " .. tostring(client.name) .. " отказался принять участие в гонке!", "error", 4000, true)
+			end
+		end
+
+	end
+)
+
+
 function addOrRemovePlayer(playerID)
 	if not client then
 		return
@@ -441,29 +478,39 @@ function addOrRemovePlayer(playerID)
 	end
 
 	if eventName == "tws-race.onCreatorAddPlayer" then
-		local result, reason = raceManager:addPlayerToRace(player, race.id, true)
-		if reason == "already in race" then
-			if race.id == player:getData("raceID") then
-				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрок " .. player:getName() .. " уже допущен к вашей гонке!", "info", 5000, true)
-			else
-				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрок " .. player:getName() .. " уже допущен к какой-то другой гонке!", "error", 5000, true)
-			end
-		elseif result == true then
-			if player == client then
+		-- если организатор приглашает сам себя
+		if player == client then
+			local result, reason = raceManager:addPlayerToRace(player, race.id)
+			if result == true then
 				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Вы допустили себя до своей гонки!", "plus", 5000, true)
+			elseif reason == "already in race" then
+				if race.id == player:getData("raceID") then
+					exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Вы уже допущены до своей гонки!", "info", 5000, true)
+				else
+					exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Вы уже допущены к какой-то другой гонке!", "error", 5000, true)
+				end
+			end
+		else
+			if player:getData("raceID") then
+				if race.id == player:getData("raceID") then
+					exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрок " .. player:getName() .. " уже допущен к вашей гонке!", "info", 5000, true)
+				else
+					exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрок " .. player:getName() .. " уже допущен к какой-то другой гонке!", "error", 5000, true)
+				end
 			else
-				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрок " .. player:getName() .. " был допущен к вашей гонке!", "plus", 5000, true)
-				exports["tws-message-manager"]:showMessage(player, "Менеджер создания гонок", "Организатор " .. client:getName() .. " допустил вас к своей гонке!", "plus", 5000, true)
+				-- кидаем инвайт игроку
+				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Вы пригласили игрока " .. player.name .. " в вашу гонку!", "info", 4000, true)
+				triggerClientEvent(player, "tws-race.onRaceInvite", resourceRoot, race.id, client.name)
 			end
 		end
 	else
 		local result, shit = raceManager:removePlayerFromRace(player, race.id, true)
 		if result == true then
 			if player == client then
-				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Вы исключили себя из своей гонки!", "info", 5000, true)
+				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Вы исключили себя из своей гонки!", "minus", 5000, true)
 			else
-				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрок " .. player:getName() .. " был исключен из вашей гонки!", "info", 5000, true)
-				exports["tws-message-manager"]:showMessage(player, "Менеджер создания гонок", "Организатор " .. client:getName() .. " исключил вас из своей гонки!", "info", 5000, true)
+				exports["tws-message-manager"]:showMessage(client, "Менеджер создания гонок", "Игрок " .. player:getName() .. " был исключен из вашей гонки!", "minus", 5000, true)
+				exports["tws-message-manager"]:showMessage(player, "Менеджер создания гонок", "Организатор " .. client:getName() .. " исключил вас из своей гонки!", "minus", 7000, true)
 			end
 		end
 	end
@@ -587,7 +634,6 @@ local function playerLogin(_, account)
 end
 addEventHandler("onPlayerLogin", root, playerLogin)
 
-
 addEventHandler("tws-race.onClientFinished", resourceRoot,
 	function(raceID)
 		local race = raceManager:getRaceByID(raceID)
@@ -605,7 +651,12 @@ addEventHandler("tws-race.onClientFinished", resourceRoot,
 		table.insert(race.winners, winner)
 
 		if #race.winners >= race.maxPlayersCount then
-			--outputChatBox("race #" .. race.id .. " has just been ended")
+			if race.announcingWinnersEnabled and race.endTimer then
+				if isTimer(race.endTimer) then
+					killTimer(race.endTimer)
+				end
+				raceManager:announceWinnners(race.id)
+			end
 			raceManager:endRace(race.id)
 		end
 
@@ -617,13 +668,15 @@ addEventHandler("tws-race.onClientFinished", resourceRoot,
 				-- оповещаем игроков, что гонка завершена
 				for _, player in ipairs(race.players) do
 					if player ~= client then
-						exports["tws-message-manager"]:showMessage(player, "Гонка", "Победитель гонки определен! Гонка будет завершена через " .. tostring(race.announcingTimeToWait and race.announcingTimeToWait/1000 or nil) .. " секунд." , "race", 10000, true)
+						exports["tws-message-manager"]:showMessage(player, "Гонка", "Победитель гонки определен! Гонка будет завершена через " .. tostring(race.announcingTimeToWait and race.announcingTimeToWait/1000 or nil) .. " секунд или в тот момент, когда финишируют все участники гонки." , "race", 10000, true)
 					end
 				end
 
 				-- завершаем гонку и объявляем победителей спустя announcingTimeToWait
-				setTimer(
+				race.endTimer = setTimer(
 					function()
+						race.endTimer = nil
+
 						raceManager:announceWinnners(race.id)
 
 						raceManager:endRace(race.id)

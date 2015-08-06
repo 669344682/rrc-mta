@@ -9,6 +9,29 @@ addEvent("tws-race.onPreStartFreeze", true)
 addEvent("tws-race.onCreatorDrawnLine", true)
 addEvent("tws-race.onClientRaceJoin", true)
 addEvent("tws-race.onClientRaceLeave", true)
+addEvent("tws-race.onRaceInvite", true)
+
+----------------------
+-- приглашение в гонку
+----------------------
+addEventHandler("tws-race.onRaceInvite", resourceRoot,
+	function(raceID, creatorName)
+		local messageID = exports["tws-message-manager"]:showMessage("Гонка", "Организатор " .. tostring(creatorName) .. " приглашает вас в свою гонку!", "question", false, true, "Принять", "Отклонить")
+
+		local function messageResponse(messageIDClicked, response)
+			if messageID == messageIDClicked then
+				if response == "yes" or response == "no" then
+					removeEventHandler("tws-message.onClientMessageClick", root, messageResponse)
+
+					triggerServerEvent("tws-race.onClientInviteResponse", resourceRoot, raceID, response)
+				end
+			end
+		end
+		addEventHandler("tws-message.onClientMessageClick", root, messageResponse)
+	end
+)
+
+
 
 ---------------------------------------------------------
 -- следим за vehicleLeave/vehicleEnter и за самой машиной
