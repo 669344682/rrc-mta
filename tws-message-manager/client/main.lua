@@ -86,7 +86,10 @@ manager.messages = {}
 function manager:showMessage(title, text, icon, time, wordWrappingEnabled, buttonYes, buttonNo)
 	local message = {}
 	local direction = direction or "up"
-	local wordWrappingEnabled = (wordWrappingEnabled == (nil or true)) and true or false
+
+	if wordWrappingEnabled ~= false then
+		wordWrappingEnabled = true
+	end
 
 	message.direction = direction
 	message.w = manager.w
@@ -482,7 +485,7 @@ addEventHandler("tws-message.onClientMessageClick", resourceRoot,
 )
 
 addEvent("tws-message.showMessageFromServer", true)
-addEventHandler("tws-message.showMessageFromServer", resourceRoot,
+addEventHandler("tws-message.showMessageFromServer", root,
 	function(...)
 		manager:showMessage(...)
 	end

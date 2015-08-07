@@ -239,7 +239,7 @@ addEventHandler("onLuckyGUIClick", root,
 					region = "0" .. tostring(region)
 				end
 
-				exports["tws-vehicles"]:applyVehicleNumberPlate(vehicle, carNumberTextNew, region)
+				triggerServerEvent("tws-donat.applyVehicleNumberPlate", resourceRoot, vehicle, carNumberTextNew, region)
 			end
 	end
 )
@@ -488,30 +488,42 @@ function startSpectating(id)
 
 	local id = tonumber(id)
 
-	local resource = getResourceFromName("tws-main")
-	if not (resource and resource.state == "running") then
-		return
-	end
-
-	local player = exports["tws-main"]:getPlayerByID(id)
-	if player then
-		setCameraTarget(player)
-
-		toggleGUI(false)
-		twsGUI:setVisible(gui.stopSpectating, true)
-	else
-		outputChatBox("[ERROR] Неверный ID!", 220, 0, 0)
-	end
+	triggerServerEvent("tws-donat.startSpectating", resourceRoot, id)
 end
 
 function stopSpectating()
-	setCameraTarget(localPlayer)
+	triggerServerEvent("tws-donat.stopSpectating", resourceRoot, id)
 
-	toggleGUI(true)
+	--toggleGUI(true)
 	twsGUI:setVisible(gui.stopSpectating, false)
+	--exports["tws-utils"]:toggleHUD(true)
 end
 
-addCommandHandler("spectate", function(cmd, shit) startSpectating(id) end)
+addEvent("tws-donat.onSpectateStart", true)
+addEventHandler("tws-donat.onSpectateStart", resourceRoot,
+	function()
+		toggleGUI(false)
+		twsGUI:setVisible(gui.stopSpectating, true)
+		--exports["tws-utils"]:toggleHUD(false)
+	end
+)
+
+addEvent("tws-donat.onSpectateStop", true)
+addEventHandler("tws-donat.onSpectateStop", resourceRoot, stopSpectating)
+
+addEventHandler("onClientResourceStop", root,
+	function(stoppedResource)
+		local player = localPlayer
+		if stoppedResource == getThisResource() then
+			local skin = player:getData("tws-skin")
+			if skin then
+				player.model = skin
+			end
+		end
+	end
+)
+
+addCommandHandler("spectate", function(cmd, id) startSpectating(id) end)
 
 addCommandHandler("donatgui", function() toggleGUI(not isGUIVisible) end)
 

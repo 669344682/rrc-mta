@@ -1,6 +1,5 @@
-local enabledHudComponents = {
-	"radar"
-}
+local components = {"ammo", "area_name", "armour", "breath", "clock", "health", "money", "vehicle_name", "weapon", "radio", "wanted"}
+
 
 hudVisiblityState = true
 
@@ -13,12 +12,10 @@ local function isResourceRunning(resourceName)
 end
 
 function toggleHUD(isVisible, ignoreMap)
-	setPlayerHudComponentVisible("all", false)
-	if isVisible then
-		for i, name in ipairs(enabledHudComponents) do
-			setPlayerHudComponentVisible(name, true)
-		end
+	for _, component in ipairs(components) do
+		setPlayerHudComponentVisible(component, false)
 	end
+
 	if isResourceRunning("tws-time") then
 		exports["tws-time"]:setClockVisible(isVisible)
 	end
@@ -32,6 +29,7 @@ function toggleHUD(isVisible, ignoreMap)
 		exports["tws-gui-hud"]:setVisible(isVisible)
 	end	
 	if not ignoreMap then
+		setPlayerHudComponentVisible("radar", isVisible)
 		if isResourceRunning("tws-gui-map") then
 			exports["tws-gui-map"]:setEnabled(isVisible)
 		end

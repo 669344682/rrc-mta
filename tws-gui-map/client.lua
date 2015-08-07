@@ -14,6 +14,7 @@ end
 
 local function updateDragging()
 	local mx, my = getMousePos()
+	mx, my = mx * (1/Map.scale), my * (1/Map.scale)
 
 	if isDragging then
 		local x, y = mx - dragX, my - dragY
@@ -25,6 +26,7 @@ local function updateDragging()
 
 	if getKeyState("mouse1") and not isDragging then
 		dragX, dragY = mx - Map.x, my - Map.y
+		Map.dragX, Map.dragY = dragX, dragY
 		isDragging = true
 		isDragMovedCursor = false
 	elseif not getKeyState("mouse1") and isDragging then

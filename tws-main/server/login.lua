@@ -22,9 +22,13 @@ end
 -- Setup account
 addEventHandler("onPlayerLogin", root,
 	function(previousAccount, account)
-		setElementData(source, "tws-accountName", getAccountName(account))
-		clearChatBox(source)
-		outputChatBox("Вы успешно вошли", source, 0, 255, 0)
+		local player = source
+
+		setElementData(player, "tws-accountName", getAccountName(account))
+		clearChatBox(player)
+		showChat(player, true)
+		exports["tws-message-manager"]:showMessage(player, "Russian Racing Club", "Вы успешно залогинились", "ok", 5000)
+		--outputChatBox("Вы успешно вошли", player, 0, 255, 0)
 		-- Check account data
 		for dataKey, dataValue in pairs(defaultAccountData) do
 			local accountData = getAccountData(account, dataKey)
@@ -37,19 +41,21 @@ addEventHandler("onPlayerLogin", root,
 		for _, dataKey in ipairs(accountDataToPlayerData) do
 			local accountData = getAccountData(account, dataKey)
 			if accountData ~= nil and accountData ~= "nil" then
-				setElementData(source, "tws-" .. dataKey, accountData)
+				setElementData(player, "tws-" .. dataKey, accountData)
 			end
 		end
 
 		-- Skin sheck
 		local playerSkinID = getAccountData(account, "skin")
 		if not playerSkinID then
-			setTimer(function(player)
-				clearChatBox(player)
-				outputChatBox("Добро пожаловать на сервер! Пожалуйста, выберите ваш скин", player, 0, 255, 0)
-				end, 500, 1, source
+			setTimer(
+				function()
+					clearChatBox(player)
+					exports["tws-message-manager"]:showMessage(player, "Russian Racing Club", "Добро пожаловать на сервер!\nПожалуйста, выберите ваш скин", "ok", 10000)
+					--outputChatBox("Добро пожаловать на сервер! Пожалуйста, выберите ваш скин", player, 0, 255, 0)
+				end, 500, 1
 			)
-			exports["tws-skinselecting"]:forcePlayerSelectSkin(source)
+			exports["tws-skinselecting"]:forcePlayerSelectSkin(player)
 		else
 			local spawnType = "normal"
 			if not hasVehicles(account) then
@@ -60,12 +66,12 @@ addEventHandler("onPlayerLogin", root,
 			if positionJSON then
 				positionInfo = fromJSON(positionJSON)
 			end
-			twsSpawnPlayer(source, spawnType, positionInfo)
+			twsSpawnPlayer(player, spawnType, positionInfo)
 		end
 		
-		exports["tws-gui-login"]:setLoginWindowVisible(source, false)
+		exports["tws-gui-login"]:setLoginWindowVisible(player, false)
 
-		setElementData(source, "tws-loginTime", getRealTime().timestamp)
+		setElementData(player, "tws-loginTime", getRealTime().timestamp)
  	end
 )
 
@@ -135,15 +141,17 @@ addEventHandler("onPlayerLogout", root,
 			--setCameraMatrix(player, startSpawnPosition[1], startSpawnPosition[2], startSpawnPosition[3] + 2, startSpawnPosition[1], startSpawnPosition[2], startSpawnPosition[3])
 		
 			clearChatBox(player)
-			outputChatBox("Выход из аккаунта...", player, 255, 150, 0)
+			--outputChatBox("Выход из аккаунта...", player, 255, 150, 0)
+			exports["tws-message-manager"]:showMessage(player, "Russian Racing Club", "Выход из аккаунта...", "info", 2000)
 			setTimer(
 				function()
 					if isElement(player) then
 						clearChatBox(player)
-						outputChatBox("Вы успешно вышли из аккаунта.", player, 0, 255, 0)	
+						--outputChatBox("Вы успешно вышли из аккаунта.", player, 0, 255, 0)
+						exports["tws-message-manager"]:showMessage(player, "Russian Racing Club", "Вы успешно вышли из аккаунта.", "info", 5000)	
 					end
-				end
-			,1000, 1)
+				end,
+			1000, 1)
 		end
 	end
 )

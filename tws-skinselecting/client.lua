@@ -6,6 +6,12 @@ addEvent("onSelectSkinForced", true)
 addEventHandler("onSelectSkinForced", root,
 	function()
 		--outputChatBox("Пожалуйста, выберите скин", 0, 255, 0)
+		setTimer(
+			function()
+				exports["tws-gui-hud"]:setVisible(false)
+				setPlayerHudComponentVisible("radar", false)
+			end, 50, 10
+		)
 		fadeCamera(false)
 		setTimer(
 			function()
@@ -78,7 +84,8 @@ addEventHandler("onSelectSkinForced", root,
 							removeEventHandler("onClientRender", root, drawStuff)
 							setTimer(
 								function()
-									--outputChatBox("trigger")
+									setPlayerHudComponentVisible("radar", true)
+									exports["tws-gui-hud"]:setVisible(true)
 									triggerServerEvent("onPlayerChoseSkin", resourceRoot, ped.model)
 									destroyElement(ped)
 								end, 1000, 1
@@ -89,7 +96,7 @@ addEventHandler("onSelectSkinForced", root,
 				end
 
 				addEventHandler("onClientKey", root, clientKey) 
-				addEventHandler("onClientRender", root, drawStuff)
+				addEventHandler("onClientRender", root, drawStuff, true, "high")
 			end, 1500, 1
 		)
 	end
