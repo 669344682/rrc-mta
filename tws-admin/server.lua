@@ -159,18 +159,25 @@ addAdminCommandHandler("getcar",
 			rx, ry, rz = getElementRotation(player.vehicle)
 		end
 		local vehicle, errorDesc = exports["tws-vehicles"]:spawnPlayerVehicle(player, id, x, y, z, rx, ry, rz)
+
 		if vehicle then
 			removePedFromVehicle(player)
-			warpPedIntoVehicle(player, vehicle)
+			setTimer(
+				function()
+					vehicle:setPosition(x, y, z)
+					warpPedIntoVehicle(player, vehicle)
+				end,
+			500, 1)
+			
 			outputText("Вы заспавнили автомобиль из своего гаража", player)
 		else
 			local errorText = "Неизвестная ошибка (" .. errorDesc .. ")"
 			if errorDesc == "no_such_car" then
 				errorText = "Автомобиля с таким ID нет в гараже"
 			elseif errorDesc == "car_already_spawned" then
-				errorDesc = "Автомобиль уже заспавнен"
+				errorText = "Автомобиль уже заспавнен"
 			elseif errorDesc == "bad_account" then
-				errorDesc = "Вы не залогинены"
+				errorText = "Вы не залогинены"
 			end
 			outputError("Не удалось заспавнить автомобиль. " .. tostring(errorText), player)
 		end

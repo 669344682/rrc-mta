@@ -52,7 +52,7 @@ local function spliceCheckpoints(x1, y1, z1, x2, y2, z2)
 	return x1 + ox, y1 + oy, z1 + oz
 end
 
-local function generateTrack(x, y, z, dx, dy, angle)
+local function generateTrack(x, y, z, dx, dy, angle, totalCheckpointsCount)
 	ignoredCheckpoints = {}
 	local checkpoints = {}
 
@@ -79,7 +79,7 @@ local function generateTrack(x, y, z, dx, dy, angle)
 	table.insert(checkpoints, {cp.x, cp.y, cp.z})
 	--math.randomseed(3) 
 	--math.random()
-	for i = 1, 60 do
+	for i = 1, totalCheckpointsCount do
 		local oldCp = cp
 		cp = getNextCheckpointRandom(cp, prev, info)
 
@@ -123,20 +123,33 @@ local function generateTrack(x, y, z, dx, dy, angle)
 	return checkpoints
 end
 
+function generateCheckpointsForPlayer(player, checkpointsCount)
+	if not player.vehicle then
+		return false
+	end
+	if not checkpointsCount then
+		return false
+	end
+	-- Чекпойнтов не может быть меньше трёх
+	checkpointsCount = math.max(3, checkpointsCount)
 
-function createChallengeRace(player1, player2)
-	local vehicle = getPedOccupiedVehicle(player1)
+	local vehicle = player.vehicle
 
+	-- Начальные координаты
 	local x, y, z = getElementPosition(vehicle)
 	local rx, ry, rz = getElementRotation(vehicle)
 	local ox, oy, oz = getPositionFromElementOffset(vehicle, 0, 30, 0)
-	--createMarker(ox, oy, oz + 4, "arrow", 6, 255, 255, 255)
-	local checkpoints = generateTrack(ox, oy, oz, x, y, rz)
 
-	if not checkpoints then
-		checkpoints = {}
+	-- Чекпойнты
+	local checkpoints = generateTrack(ox, oy, oz, x, y, rz, checkpointsCount)
+
+	if not checkpoints or type(checkpoints) ~= "table" or #checkpoints == 0 then
+		return false
 	end
 
-	triggerClientEvent(player1, "tws-challengeCheckpointsReady", resourceRoot, checkpoints)
-	triggerClientEvent(player2, "tws-challengeCheckpointsReady", resourceRoot, checkpoints)
+	-- Конвертирование массива координат в таблицу c x, y, z
+	for i, checkpoint in ipairs(checkpoints) do
+		checkpoints[i] = {x = checkpoint[1], y = checkpoint[2], z = checkpoint[3]}
+	end
+	return checkpoints
 end

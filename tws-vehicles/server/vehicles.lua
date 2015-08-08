@@ -352,7 +352,6 @@ function spawnPlayerVehicle(player, vehicleID, x, y, z, rx, ry, rz)
 		return false, "bad_player_element"
 	end
 	vehicleID = tonumber(vehicleID)
-	outputChatBox(table.concat({x, y, z}))
 	if not vehicleID then
 		--outputChatBox(2)
 		return false, "bad_vehicle_id"

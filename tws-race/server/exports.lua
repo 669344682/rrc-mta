@@ -41,6 +41,17 @@ function abandonRace(...)
 	return raceManager:abandonRace(...)
 end
 
+-- isPlayerInRace(player thePlayer)
+-- Возвращает true/false - находится ли игрок в какой-либо гонке
+function isPlayerInRace(...)
+	return raceManager:isPlayerInRace(...)
+end
+
+-- getPlayerRace(player thePlayer)
+-- Возвращает ID гонки, в которой находится игрок или false, если игрок не находится в гонке
+function getPlayerRace(...)
+	return raceManager:getPlayerRace(...)
+end
 
 -- происходит, когда игрок финиширует
 -- в параметрах raceID (игрок - client)

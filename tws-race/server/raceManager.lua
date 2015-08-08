@@ -224,6 +224,27 @@ function raceManager:abandonRace(raceID, reason)
 	return true
 end
 
+function raceManager:getPlayerRace(player)
+	if not isElement(player) then
+		return false
+	end
+	local raceID = player:getData("raceID")
+	if raceID then
+		return raceID
+	else
+		return false
+	end
+end
+
+function raceManager:isPlayerInRace(player)
+	local raceID = self:getPlayerRace(player)
+	if raceID then
+		return true
+	else
+		return false
+	end
+end
+
 function raceManager:addPlayerToRace(player, raceID)
 	-- Если гонки не существует или игрока не существует
 	local race = self:getRaceByID(raceID)

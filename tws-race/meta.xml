@@ -42,4 +42,6 @@
     <export function="addPlayerToRace" type="server"/>
     <export function="removePlayerFromRace" type="server"/>
     <export function="abandonRace" type="server"/>
+    <export function="getPlayerRace" type="server"/>
+    <export function="isPlayerInRace" type="server"/>
 </meta>
