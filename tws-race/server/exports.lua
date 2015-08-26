@@ -53,10 +53,17 @@ function getPlayerRace(...)
 	return raceManager:getPlayerRace(...)
 end
 
+-- SERVER EVENT
 -- происходит, когда игрок финиширует
 -- в параметрах raceID (игрок - client)
 addEvent("tws-race.onClientFinished", true)
 
+-- SERVER EVENT
 -- происходит, если игрок дисквалифицирован из-за нахождения вне автомобиля 
 -- в параметрах raceID (игрок - client)
 addEvent("tws-race.onClientDisqualified", true)
+
+-- CLIENT EVENT
+-- только для участников гонки
+-- происходит, когда гонка начинается (с учетом отсчета)
+addEvent("tws-race.onRaceStart", true)

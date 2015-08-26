@@ -839,4 +839,5 @@
     <object id="object (vgncarshade1) (2)" breakable="true" interior="0" collisions="true" alpha="0" model="3458" doublesided="false" scale="1" dimension="0" MSTalpha="0" MSTselected="false" posX="5283.8584" posY="-1909.3105" posZ="11.20732" rotX="0" rotY="341.488" rotZ="90.319"></object>
     <object id="object (vgncarshade1) (7)" breakable="true" interior="0" collisions="true" alpha="0" model="3458" doublesided="false" scale="1" dimension="0" MSTalpha="0" MSTselected="false" posX="5279.0366" posY="-1909.3105" posZ="10.54612" rotX="288.512" rotY="270" rotZ="0.319"></object>
     <object id="object (vgncarshade1) (9)" breakable="true" interior="0" collisions="true" alpha="0" model="3458" doublesided="false" scale="1" dimension="0" MSTalpha="0" MSTselected="false" posX="5288.8862" posY="-1909.3105" posZ="10.60312" rotX="71.488" rotY="270" rotZ="180.319"></object>
+    <object id="object (vgncarshade1) (5)" breakable="true" interior="0" alpha="0" model="3458" doublesided="false" scale="1" dimension="0" posX="5567.2002" posY="-1378.25" posZ="23.175" rotX="354.75" rotY="0" rotZ="0"></object>
 </map>

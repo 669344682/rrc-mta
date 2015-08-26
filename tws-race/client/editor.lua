@@ -13,7 +13,7 @@ checkpointsForLines = {}
 local currentStage = 0
 
 local hotkeyCursor = "r"
-local checkpointCursor = checkpointCursor -- editor_gui.lua
+local checkpointCursor = checkpointHotkey -- editor_gui.lua
 local checkpoints = {}
 local lines = {}
 local checkpointsVisibility = true
@@ -64,6 +64,9 @@ functions.checkpointAdd = function()
 
 		local checkpoint = createMarker(x, y, z, "checkpoint", size)
 		local blip = createBlipAttachedTo(checkpoint, 0, 2, 0, 0, 255, 255)
+
+		checkpoint.dimension = localPlayer.dimension
+		blip.dimension = localPlayer.dimension
 
 		if (#checkpoints + 1) > 1 then
 			local x1, y1, z1 = checkpoints[#checkpoints].x, checkpoints[#checkpoints].y, checkpoints[#checkpoints].z
@@ -283,7 +286,7 @@ addEventHandler("onClientRender", root, drawLines)
 addCommandHandler("race", startRaceCreating)
 --bindKey(hotkeyCursor, "down", toggleCursor)
 
-bindKey(checkpointCursor, "down", 
+bindKey(checkpointHotkey, "down", 
 	function()
 		if raceCreating then
 			functions.checkpointAdd()
@@ -291,3 +294,30 @@ bindKey(checkpointCursor, "down",
 	end
 )
 
+
+addCommandHandler("savecheckpoints",
+	function()
+		if not checkpoints then
+			return
+		end
+
+		local string = "checkpoints = {\n"
+
+		for _, checkpoint in ipairs(checkpoints) do
+			local x, y, z, size = checkpoint.x, checkpoint.y, checkpoint.z, checkpoint.size
+
+			string = string .. "\t{x = " .. x .. ", y = " .. y .. ", z = " .. z .. ", size = " .. size .. "},\n"
+		end
+
+		string = string .. "}"
+
+		local file = fileCreate("save/checkpoints.lua")
+		if file then
+			outputDebugString("CHECKPOINTS WERE SUCCESFULLY SAVED")
+			file:write(string)
+			file:close()
+		else
+			outputDebugString("CHECKPOINTS FILE WAS NOT CREATED")
+		end
+	end
+)

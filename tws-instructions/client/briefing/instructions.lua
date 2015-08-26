@@ -67,10 +67,10 @@ instructions.panel = {
 local function markerHit(hitElement)
 	if hitElement == localPlayer then
 		if localPlayer.vehicle then
+			removeEventHandler("onClientMarkerHit", marker, markerHit)
+
 			marker:destroy(); marker = nil
 			blip:destroy(); blip = nil
-
-			removeEventHandler("onClientMarkerHit", marker, markerHit)
 
 			startInstruction("challenge")
 		else
@@ -101,13 +101,15 @@ instructions.auto = {
 		continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
 		continueAfterEvent("onClientVehicleEnter", root,
 			function()
-				marker = createMarker(5295.377, -2073.993, 13.5, "cylinder", 3, 255, 0, 0, 150)
+				marker = createMarker(5296.943, -2083.435, 13.5, "cylinder", 3, 255, 0, 0, 150)
 				marker.dimension = localPlayer.dimension
 
 				blip = createBlipAttachedTo(marker)
 				blip.dimension = localPlayer.dimension
 
 				addEventHandler("onClientMarkerHit", marker, markerHit)
+
+				startInstruction("racemarker")
 			end
 		)
 	end
@@ -201,9 +203,9 @@ instructions.VIP = {
 		button.text = "OK"
 		button.visible = true
 
-		arrow.x, arrow.y = screenX/2 - arrow.w/2, window.y + window.h
-		arrow.rotation = 0
-		arrow.visible = true
+		-- arrow.x, arrow.y = screenX/2 - arrow.w/2, window.y + window.h
+		-- arrow.rotation = 0
+		-- arrow.visible = true
 	end,
 	buttonClick = function()
 		triggerServerEvent("disableVIPInstruction", resourceRoot)
@@ -250,12 +252,5 @@ instructions.garage = {
 		continueAfterEvent("onAlphaFullyChanged", resourceRoot, deinit)
 	end
 }
-
-instructions.beginning = {
-	show = function()
-		triggerServerEvent("instructions.onClientBeginnerTutorialStart", resourceRoot)
-	end
-}
-
 
 triggerEvent("onInstructionsLoaded", resourceRoot)

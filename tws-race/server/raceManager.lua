@@ -128,7 +128,7 @@ function raceManager:startRace(raceID)
 				for _, player in ipairs(race.players) do
 					race.startedAt = getTickCount()
 					player:setData("tws-race.finished", false)
-					triggerClientEvent(player, "tws-race.onRaceStart", resourceRoot, race)
+					triggerClientEvent(player, "tws-race.onRaceStart", root, race)
 				end
 			end, 4000, 1
 		)
@@ -136,7 +136,7 @@ function raceManager:startRace(raceID)
 		for _, player in ipairs(race.players) do
 			race.startedAt = getTickCount()
 			player:setData("tws-race.finished", false)
-			triggerClientEvent(player, "tws-race.onRaceStart", resourceRoot, race)
+			triggerClientEvent(player, "tws-race.onRaceStart", root, race)
 		end
 	end
 
@@ -210,7 +210,7 @@ function raceManager:abandonRace(raceID, reason)
 		text = "Гонка была отменена."
 	end
 
-	if reason == false then
+	if reason ~= false then
 		-- информируем игроков, что гонка отменена
 		for _, player in ipairs(race.players) do
 			exports["tws-message-manager"]:showMessage(player, "Гонка", text, "race", 10000, true)

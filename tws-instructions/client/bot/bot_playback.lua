@@ -1,14 +1,41 @@
-local vehicle
+local VEHICLE_MODEL = 587
+local SPEED_SENSIVITY = 30
+local TURNING_STRENGTH = 0.4
+local BRAKING_STRENGTH = 0.2
+local ANGLE_DEADZONE = 0.1 -- from 0 to 40
+local BREAKING_PERIOD = 100
+local GOING_BACKWARDS_TIME = 1000
+local COLSHAPE_RADIUS = 12
+
+local vehicle, ped
+
+function spawnBotVehicle()
+	if not RECORDING_DATA then
+		outputDebugString("no RECORDING_DATA", 1)
+		return
+	end
+
+	local x1, y1 = RECORDING_DATA[1].x, RECORDING_DATA[1].y
+	local x2, y2 = RECORDING_DATA[2].x, RECORDING_DATA[2].y
+
+	local angle = math.atan2((y2 - y1), (x2 - x1)) * 180 / math.pi
+
+	local pos = Vector3(RECORDING_DATA[1].x, RECORDING_DATA[1].y, RECORDING_DATA[1].z)
+
+	vehicle = createVehicle(VEHICLE_MODEL, pos, 0, 0, angle - 90)
+	vehicle.dimension = localPlayer.dimension
+	vehicle.overrideLights = 2
+
+	ped = createPed(0, vehicle.position)
+	ped:warpIntoVehicle(vehicle)
+	ped.dimension = localPlayer.dimension
+end
 
 function startBot()
-	local VEHICLE_MODEL = 587
-	local SPEED_SENSIVITY = 30
-	local TURNING_STRENGTH = 0.4
-	local BRAKING_STRENGTH = 0.2
-	local ANGLE_DEADZONE = 0.1 -- from 0 to 40
-	local BREAKING_PERIOD = 100
-	local GOING_BACKWARDS_TIME = 1000
-	local COLSHAPE_RADIUS = 12
+	if not vehicle or not ped then
+		outputDebugString("no vehicle or no ped", 1)
+		return
+	end
 
 	for index, values in ipairs(RECORDING_DATA) do
 		recording_colshapes[index] = createColSphere(values.x, values.y, values.z, COLSHAPE_RADIUS)
@@ -22,7 +49,7 @@ function startBot()
 	end
 
 	local colshapes = recording_colshapes
-	local ped, target
+	local target = colshapes[1]
 	local frameCounter = 0
 	local target_last
 	local wallCounter = 0
@@ -34,24 +61,6 @@ function startBot()
 	local forcedDirection = nil
 	local breakingPeriod
 	local forcedSpeedValue
-
-	if colshapes[1] and colshapes[2] then
-		local x1, y1 = colshapes[1].position.x, colshapes[1].position.y
-		local x2, y2 = colshapes[2].position.x, colshapes[2].position.y
-
-		local angle = math.atan2((y2 - y1), (x2 - x1)) * 180 / math.pi
-
-		vehicle = createVehicle(VEHICLE_MODEL, colshapes[1].position, 0, 0, angle - 90)
-		vehicle.position = vehicle.position - vehicle.matrix.forward * (COLSHAPE_RADIUS + 2)
-		vehicle.dimension = localPlayer.dimension
-		vehicle.overrideLights = 2
-
-		ped = createPed(0, vehicle.position)
-		ped:warpIntoVehicle(vehicle)
-		ped.dimension = localPlayer.dimension
-
-		target = colshapes[1]
-	end
 
 	local function clientRender()
 		if not ped then
@@ -70,6 +79,8 @@ function startBot()
 
 		if not target then
 			removeEventHandler("onClientRender", root, clientRender)
+			vehicle.overrideLights = 1
+			vehicle.engineState = false
 			return
 		else
 			if not isElement(target) then
@@ -222,12 +233,6 @@ function startBot()
 
 	addEventHandler("onClientRender", root, clientRender)
 end
-
-addCommandHandler("startbot",
-	function()
-		startBot()
-	end
-)
 --[[
 addEventHandler("onClientRender", root,
 	function()
@@ -251,32 +256,34 @@ addEventHandler("onClientRender", root,
 	end
 )
 ]]--
-addCommandHandler("attach",
-	function()
-		if not localPlayer.vehicle then
-			return
-		end
 
-		localPlayer.vehicle.position = vehicle.position + Vector3(0, 0, 1)
-		localPlayer.vehicle:attach(vehicle, 0, 0, 0.2)
-		localPlayer.vehicle.alpha = 0
-		localPlayer.vehicle.engineState = false
+
+-- addCommandHandler("attach",
+-- 	function()
+-- 		if not localPlayer.vehicle then
+-- 			return
+-- 		end
+
+-- 		localPlayer.vehicle.position = vehicle.position + Vector3(0, 0, 1)
+-- 		localPlayer.vehicle:attach(vehicle, 0, 0, 0.2)
+-- 		localPlayer.vehicle.alpha = 0
+-- 		localPlayer.vehicle.engineState = false
 		
-		setCameraClip(true, false)
-	end
-)
+-- 		setCameraClip(true, false)
+-- 	end
+-- )
 
-addCommandHandler("detach",
-	function()
-		if not localPlayer.vehicle then
-			return
-		end
+-- addCommandHandler("detach",
+-- 	function()
+-- 		if not localPlayer.vehicle then
+-- 			return
+-- 		end
 
-		localPlayer.vehicle:detach()
-		localPlayer.vehicle.alpha = 255
-		localPlayer.vehicle.position = vehicle.position + Vector3(0, 0, 1)
-		localPlayer.vehicle.engineState = true
+-- 		localPlayer.vehicle:detach()
+-- 		localPlayer.vehicle.alpha = 255
+-- 		localPlayer.vehicle.position = vehicle.position + Vector3(0, 0, 1)
+-- 		localPlayer.vehicle.engineState = true
 
-		setCameraClip(true, true)
-	end
-)
+-- 		setCameraClip(true, true)
+-- 	end
+-- )

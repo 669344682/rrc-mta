@@ -172,8 +172,10 @@ function showNextCheckpoint()
 			destroyElement(visibleBlip2); visibleBlip2 = nil
 
 			visibleCheckpoint1 = createMarker(x1, y1, z1, "checkpoint", s1)
+			visibleCheckpoint1.dimension = localPlayer.dimension
 			setMarkerIcon(visibleCheckpoint1, "finish")
 			visibleBlip1 = createBlipAttachedTo(visibleCheckpoint1, 0, 2, 0, 0, 255, 255)
+			visibleBlip1.dimension = localPlayer.dimension
 		else
 			-- finish checkpoint
 			playSoundFrontEnd(7)
@@ -182,6 +184,7 @@ function showNextCheckpoint()
 			destroyElement(visibleBlip1)
 
 
+			triggerEvent("tws-race.onClientFinished", root)
 			triggerServerEvent("tws-race.onClientFinished", root, localPlayer:getData("raceID"))
 
 			if activeRace.announcingWinnersEnabled then
@@ -215,6 +218,12 @@ function showNextCheckpoint()
 
 	visibleBlip1 = createBlipAttachedTo(visibleCheckpoint1, 0, 2, 0, 0, 255, 255)
 	visibleBlip2 = createBlipAttachedTo(visibleCheckpoint2, 0, 2, 0, 0, 255, 255)
+
+	visibleCheckpoint1.dimension = localPlayer.dimension
+	visibleCheckpoint2.dimension = localPlayer.dimension
+
+	visibleBlip1.dimension = localPlayer.dimension
+	visibleBlip2.dimension = localPlayer.dimension
 
 	setMarkerTarget(visibleCheckpoint1, x2, y2, z2)
 	checkpointIndexPos = checkpointIndexPos + 1

@@ -1,4 +1,4 @@
-checkpointCursor = "1"
+checkpointHotkey = "1"
 
 addEvent("onButtonsToggle", true)
 
